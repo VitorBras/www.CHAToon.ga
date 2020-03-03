@@ -1,0 +1,100 @@
+.box-capsula {
+    position: relative;
+    top: 20px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 0;
+    margin-top: 0;
+    border-radius: 53px;
+    height: 186px;
+    width: 370px;
+    background: linear-gradient(to right, rgb(101, 177, 213), #5eb5ac) ;
+    text-align: center;
+    box-shadow: 0px 3px 20px rgba(0,0,0,0.3);
+}
+.box-capsula h1{
+	font-size:83px;
+	margin:0;
+}
+.box-capsula h3{
+	color:white;
+}
+
+.login-box{
+	height:200px;
+	width:444px;
+	background: linear-gradient(to right, #72c2ff , #66cdaa);
+	border-radius:28%;
+	box-shadow:0px 8px 3px rgba(0,0,0,0.1);
+}
+body{
+	background-color:#e1eef2;
+}
+.login-box-positioned{
+	position:relative;
+	top:0px;
+	left:0px;
+	margin-left:auto;
+	margin-right:auto;
+	margin-top:4%;
+}
+
+.login-box-transparente {
+    display: block;
+    height: 80%;
+    width: 80%;
+    background-color: rgba(0,0,0,0.1);
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 4%;
+    border-radius: 20%;
+    box-shadow: 0px 3px 12px rgba(0,0,0,0.3);
+}
+
+.login-box-transparente2 {
+    position: relative;
+    height: 19%;
+    width: 56%;
+    /* background-color: black; */
+    margin-right: auto;
+    margin-left: auto;
+
+    top: 1px;
+}
+
+
+.button-box{
+	height:95%;
+	width:49.2%;
+	cursor:pointer;
+}
+.button-register:hover{
+	background-color:#f43a3a;
+	color:white;
+}
+.button-login:hover{
+	background-color:#b9dd25;
+	color:white;
+}
+.button-login{
+	background-color:#41a6bf;
+	color:white;
+}
+.button-register{
+	background-color:#333c3f;
+	color:white;
+}
+#mode-tabela{
+	position:relative;
+	margin-right:auto;
+	margin-left:auto;
+	top:28%;
+}
+.input {
+    height: 36px;
+    width: 177px;
+	border-radius:20px;
+	text-align:center;
+}
+
+
