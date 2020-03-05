@@ -64,13 +64,10 @@ body{
 
 
 .button-box{
-	display:block;
 	height:95%;
 	width:49.2%;
-	cursor:pointer;
+	cursor:hand;
 	border-radius:30px;
-	margin-left:auto;
-	margin-right:auto;
 }
 .button-register:hover{
 	background-color:#ffab1c;
@@ -88,11 +85,11 @@ body{
 	background-color:#333c3f;
 	color:white;
 }
-#molde-tabela{
+#mode-tabela{
 	position:relative;
 	margin-right:auto;
 	margin-left:auto;
-	top:25%;  /*Ajusta para 7% quando os erros desaparecem*/
+	top:25%;
 }
 .input {
     height: 36px;
@@ -101,56 +98,16 @@ body{
 	text-align:center;
 }
 
-.input-userpass{
-	display:none;
-}
-/*Confirmar hbName -- Confirmar nome Habbo*/
-.input-hbname-confirm-code{
-	display:none;
-	
-}
-.explain-confirm{
-	display:none;
-	width:100%;
-	text-align:center;
-}
-.explain-confirm-text{
-	display:block;
-}
-#code-confirm{
-	display:block;
-	color:white;
-	font-size:24px;
-}
-/*------------*/
-#servidor{
-	display:block;
-    height: 36px;
-    width: 177px;
-	border-radius:20px;
-	text-align:center;
-}
-#servidor option{
-	background-color:#d0e4ea;
-}
-
 /* Aviso de erros em registro */
 
 .warnings{
 	font-size:13px;
 	color:#ff0000;
 	display:block;
-	margin-left:auto;
-	margin-right:auto;
+	margin-left:91px;
 	width:100%;
 	list-style:none;
 	padding:0;
-	
-}
-.warnings li{
-	margin-right:auto;
-	margin-left:auto;
-	text-align:center;
 }
 
 #hb_name_existence{
@@ -168,21 +125,4 @@ body{
 #account_pass_patter{
 	display:none;
 }
-#hb_name_nowrited_warn{
-	display:none;
-}
-#hb_server_noselected_warn{
-	display:none;
-}
-#hb_name_sobig_warn{
-	display:none;
-}
-
-
-
-
-
-
-
-
 
