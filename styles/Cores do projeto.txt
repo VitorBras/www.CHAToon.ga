@@ -11,6 +11,7 @@ ______________________CORES USADAS____________________
 
 Azul clarinho no background: #E1EEF2
 Azul claro : #72c2ff
+Azul Esverdeado no background dos botões: #41a6bf
 
 Vermelho do botao sair: 						#f43a3a        *era do botão registrar do login
 Amarelo usado no botão registrar: 				#ffab1c

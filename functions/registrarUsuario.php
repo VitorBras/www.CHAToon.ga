@@ -76,28 +76,28 @@ if(isset($_GET['processo'])){
 			$verify_is_user = mysqli_query($connect,"SELECT habbo_name,ban FROM usuarios WHERE habbo_name = '$hbname';");
 			$resultado = mysqli_fetch_assoc($verify_is_user);
 			//Está registrado em usuários?
-			if($resultado['habbo_name'] == $hbname){print("Cadastrado em: USUÁRIOS");
+			if($resultado['habbo_name'] == $hbname){//print("Cadastrado em: USUÁRIOS");
 				
 				//A conta está banida?
-				if($resultado['ban'] == true or $resultado['ban'] == 1){print("Conta: BANIDA");
+				if($resultado['ban'] == true or $resultado['ban'] == 1){//print("Conta: BANIDA");
 					print("{\"response\":\"banned\",\"hbname\":\"$hbname\",\"hbserver\":\"$hbserver\"}");
 				}else{//Está cadastrado definitivamente e não está banido.
 					print("{\"response\":\"already_registered\",\"hbname\":\"$hbname\",\"hbserver\":\"$hbserver\"}");
-					print("Cadastrado em: USUÁRIOS e não banido");
+					//print("Cadastrado em: USUÁRIOS e não banido");
 				}
 			}else{//Avatar não está cadastrado como usuário. Será que está na base de dados para confirmação de HABBO NAME?
 				$verify_is_confirming = mysqli_query($connect,"SELECT habbo_name,codigo_hb_name,status FROM codigo_confirmacao WHERE habbo_name = '$hbname';");
 				$result = mysqli_fetch_assoc($verify_is_confirming);
 				//O sistema está esperando o usuário confirmar a posse da conta Avatar Habbo?
-				print("status: ".$result['status']);
-				print("habbo_name: ".$result['habbo_name']);
-				if($result['status'] == "0" and $result['habbo_name'] == "$hbname"){//Sim
-					print("Cadastrado em: BASE DE CONFIRMAÇÃO e aguardando confirmação de HBNAME");
+				//print("status: ".$result['status']);
+				//print("habbo_name: ".$result['habbo_name']);
+				if($result['status'] == "0" and strtolower($result['habbo_name']) == strtolower("$hbname")){//Sim
+					//print("Cadastrado em: BASE DE CONFIRMAÇÃO e aguardando confirmação de HBNAME");
 					$codigo_confirmacao = $result['codigo_hb_name'];
 					print("{\"response\":\"need-confirm-hbname\",\"hbname\":\"$hbname\",\"hbserver\":\"$hbserver\",\"code\":\"$codigo_confirmacao\"}");
 				}elseif($result['status'] == 2){//Usuário cadastrado.. mas com o email confirmado?
 					print("{\"response\":\"already_registered-with-email-confirmed\",\"hbname\":\"$hbname\",\"hbserver\":\"$hbserver\"}");
-				}else{print("EXECUTANDO.</br>");
+				}else{//print("EXECUTANDO.</br>");
 					//O status não é 0 e nem 2: Não está para confirmar, nem foi confirmado com email. Então não foi cadastrado em lugar algum.
 					//Então vamos cadastrar o usuário na base de confirmação...
 					set_timing($hbserver);
@@ -105,7 +105,7 @@ if(isset($_GET['processo'])){
 					$datetime = date("Y-m-d H:i:s");
 					mysqli_query($connect,"INSERT INTO codigo_confirmacao (habbo_name,codigo_hb_name,server,criado_timestamp) VALUES ('$hbname','$codigo','$hbserver','$datetime')");
 					print("{\"response\":\"need-confirm-hbname\",\"hbname\":\"$hbname\",\"hbserver\":\"$hbserver\",\"code\":\"$codigo\"}");
-					print("Aki".mysqli_error($connect)."Aki");
+					//print("Aki".mysqli_error($connect)."Aki");
 				}
 			}
 			

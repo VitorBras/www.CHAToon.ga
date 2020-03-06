@@ -4,28 +4,127 @@ var habboName;
 var habboServer;
 var active_warnings = 0;
 
+var not_confirmed_yet = 0;
 
+function logar(caso){//Redireciona o usuário a página de login. Salva o nome de usuário no cookie.
+	//Guardando o nome do usuário
+	habboName = document.querySelector(".input-username").value;
+	switch(caso){
+		case "already-registered":
+			console.log
+			document.cookie = "username="+habboName;
+			window.location.href = "login.php";
+			break;
+	}
+	
+}
+function confirm_hb_avatar_owner(){//Pedir para o servidor confirmar a possa da conta do avatar habbo.
+	
+	$.ajax({
+				url:"http://localhost/TESTEDECODIGO/Chat/www.CHAToon.ga/functions/confirmarHabboOwner.php",
+				type:"GET",
+				data:{processo:"confirmar-habbo-owner",habbo_name:habboName,habbo_server:habboServer},
+				success:function(response){
+					console.log("Server Response: "+response);
+					console.log("habboName: "+habboName+" / habboServer: "+habboServer);
+					let resposta = JSON.parse(response);
 
-function start_options(pagetype){//Acionar opções confirmação
+					switch(resposta.response){
+						case "hb-name-confirmed" :
+							console.log("Client App: UI Confirmed hbname");
+							start_options("confirmed-hb-name",resposta.code);
+							break;
+						case "hb-name-not-confirmed" :
+							console.log("Client App: UI Already Registered");
+							start_options("hb-name-not-confirmed",null,resposta.hbname);
+							break;
+						case "" :
+							
+							break;
+					}
+					
+				}
+			});
+}
+
+function start_options(pagetype,code,hbname){//Acionar opções confirmação
 	switch(pagetype){
 		case "confirm-hb-name":
 			console.log("Client App: UI CONFIRM HB NAME");
 			document.querySelector("#servidor").setAttribute("style","display:none;");
-			document.querySelector(".input-hbname-confirm-code").setAttribute("style","display:block;");
+			
 			document.querySelector("#molde-tabela").setAttribute("style","top:4%;");
 			document.querySelector(".input-username").setAttribute("disabled","");
 			document.querySelector(".explain-confirm").setAttribute("style","display:block;");
 			document.querySelector("#code-confirm").setAttribute("style","display:block;");
+			document.querySelector("#code-confirm").innerHTML = code;
 			document.querySelector(".explain-confirm-text").setAttribute("style","display:block;");
 			document.querySelector(".button-register").innerHTML = "Confirmar";
+			document.querySelector(".button-register").setAttribute("onclick","confirm_hb_avatar_owner();");
+			document.querySelector(".explain-text-principal").innerHTML = "O avatar é mesmo seu?";
+			document.querySelector(".explain-text-principal").setAttribute("style","display:block;");
+			
 			break;
 		case "confirm-email":
-		
+			document.querySelector(".input-hbname-confirm-code").setAttribute("style","display:none;");
 			break;
 			
 		case "confirm-phone-number":
 		
 			break;
+		case "already-registered":
+			document.querySelector(".input-hbname-confirm-code").setAttribute("style","display:none;");
+			document.querySelector(".explain-confirm").setAttribute("style","display:block;");
+			document.querySelector("#servidor").setAttribute("style","display:none;");
+			document.querySelector("#molde-tabela").setAttribute("style","top:7%;");
+			document.querySelector("#code-confirm").setAttribute("style","display:none;");
+			document.querySelector(".input-username").setAttribute("disabled","");
+			document.querySelector(".input-username").setAttribute("value",hbname);
+			document.querySelector(".button-register").innerHTML = "Registrar outro";
+			document.querySelector(".button-register").setAttribute("onclick","start_options('register-user')");
+			document.querySelector(".button-ir-logar").setAttribute("style","display:block;");
+			document.querySelector(".explain-text-principal").innerHTML = "Usuário já cadastrado!";
+			document.querySelector(".explain-text-principal").setAttribute("style","display:block;");
+			document.querySelector(".explain-text-secundario").innerHTML = "Logue nessa conta agora!";
+			document.querySelector(".explain-text-secundario").setAttribute("style","display:block;");
+			break;
+		case "register-user" :
+			document.querySelector(".input-username").disabled = false;
+			document.querySelector(".input-username").setAttribute("value","");
+			document.querySelector(".explain-text-principal").setAttribute("style","display:none;");
+			document.querySelector(".explain-text-secundario").setAttribute("style","display:none;");
+			document.querySelector("#molde-tabela").setAttribute("style","top:25%;");
+			document.querySelector(".button-ir-logar").setAttribute("style","display:none;");
+			document.querySelector("#servidor").setAttribute("style","display:block;");
+			document.querySelector(".button-register").innerHTML = "Próximo";
+			document.querySelector(".button-register").setAttribute("onclick","confirm_hb_name();");
+			break;
+		case "confirmed-hb-name" :
+			//document.querySelector("#molde-tabela").setAttribute("style","top:4%;");
+			//document.querySelector(".input-username").setAttribute("disabled","");
+			//document.querySelector(".explain-confirm").setAttribute("style","display:block;");
+			document.querySelector("#code-confirm").setAttribute("style","display:none;");
+			//document.querySelector("#code-confirm").innerHTML = code;
+			//document.querySelector(".explain-confirm-text").setAttribute("style","display:block;");
+			//document.querySelector(".button-register").innerHTML = "Confirmar";
+			document.querySelector(".button-register").setAttribute("style","display:none;");
+			document.querySelector(".explain-confirm-text").setAttribute("style","display:none;");
+			document.querySelector(".button-ir-logar").setAttribute("style","display:block;");
+			//document.querySelector(".button-register").setAttribute("onclick","confirm_hb_avatar_owner();");
+			document.querySelector(".explain-text-principal").innerHTML = "É seu mesmo! ^^";
+			document.querySelector(".explain-text-principal").setAttribute("style","display:block;");
+			document.querySelector(".explain-text-secundario").innerHTML = "Você está registrado(a) no CHAToon.";
+			document.querySelector(".explain-text-secundario").setAttribute("style","display:block;");
+			break;
+		case "hb-name-not-confirmed" :
+			if(not_confirmed_yet < 4){not_confirmed_yet++;//Pedir para confirmar novamente;
+				setTimeout(function(){confirm_hb_avatar_owner(habboName,habboServer);},6000);
+			}else{//Realmente o servidor não está conseguindo confirmar de que a conta é realmente do usuário. Talvez o usuário n~~ao esteja colando o código no lugar certo.
+				
+			}
+			//Devo desenhar uma interface de recarregamento aqui.
+			break;
+	
 	}
 }
 function adapt_ui_to_warnings(quantos){console.log(quantos);
@@ -123,12 +222,21 @@ function confirm_hb_name(){
 				success:function(response){
 					console.log("Server Response: "+response);
 					var resposta = JSON.parse(response);
-					if(resposta.response == "need-confirm-hbname"){//Se o servidor salva os dados e pede para confirmar a App Client muda a interface.
-						console.log("Client App: UI Confirm hbname");
-						start_options("confirm-hb-name");
-					}else{//O servidor não salvou os dados por algum motivo...
-						
+
+					switch(resposta.response){
+						case "need-confirm-hbname" :
+							console.log("Client App: UI Confirm hbname");
+							start_options("confirm-hb-name",resposta.code);
+							break;
+						case "already_registered" :
+							console.log("Client App: UI Already Registered");
+							start_options("already-registered",null,resposta.hbname);
+							break;
+						case "" :
+							
+							break;
 					}
+					
 				}
 			});
 		}else{

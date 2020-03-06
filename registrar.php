@@ -25,6 +25,8 @@
 				<li id="hb_server_noselected_warn" >Você precisa selecionar o servidor em que joga</li>
 			</ul>
 			<div class="explain-confirm">
+				<span class="explain-text-principal">Usuário já cadastrado!</span>
+				<span class="explain-text-secundario">Logue na conta agora!</span>
 				<span class="explain-confirm-text">Cole o código na missão do seu avatar</span>
 				<span id="code-confirm">Código</span>
 			</div>
@@ -34,6 +36,7 @@
 				<tr><td>
 					<input type="text" class="input-userpass input pos-confirm" placeholder="Sua senha" disabled><!-- Pós confirmação -->
 					<input type="text" class="input-hbname-confirm-code input pos-confirm" placeholder="Digite o código" ><!-- Pós confirmação -->
+					<button class="button-ir-logar" onclick="logar('already-registered');">Ir logar</button>
 					<select id="servidor" name="servidor" required> 
 						<option value="nothing-selected" selected>Em qual servidor Habbo?</option>
 						<option value=".com.br">.com.br</option>
@@ -50,6 +53,7 @@
 			</table>
 		</div>
 		<div class="login-box-transparente2">
+			<button onclick="start_options('already-registered');">Teste</button>
 			<button class="button-box button-login" style="display:none;">Logar</button>
 			<button class="button-box button-register" onclick="confirm_hb_name();">Próximo</button>
 		</div>

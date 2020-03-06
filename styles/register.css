@@ -104,6 +104,32 @@ body{
 .input-userpass{
 	display:none;
 }
+/*Interface - Usuário Já Cadastrado*/
+
+.explain-text-principal{
+	display:none;
+	font-size:20px;
+	color:white;
+}
+.explain-text-secundario{
+	display:none;
+}
+.button-ir-logar:hover{
+	background-color:#b9dd25;
+	color:white;
+}
+.button-ir-logar{
+	background-color:#41a6bf;
+	color:white;
+	display:none;
+	height:36px;
+	width:100%;
+	cursor:pointer;
+	border-radius:30px;
+	margin-left:auto;
+	margin-right:auto;
+}
+
 /*Confirmar hbName -- Confirmar nome Habbo*/
 .input-hbname-confirm-code{
 	display:none;
@@ -115,7 +141,7 @@ body{
 	text-align:center;
 }
 .explain-confirm-text{
-	display:block;
+	display:none;
 }
 #code-confirm{
 	display:block;
