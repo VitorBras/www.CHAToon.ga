@@ -41,7 +41,7 @@ body{
 
 .login-box-transparente {
     display: block;
-    height: 80%;
+    height: 117%;
     width: 80%;
     background-color: rgba(0,0,0,0.1);
     margin-right: auto;
@@ -58,10 +58,8 @@ body{
     /* background-color: black; */
     margin-right: auto;
     margin-left: auto;
-
-    top: 1px;
+    top: -35px;
 }
-
 
 .button-box{
 	height:95%;
@@ -89,7 +87,7 @@ body{
 	position:relative;
 	margin-right:auto;
 	margin-left:auto;
-	top:25%;
+	top:7%;
 }
 .input {
     height: 36px;
@@ -108,6 +106,29 @@ body{
 	width:100%;
 	list-style:none;
 	padding:0;
+}
+.explain-confirm{
+	text-align:center;
+}
+.explain-text-principal{
+	display:block;
+	font-size:20px;
+	color:white;
+}
+.explain-text-secundario{
+	display:block;
+}
+
+#servidor{
+
+    height: 36px;
+    width: 177px;
+    border-radius: 20px;
+    text-align: center;
+
+}
+#servidor option{
+	background-color: #d0e4ea;
 }
 
 #hb_name_existence{

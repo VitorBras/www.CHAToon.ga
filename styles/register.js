@@ -12,6 +12,9 @@ function our_policals(){//Quando o usuário tem a conta banida e está tentando 
 	window.location.href = "nossaPolitica.php";
 }
 
+function back_to_login(){
+	window.location.href = "login.php";
+}
 function logar(caso){//Redireciona o usuário a página de login. Salva o nome de usuário no cookie.
 	//Guardando o nome do usuário
 	habboName = document.querySelector(".input-username").value;

@@ -41,7 +41,7 @@ body{
 
 .login-box-transparente {
     display: block;
-    height: 80%;
+    height: 117%;
     width: 80%;
     background-color: rgba(0,0,0,0.1);
     margin-right: auto;
@@ -58,8 +58,7 @@ body{
     /* background-color: black; */
     margin-right: auto;
     margin-left: auto;
-
-    top: 1px;
+    top: -35px;
 }
 
 
@@ -129,7 +128,13 @@ body{
 	margin-left:auto;
 	margin-right:auto;
 }
-
+.button-voltar{
+	background-color:#41a6bf;
+	color:white;
+}
+.button-voltar:hover{
+	background-color:#ffab1c;
+}
 /*Confirmar hbName -- Confirmar nome Habbo*/
 .input-hbname-confirm-code{
 	display:none;
