@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: 03-Mar-2020 às 06:14
+-- Generation Time: 07-Mar-2020 às 17:21
 -- Versão do servidor: 5.7.24
 -- versão do PHP: 7.3.1
 
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `db_sistemaChat`
+-- Database: `db_sistemachat`
 --
 
 -- --------------------------------------------------------
@@ -85,11 +85,28 @@ CREATE TABLE IF NOT EXISTS `codigo_confirmacao` (
   `habbo_name` varchar(18) NOT NULL COMMENT 'O nome do usuário é cadastrado. Porém ainda está em verificação. É neste processo que o sistema armazena o código mantendo sua relação com o nome apresentado/cadastrado pelo usuário. O sistema precisa cadastrar o nome. Porém num cadastro de verificação. Qualquer um pode sobreescrever os dados. Mas só  um pode confirmar utilizando o código correto.',
   `codigo_hb_name` varchar(20) DEFAULT NULL COMMENT 'Não sei porque eu inclui este campo nessa tabela que se trata de uma mera verificação. Por não se tratar de um cadastro do usuário de FATO no sistema o seu código de identificação não é gerado por isso não deveria nem existir este campo. Ainda não tenho certeza. Vou deixa-lo para no futuro eu compreender. ',
   `email` varchar(34) DEFAULT NULL COMMENT 'O campo está aí. Porém o usuário não precisa informar o seu email no seu cadastro para se cadastrar ao sistema NA VERSÂO BETA deste sistema. Mais pra frente posso tornar obrigatório o usuário ter de informar qual é o seu email. Por isso estou deixando este campo aqui porém NULO.',
-  `codigo_email` int(6) NOT NULL,
+  `codigo_email` varchar(6) DEFAULT NULL,
   `status` int(11) DEFAULT '0',
   `criado_timestamp` timestamp(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Quando o usuário cadastra esse é o seu primeiro registro. Seus dados ainda precisam ser confirmados.. o sistema precisa confirmar que é dele mesmo o email e nome de usuário no Habbo. Portanto o timestamp é gravado para a restauração dos códigos de verificação quando o seu tempo de verificação superior o tempo configurado no arquivo sistemaConfig.xml no diretório do sistema.',
+  `server` varchar(7) NOT NULL COMMENT 'Servidor Habbo onde o usuario joga.',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=45 DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `codigo_confirmacao`
+--
+
+INSERT INTO `codigo_confirmacao` (`id`, `habbo_name`, `codigo_hb_name`, `email`, `codigo_email`, `status`, `criado_timestamp`, `server`) VALUES
+(1, '4Queijos', '4444', NULL, NULL, 0, '2020-03-05 20:03:06.000000', ''),
+(19, 'Te_Importa?', NULL, NULL, NULL, 1, '2020-03-05 21:01:24.000000', '.com.br'),
+(37, 'Bolsonaro1', '006319', NULL, NULL, 0, '2020-03-07 16:36:39.000000', '.com.br'),
+(34, 'VitorGp', '085493', NULL, NULL, 0, '2020-03-07 16:01:49.000000', '.com.br'),
+(35, 'Te_Importa?', '200950', NULL, NULL, 0, '2020-03-07 20:06:01.000000', '.de'),
+(36, 'Testando', '593764', NULL, NULL, 0, '2020-03-07 14:21:19.000000', '.com'),
+(32, 'Te_Importa?', '706275', NULL, NULL, 0, '2020-03-07 12:55:33.000000', '.com'),
+(30, 'vitoradm', '270088', NULL, NULL, 0, '2020-03-06 13:26:58.000000', '.com.br'),
+(31, 'Vitor', '421520', NULL, NULL, 0, '2020-03-07 18:16:34.000000', '.fr'),
+(44, 'Bolsonaro1', NULL, NULL, NULL, 1, '2020-03-07 15:10:39.000000', '.com');
 
 -- --------------------------------------------------------
 
@@ -139,17 +156,29 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `habbo_name` varchar(18) NOT NULL COMMENT 'Nome do usuário cadastrado no sistema.',
   `senha` varchar(34) NOT NULL COMMENT 'Senha do usuário cadastrado. Vai es',
-  `creditos` int(11) NOT NULL DEFAULT '0' COMMENT 'O crédito que o usário possui no sistema. Será usado para a utilização de funções no chat.',
+  `creditos` int(11) DEFAULT '0' COMMENT 'O crédito que o usário possui no sistema. Será usado para a utilização de funções no chat.',
   `email` varchar(34) DEFAULT NULL COMMENT 'O email que o usuário irá cadastrar/vincular a conta no sistema.',
   `celular` varchar(12) DEFAULT NULL COMMENT 'O número de celular do usuário que irá vincular a conta.',
   `rede_social` varchar(83) DEFAULT NULL,
-  `criando_timestamp` timestamp(6) NOT NULL COMMENT 'É a hora e a data quando o usuário foi cadastrado no sistema.',
+  `criado_timestamp` timestamp(6) NULL DEFAULT NULL COMMENT 'É a hora e a data quando o usuário foi cadastrado no sistema.',
   `ban` tinyint(1) DEFAULT '0' COMMENT 'O usuário pode ser banido do sistema. Não há tempo de término para o banido. É necessário enviar um email para a administração do site ou sistema.',
   `server` varchar(7) NOT NULL DEFAULT '.com.br' COMMENT 'Indica em qual servidor o usuário pertence. No cadastra ele informará.',
-  `status` int(11) NOT NULL DEFAULT '0' COMMENT 'Define se o usuário está online ou offline.',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `habbo_name` (`habbo_name`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `status` int(11) DEFAULT '0' COMMENT 'Define se o usuário está online ou offline.',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `usuarios`
+--
+
+INSERT INTO `usuarios` (`id`, `habbo_name`, `senha`, `creditos`, `email`, `celular`, `rede_social`, `criado_timestamp`, `ban`, `server`, `status`) VALUES
+(1, '4Queijos', 'administrador55', 30, NULL, NULL, NULL, NULL, 1, '.com.br', 0),
+(2, '4Queijoss', 'administrador55', 400, NULL, NULL, NULL, NULL, 0, '.com.br', 0),
+(4, 'Te_Importa?', 'piriquitoverde', 0, NULL, NULL, NULL, NULL, 0, '.com.br', 0),
+(5, 'Administrador', 'administrando', 0, NULL, NULL, NULL, '2020-03-07 03:00:00.000000', 0, '.com.br', 0),
+(17, 'Bolsonaro1', 'Testando', 0, NULL, NULL, NULL, '2020-03-07 15:13:29.000000', 0, '.com', 0),
+(7, 'Te_Importa?', 'piriquitoverde', 0, NULL, NULL, NULL, NULL, 0, '.com.br', 0),
+(13, 'Te_Importa?', 'piriquitoverde', 0, NULL, NULL, NULL, NULL, 0, '.com.br', 0);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
