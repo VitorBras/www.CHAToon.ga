@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<systemConfig>
+	<session>
+		<usuarioComum>
+			<tempoMaximo minutos="30"/>
+		</usuarioComum>
+	</session>
 
-<session>
-	<tempoMaximo minutos="30"/>
-	<tipoSessao>usuarioComum</tipoSessao>
-</session>
-
-
+	<habboServer>
+		<server available="yes">.com.br</server>
+		<server available="not">.com</server>
+		<server available="yes">.de</server>
+		<server available="yes">.es</server>
+		<server available="yes">.fi</server>
+		<server available="yes">.fr</server>
+		<server available="yes">.it</server>
+		<server available="yes">.nl</server>
+		<server available="yes">.com.tr</server>
+	</habboServer>
+</systemConfig>
 

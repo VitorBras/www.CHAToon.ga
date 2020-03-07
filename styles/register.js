@@ -2,9 +2,15 @@
 
 var habboName;
 var habboServer;
+var habboSenha;
 var active_warnings = 0;
 
 var not_confirmed_yet = 0;
+
+
+function our_policals(){//Quando o usuário tem a conta banida e está tentando recadastra-la essa função redireciona ele a página de NOSSA POLÍTICA.
+	window.location.href = "nossaPolitica.php";
+}
 
 function logar(caso){//Redireciona o usuário a página de login. Salva o nome de usuário no cookie.
 	//Guardando o nome do usuário
@@ -16,14 +22,15 @@ function logar(caso){//Redireciona o usuário a página de login. Salva o nome d
 			window.location.href = "login.php";
 			break;
 	}
-	
+
 }
 function confirm_hb_avatar_owner(){//Pedir para o servidor confirmar a possa da conta do avatar habbo.
 	
+	habboSenha = document.querySelector(".input-userpass").value;console.log(habboSenha);
 	$.ajax({
 				url:"http://localhost/TESTEDECODIGO/Chat/www.CHAToon.ga/functions/confirmarHabboOwner.php",
 				type:"GET",
-				data:{processo:"confirmar-habbo-owner",habbo_name:habboName,habbo_server:habboServer},
+				data:{processo:"confirmar-habbo-owner",habbo_name:habboName,habbo_server:habboServer,senha:habboSenha},
 				success:function(response){
 					console.log("Server Response: "+response);
 					console.log("habboName: "+habboName+" / habboServer: "+habboServer);
@@ -38,8 +45,8 @@ function confirm_hb_avatar_owner(){//Pedir para o servidor confirmar a possa da 
 							console.log("Client App: UI Already Registered");
 							start_options("hb-name-not-confirmed",null,resposta.hbname);
 							break;
-						case "" :
-							
+						case "hb-server-not-accepted" :
+							start_options("server-not-accepted",null);
 							break;
 					}
 					
@@ -55,6 +62,8 @@ function start_options(pagetype,code,hbname){//Acionar opções confirmação
 			
 			document.querySelector("#molde-tabela").setAttribute("style","top:4%;");
 			document.querySelector(".input-username").setAttribute("disabled","");
+			document.querySelector(".input-userpass").disabled = false;
+			document.querySelector(".input-userpass").setAttribute("style","display:block;");
 			document.querySelector(".explain-confirm").setAttribute("style","display:block;");
 			document.querySelector("#code-confirm").setAttribute("style","display:block;");
 			document.querySelector("#code-confirm").innerHTML = code;
@@ -63,10 +72,14 @@ function start_options(pagetype,code,hbname){//Acionar opções confirmação
 			document.querySelector(".button-register").setAttribute("onclick","confirm_hb_avatar_owner();");
 			document.querySelector(".explain-text-principal").innerHTML = "O avatar é mesmo seu?";
 			document.querySelector(".explain-text-principal").setAttribute("style","display:block;");
+			document.querySelector("#servidor").disabled = false;
 			
 			break;
 		case "confirm-email":
 			document.querySelector(".input-hbname-confirm-code").setAttribute("style","display:none;");
+			document.querySelector("#servidor").disabled = false;
+			document.querySelector(".input-userpass").disabled = false;
+			document.querySelector(".input-userpass").setAttribute("style","display:none;");
 			break;
 			
 		case "confirm-phone-number":
@@ -87,6 +100,9 @@ function start_options(pagetype,code,hbname){//Acionar opções confirmação
 			document.querySelector(".explain-text-principal").setAttribute("style","display:block;");
 			document.querySelector(".explain-text-secundario").innerHTML = "Logue nessa conta agora!";
 			document.querySelector(".explain-text-secundario").setAttribute("style","display:block;");
+			document.querySelector("#servidor").disabled = false;
+			document.querySelector(".input-userpass").disabled = false;
+			document.querySelector(".input-userpass").setAttribute("style","display:none;");
 			break;
 		case "register-user" :
 			document.querySelector(".input-username").disabled = false;
@@ -98,6 +114,9 @@ function start_options(pagetype,code,hbname){//Acionar opções confirmação
 			document.querySelector("#servidor").setAttribute("style","display:block;");
 			document.querySelector(".button-register").innerHTML = "Próximo";
 			document.querySelector(".button-register").setAttribute("onclick","confirm_hb_name();");
+			document.querySelector("#servidor").disabled = false;
+			document.querySelector(".input-userpass").disabled = false;
+			document.querySelector(".input-userpass").setAttribute("style","display:none;");
 			break;
 		case "confirmed-hb-name" :
 			//document.querySelector("#molde-tabela").setAttribute("style","top:4%;");
@@ -115,6 +134,9 @@ function start_options(pagetype,code,hbname){//Acionar opções confirmação
 			document.querySelector(".explain-text-principal").setAttribute("style","display:block;");
 			document.querySelector(".explain-text-secundario").innerHTML = "Você está registrado(a) no CHAToon.";
 			document.querySelector(".explain-text-secundario").setAttribute("style","display:block;");
+			document.querySelector("#servidor").disabled = false;
+			document.querySelector(".input-userpass").disabled = false;
+			document.querySelector(".input-userpass").setAttribute("style","display:none;");
 			break;
 		case "hb-name-not-confirmed" :
 			if(not_confirmed_yet < 4){not_confirmed_yet++;//Pedir para confirmar novamente;
@@ -123,6 +145,40 @@ function start_options(pagetype,code,hbname){//Acionar opções confirmação
 				
 			}
 			//Devo desenhar uma interface de recarregamento aqui.
+			document.querySelector("#servidor").disabled = false;
+			document.querySelector(".input-userpass").disabled = false;
+			document.querySelector(".input-userpass").setAttribute("style","display:none;");
+			break;
+		case "hbname-banned":
+			document.querySelector(".explain-text-principal").innerHTML = "Essa conta foi banida!";
+			document.querySelector(".explain-text-principal").setAttribute("style","display:block;");
+			document.querySelector(".explain-confirm").setAttribute("style","display:block;");
+			document.querySelector("#code-confirm").setAttribute("style","display:none;");
+			document.querySelector("#molde-tabela").setAttribute("style","top:11%;");
+			document.querySelector(".input-username").disabled = true;
+			document.querySelector(".input-username").setAttribute("value",habboName);
+			document.querySelector("#servidor").disabled = true;
+			document.querySelector(".button-register").innerHTML = "Leia nossa Política";
+			document.querySelector(".button-register").onclick = function(){our_policals();};
+			document.querySelector(".input-userpass").disabled = false;
+			document.querySelector(".input-userpass").setAttribute("style","display:none;");
+			//selecionando o .com.br :  itera entre os elementos filhos e caso o valor seja compatível com o habboServer que o server retornou esse é selecionado.
+			let elemento = document.querySelector("#servidor");
+			for(i=0;i<elemento.childElementCount;i++){
+				if(elemento.children[i].getAttribute("value") == habboServer){
+					elemento.children[i].selected = true;
+					i = elemento.childElementCount;
+				}
+			}
+			break;
+		case "server-not-accepted" :
+			document.querySelector(".explain-text-principal").innerHTML = "Servidor não aceito!";
+			document.querySelector(".explain-text-principal").setAttribute("style","display:block;");
+			document.querySelector(".explain-confirm").setAttribute("style","display:block;");
+			document.querySelector("#code-confirm").setAttribute("style","display:none;");
+			document.querySelector("#molde-tabela").setAttribute("style","top:10%;");
+			document.querySelector(".input-userpass").disabled = false;
+			document.querySelector(".input-userpass").setAttribute("style","display:none;");
 			break;
 	
 	}
@@ -222,7 +278,8 @@ function confirm_hb_name(){
 				success:function(response){
 					console.log("Server Response: "+response);
 					var resposta = JSON.parse(response);
-
+					habboName = resposta.hbname;
+					habboServer = resposta.hbserver;
 					switch(resposta.response){
 						case "need-confirm-hbname" :
 							console.log("Client App: UI Confirm hbname");
@@ -232,8 +289,12 @@ function confirm_hb_name(){
 							console.log("Client App: UI Already Registered");
 							start_options("already-registered",null,resposta.hbname);
 							break;
-						case "" :
-							
+						case "banned" :
+							console.log("Client App: UI This Account Was Banned");
+							start_options("hbname-banned");
+							break;
+						case "hb-server-not-accepted" :
+							start_options('server-not-accepted');
 							break;
 					}
 					

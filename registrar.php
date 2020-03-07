@@ -53,7 +53,7 @@
 			</table>
 		</div>
 		<div class="login-box-transparente2">
-			<button onclick="start_options('already-registered');">Teste</button>
+			<button onclick="start_options('server-not-accepted');">Teste</button>
 			<button class="button-box button-login" style="display:none;">Logar</button>
 			<button class="button-box button-register" onclick="confirm_hb_name();">Próximo</button>
 		</div>

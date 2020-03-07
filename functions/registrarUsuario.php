@@ -18,6 +18,23 @@ function hbserver_verify_patter(){
 	
 }
 */
+function AcceptedServer($domain){//Preciso abrir o arquivo de configurações do sistema e buscar a lista de servidores Habbo
+	//Verificar se o dominio passado no parâmetro está na lista de configurações do sistema e ver se está ativo no sistema.
+	//Afim de permitir o sistema de verificar e por consequencia a realização do cadastro da conta do usuário para aquele respectivo servidor
+	$configSystem = simplexml_load_file("../config/sistemaConfig.xml");
+	
+	for($i=0,$habS=false;$i<count($configSystem->habboServer->server);$i++){
+		if(((string) $configSystem->habboServer->server[$i]) == $domain){//É um servidor Oficial do Habbo
+			$i=count($configSystem->habboServer->server);
+			$habS=true;
+			return true;
+		}else{
+			if($i+1 == count($configSystem->habboServer->server) and $habS == false){
+				return false;
+			}
+		}
+	}
+}
 
 function gen_code_confirm(){
 	$code = "";
@@ -30,6 +47,7 @@ function gen_code_confirm(){
 	}
 	return($code);
 }
+
 function set_timing($servidor){
 	
 	switch($servidor){
@@ -67,49 +85,54 @@ function set_timing($servidor){
 if(isset($_GET['processo'])){
 	if($_GET['processo'] == "registrar"){
 		if(isset($_GET['processo']) && isset($_GET['hbname']) && isset($_GET['hbserver'])){
-			$hbname = $_GET['hbname'];
-			$hbserver = $_GET['hbserver'];
-			
-			//Registrando nome do usuário mais o código de confirmação no banco de dados
-			
-			//Verificar se o avatar está registrado PARA CONFIRMAÇÃO de posse de conta do avatar Habbo
-			$verify_is_user = mysqli_query($connect,"SELECT habbo_name,ban FROM usuarios WHERE habbo_name = '$hbname';");
-			$resultado = mysqli_fetch_assoc($verify_is_user);
-			//Está registrado em usuários?
-			if($resultado['habbo_name'] == $hbname){//print("Cadastrado em: USUÁRIOS");
+			if(AcceptedServer($_REQUEST['hbserver']) == true){
+				$hbname = $_GET['hbname'];
+				$hbserver = $_GET['hbserver'];
 				
-				//A conta está banida?
-				if($resultado['ban'] == true or $resultado['ban'] == 1){//print("Conta: BANIDA");
-					print("{\"response\":\"banned\",\"hbname\":\"$hbname\",\"hbserver\":\"$hbserver\"}");
-				}else{//Está cadastrado definitivamente e não está banido.
-					print("{\"response\":\"already_registered\",\"hbname\":\"$hbname\",\"hbserver\":\"$hbserver\"}");
-					//print("Cadastrado em: USUÁRIOS e não banido");
-				}
-			}else{//Avatar não está cadastrado como usuário. Será que está na base de dados para confirmação de HABBO NAME?
-				$verify_is_confirming = mysqli_query($connect,"SELECT habbo_name,codigo_hb_name,status FROM codigo_confirmacao WHERE habbo_name = '$hbname';");
-				$result = mysqli_fetch_assoc($verify_is_confirming);
-				//O sistema está esperando o usuário confirmar a posse da conta Avatar Habbo?
-				//print("status: ".$result['status']);
-				//print("habbo_name: ".$result['habbo_name']);
-				if($result['status'] == "0" and strtolower($result['habbo_name']) == strtolower("$hbname")){//Sim
-					//print("Cadastrado em: BASE DE CONFIRMAÇÃO e aguardando confirmação de HBNAME");
-					$codigo_confirmacao = $result['codigo_hb_name'];
-					print("{\"response\":\"need-confirm-hbname\",\"hbname\":\"$hbname\",\"hbserver\":\"$hbserver\",\"code\":\"$codigo_confirmacao\"}");
-				}elseif($result['status'] == 2){//Usuário cadastrado.. mas com o email confirmado?
-					print("{\"response\":\"already_registered-with-email-confirmed\",\"hbname\":\"$hbname\",\"hbserver\":\"$hbserver\"}");
-				}else{//print("EXECUTANDO.</br>");
-					//O status não é 0 e nem 2: Não está para confirmar, nem foi confirmado com email. Então não foi cadastrado em lugar algum.
-					//Então vamos cadastrar o usuário na base de confirmação...
-					set_timing($hbserver);
-					$codigo = gen_code_confirm();
-					$datetime = date("Y-m-d H:i:s");
-					mysqli_query($connect,"INSERT INTO codigo_confirmacao (habbo_name,codigo_hb_name,server,criado_timestamp) VALUES ('$hbname','$codigo','$hbserver','$datetime')");
-					print("{\"response\":\"need-confirm-hbname\",\"hbname\":\"$hbname\",\"hbserver\":\"$hbserver\",\"code\":\"$codigo\"}");
-					//print("Aki".mysqli_error($connect)."Aki");
-				}
+				//Registrando nome do usuário mais o código de confirmação no banco de dados
+				
+				//Verificar se o avatar está registrado PARA CONFIRMAÇÃO de posse de conta do avatar Habbo
+				$verify_is_user = mysqli_query($connect,"SELECT habbo_name,ban FROM usuarios WHERE habbo_name = '$hbname' AND server = '$hbserver';");
+				$resultado = mysqli_fetch_assoc($verify_is_user);
+				//Está registrado em usuários?
+				if($resultado['habbo_name'] == $hbname){//print("Cadastrado em: USUÁRIOS");
+					
+					//A conta está banida?
+					if($resultado['ban'] == true or $resultado['ban'] == 1){//print("Conta: BANIDA");
+						print("{\"response\":\"banned\",\"hbname\":\"$hbname\",\"hbserver\":\"$hbserver\"}");
+					}else{//Está cadastrado definitivamente e não está banido.
+						print("{\"response\":\"already_registered\",\"hbname\":\"$hbname\",\"hbserver\":\"$hbserver\"}");
+						//print("Cadastrado em: USUÁRIOS e não banido");
+					}
+				}else{//Avatar não está cadastrado como usuário. Será que está na base de dados para confirmação de HABBO NAME?
+					$verify_is_confirming = mysqli_query($connect,"SELECT habbo_name,codigo_hb_name,status FROM codigo_confirmacao WHERE habbo_name = '$hbname' AND server = '$hbserver';");
+					$result = mysqli_fetch_assoc($verify_is_confirming);
+					//O sistema está esperando o usuário confirmar a posse da conta Avatar Habbo?
+					//print("status: ".$result['status']);
+					//print("habbo_name: ".$result['habbo_name']);
+					if($result['status'] == "0" and strtolower($result['habbo_name']) == strtolower("$hbname")){//Sim
+						//print("Cadastrado em: BASE DE CONFIRMAÇÃO e aguardando confirmação de HBNAME");
+						$codigo_confirmacao = $result['codigo_hb_name'];
+						print("{\"response\":\"need-confirm-hbname\",\"hbname\":\"$hbname\",\"hbserver\":\"$hbserver\",\"code\":\"$codigo_confirmacao\"}");
+					}elseif($result['status'] == "2"){//Usuário cadastrado.. mas com o email confirmado?
+						print("{\"response\":\"already_registered-with-email-confirmed\",\"hbname\":\"$hbname\",\"hbserver\":\"$hbserver\"}");
+					}else{//print("EXECUTANDO.</br>");
+						//O status não é 0 e nem 2: Não está para confirmar, nem foi confirmado com email. Então não foi cadastrado em lugar algum.
+						//Então vamos cadastrar o usuário na base de confirmação...
+						set_timing($hbserver);
+						$codigo = gen_code_confirm();
+						$datetime = date("Y-m-d H:i:s");
+						mysqli_query($connect,"INSERT INTO codigo_confirmacao (habbo_name,codigo_hb_name,server,criado_timestamp) VALUES ('$hbname','$codigo','$hbserver','$datetime')");
+						print("{\"response\":\"need-confirm-hbname\",\"hbname\":\"$hbname\",\"hbserver\":\"$hbserver\",\"code\":\"$codigo\"}");
+						//print("Aki".mysqli_error($connect)."Aki");
+					}
+				}	
+			}else{
+				echo("{\"response\":\"hb-server-not-accepted\",\"habbo_name\":\"$hbname\",\"habbo_server\":\"$hbserver\"}");
 			}
 			
-			//mysqli_query($connect,"INSERT INTO codigo_confirmacao (habbo_name,codigo_hb_name,status) VALUES ($hbname,$codigo,0)");
+			
+			
 			
 		
 		}
