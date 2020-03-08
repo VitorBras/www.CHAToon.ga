@@ -11,15 +11,24 @@ ______________________CORES USADAS____________________
 
 Azul clarinho no background: #E1EEF2
 Azul claro : #72c2ff
-Azul Esverdeado no background dos botões: #41a6bf
 
+	(Botões)
+Azul Esverdeado no background dos botões: #41a6bf
+Verde claro do Botão ativo no Botao de Login: #b9dd25
 Vermelho do botao sair: 						#f43a3a        *era do botão registrar do login
 Amarelo usado no botão registrar: 				#ffab1c
+
+
 Verde claro usado na confirmação dos inputs : 	#7fe86f
 Preto usado nos botões : #333c3f
 
-
+Preto usado no Menu do Dashboard : #1c1c1c
 Degradê dos painéis principais: #72c2ff > #66cdaa
+Degradê na Base da area de pesquisa: #696f73 > #66cdaa
+
+	(Degradês utilizados)
+info ADM em GRUPOS: linear-gradient(#ffab1c,#ffd20a,#ffab1c);
+
 
 _________________CORES DE QUE GOSTEI MAS NÂO ESTÃO EM USO
 
@@ -28,3 +37,5 @@ _________________CORES DE QUE GOSTEI MAS NÂO ESTÃO EM USO
 Verde de cachoeira clara: 66cdaa
 
 Azul clarinho : d0e4ea
+
+Azul escuro interessante: rgba(4,4,42,1)

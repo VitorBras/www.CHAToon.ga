@@ -1,0 +1,168 @@
+
+body{
+	background-color:#E1EEF2;
+}
+
+/*Bases*/
+
+.boxBase-One{
+	background: linear-gradient(to right,#72c2ff,#66cdaa);
+	border-radius:20px;
+	width:50%;
+	min-height:20%;
+	margin-left:auto;
+	margin-right:auto;
+	padding-bottom:20px;
+	box-shadow:2px 2px 16px #848484;
+}
+
+/*Encapsuladores de conteúdos*/
+
+.menu-bar {
+    background: linear-gradient(#1c1c1c,#7f7f7f);
+    height: 40px;
+    width: 100%;
+    box-shadow: 0px 4px 2px #5a5a5a;
+    border-radius: 20px 20px 0px 0px;
+}
+
+/*--------- Profile ----------*/
+.boxBase-Two{
+	background: rgb(202, 214, 217.0.4);
+	height:200px;
+	width:100%;
+	margin-top:10px;
+	border-radius:20px;
+}
+
+.boxContent-One{
+	background-color: rgba(202, 214, 217,0.4);
+	height:100%;
+	width:49%;
+	float:left;
+	margin-left:2.5px;
+	margin-right:2.5px;
+	border-radius:20px 40px;
+}
+.boxContent-Two{
+	background-color: rgba(202, 214, 217,0.4);
+	height:100%;
+	width:49%;
+	float:right;
+	margin-right:2.5px;
+	margin-left:2.5px;
+	border-radius:40px 20px;
+}
+
+/*--------------------*/
+/*---- Area de Pesquisa -----*/
+.boxBase-Three {
+    background: linear-gradient(to right,#72c2ff,#66cdaa);
+    height: 200px;
+    width: 98%;
+    margin-top: 10px;
+    margin-right: auto;
+    margin-left: auto;
+    border-radius: 20px;
+    box-shadow: 0px 0px 12px whitesmoke;
+}
+
+
+/*-------- Area dos Resultados das pesquisas ---------*/
+.boxBase-Four {
+	display:block;
+    position: relative;
+    background: linear-gradient(to right,#696f73,#66cdaa);
+    min-height: 200px;
+    width: 116%;
+    margin-top: 20px;
+    margin-right: auto;
+    margin-left: auto;
+    border-radius: 20px;
+	padding-bottom:10px;
+    left: -8%;
+}
+.boxContent-Infos {
+    position: relative;
+    width: 97%;
+    height: 84px;
+    background-color: #dadada;
+    border-radius: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    top: 10px;
+    box-shadow: 0px 8px 8px #6d6d6d;
+}
+.molde-infos{
+	position:relative;
+	top:8%;
+	margin-right:auto;
+	margin-left:auto;
+}
+.molde-infos td{
+	background-color:#6A807B;
+	color:white;
+}
+.infos-categories{
+	text-align:center;
+	font-weight:700;
+}
+
+/*--------------sessão Lista de resultados da pesquisa de GRUPOS-------------*/
+.boxContent-resultados{
+	position:relative;
+	width:97%;
+	min-height:100px;
+	background-color:white;
+	margin-right:auto;
+	margin-left:auto;
+	margin-top:20px;
+	border-radius:20px;
+}
+
+.boxContent-lista-resultados li{
+	position:relative;
+	list-style:none;
+	display:block;
+	background-color:gray;
+	border-radius:20px;
+	margin-right:20px;
+	padding-left:10px;
+	top:3px;
+}
+
+.info-nome-group{
+	display:block;
+	font-size:17px;
+}
+
+.info-adm-group[hasadm="yes"] span{
+	display:block;
+	background: linear-gradient(#ffab1c,#ffd20a,#ffab1c);
+	border-radius:20px;
+	text-align:center;
+	width:101px;
+}
+
+.info-adm-group[hasadm="no"] span{
+	display:none;
+	
+}
+
+.info-qtd-members{
+	display:block;
+	color:white;
+}
+
+.action-join-button button{
+	display:block;
+	background-color:#333c3f;
+	color:white;
+	width:120px;
+	height:24px;
+}
+
+.action-join-button button:hover{
+	background-color:#ffab1c;
+	cursor:pointer;
+}
