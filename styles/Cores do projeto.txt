@@ -20,7 +20,7 @@ Amarelo usado no botão registrar: 				#ffab1c
 
 
 Verde claro usado na confirmação dos inputs : 	#7fe86f
-Preto usado nos botões : #333c3f
+Preto usado nos botões : #333c3f     :hover  #49575b
 
 Preto usado no Menu do Dashboard : #1c1c1c
 Degradê dos painéis principais: #72c2ff > #66cdaa

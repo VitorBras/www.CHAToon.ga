@@ -107,7 +107,34 @@ body{
 	text-align:center;
 	font-weight:700;
 }
-
+/*--------------Zona de pesquisa por GRUPOS e PESSOAS------------------*/
+.box-search{
+	display:block;
+	height:38px;
+	width:100%;
+	background-color:gray;
+}
+.molde-box-search{
+	margin-left:auto;
+	margin-right:auto;
+}
+.inputs-search {
+    height: 32px;
+    width: 342px;
+	border-radius:20px;
+}
+#filtro{
+	height:32px;
+}
+.molde-box-search button{
+	height:32px;
+	background-color:#333c3f;
+	color:white;
+}
+.molde-box-search button:hover{
+	cursor:pointer;
+	background-color:#49575b;
+}
 /*--------------sessão Lista de resultados da pesquisa de GRUPOS-------------*/
 .boxContent-resultados{
 	position:relative;
@@ -118,9 +145,10 @@ body{
 	margin-left:auto;
 	margin-top:20px;
 	border-radius:20px;
+	padding-bottom:5px;
 }
 
-.boxContent-lista-resultados li{
+.boxContent-lista-resultados-grupos li{
 	position:relative;
 	list-style:none;
 	display:block;
@@ -137,6 +165,57 @@ body{
 }
 
 .info-adm-group[hasadm="yes"] span{
+	display:block;
+	background: linear-gradient(#ffab1c,#ffd20a,#ffab1c);
+	border-radius:20px;
+	text-align:center;
+	width:101px;
+}
+
+.info-adm-group[hasadm="no"] span{
+	display:none;
+	
+}
+
+.info-qtd-members{
+	display:block;
+	color:white;
+}
+
+.action-join-button button{
+	display:block;
+	background-color:#333c3f;
+	color:white;
+	width:120px;
+	height:24px;
+}
+
+.action-join-button button:hover{
+	background-color:#ffab1c;
+	cursor:pointer;
+}
+
+/*--------------sessão Lista de resultados da pesquisa de PESSOAS-------------*/
+.boxContent-lista-resultados-pessoas{
+	display:block;
+}
+.boxContent-lista-resultados-pessoas li{
+	position:relative;
+	list-style:none;
+	display:block;
+	background-color:gray;
+	border-radius:20px;
+	margin-right:20px;
+	padding-left:10px;
+	top:3px;
+}
+
+.info-nome-group{
+	display:block;
+	font-size:17px;
+}
+
+.info-adm-group[isme="yes"] span{
 	display:block;
 	background: linear-gradient(#ffab1c,#ffd20a,#ffab1c);
 	border-radius:20px;
