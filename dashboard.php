@@ -13,14 +13,38 @@ session_start();
 	<body>
 		<div class="boxBase-One">
 			<nav class="menu-bar">
-				MENU
+				<div class="box-menu-bar">
+					<button class="button-negocios botoes-menu">Negócios</button>
+					<button class="button-friendsbotoes-menu botoes-menu">Amigos</button>
+					<button class="button-configuracoes botoes-menu">Configurações</button>
+				</div>
 			</nav>
 			<div class="boxBase-Two">
 				<div class="boxContent-One">
-				
+					<table class="molde-profile-data">
+						<tr>
+							<td id="nome">Nome:</td>
+						</tr>
+						<tr>
+							<td>Like:</td>
+						</tr>
+						<tr>
+							<td>Friend QTD:</td>
+						</tr>
+						<tr>
+							<td>Status:</td>
+						</tr>
+					</table>
 				</div>
 				<div class="boxContent-Two">
-				
+					<div class="money-box-info">
+						<div class="prefixoMoneyBox">
+							<span id="prefixoMoney">Toon$</span>
+						</div>
+						<div class="prefixoMoneyBoxTwo">
+							<span id="unidade-toon-money">200</span>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="boxBase-Three">
@@ -54,6 +78,11 @@ session_start();
 						<tr>
 							<td>Grupos Privados</td>
 							<td>60</td>
+						</tr>
+					</table>
+					<table class="molde-infos-pessoas">
+						<tr>
+							<td><pan>255 pessoas encontradas</span></td>
 						</tr>
 					</table>
 				</div>
