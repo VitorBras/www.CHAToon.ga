@@ -133,12 +133,14 @@ body{
 #filtro{
 	height:32px;
 	width:100%;
+	border-radius:20px;
 }
 .molde-box-search button{
 	height:32px;
 	width:100%;
 	background-color:#333c3f;
 	color:white;
+	border-radius:20px;
 }
 .molde-box-search button:hover{
 	cursor:pointer;
@@ -172,39 +174,86 @@ body{
 	display:block;
 	font-size:17px;
 }
-
-.info-adm-group[hasadm="yes"] span{
-	display:block;
-	background: linear-gradient(#ffab1c,#ffd20a,#ffab1c);
-	border-radius:20px;
-	text-align:center;
-	width:101px;
+@media (max-width:618px){
+	.info-adm-group[hasadm="yes"] span{
+		display:block;
+		background: linear-gradient(#ffab1c,#ffd20a,#ffab1c);
+		border-radius:20px;
+		text-align:center;
+		width:60px;
+	}
+}
+@media (min-width:618px){
+	.info-adm-group[hasadm="yes"] span{
+		display:block;
+		background: linear-gradient(#ffab1c,#ffd20a,#ffab1c);
+		border-radius:20px;
+		text-align:center;
+		width:101px;
+	}
 }
 
 .info-adm-group[hasadm="no"] span{
-	display:none;
-	
+	/*display:none;*/
+}
+.info-adm-group[hasadm="yes"] span{
+	display:block;
 }
 
 .info-qtd-members{
 	display:block;
 	color:white;
 }
+@media screen and (min-width:618px){
+	.action-join-button button{
+		display:block;
+		background-color:#333c3f;
+		color:white;
+		width:120px;
+		height:24px;
+	}
+
+
+
+	
+}
+
+@media screen and (max-width:618px){
+	.action-join-button button{
+		display:block;
+		background-color:#333c3f;
+		color:red;
+		width:65px;
+		height:24px;
+	}
+	#molde-resultados-grupos-pesquisa{
+		font-size:16px;
+	}
+}
 
 .action-join-button button{
 	display:block;
 	background-color:#333c3f;
 	color:white;
-	width:120px;
-	height:24px;
 }
-
 .action-join-button button:hover{
 	background-color:#ffab1c;
 	cursor:pointer;
 }
 
 /*--------------sessão Lista de resultados da pesquisa de PESSOAS-------------*/
+
+
+@media (max-width:970px){
+	#molde-resultados-grupos-pesquisa{
+		width:200px;
+		font-size:12px;
+	}
+}
+
+#molde-resultados-pessoas-pesquisa{
+	width:100%;
+}
 .boxContent-lista-resultados-pessoas{
 	display:block;
 }
@@ -240,14 +289,6 @@ body{
 .info-qtd-members{
 	display:block;
 	color:white;
-}
-
-.action-join-button button{
-	display:block;
-	background-color:#333c3f;
-	color:white;
-	width:120px;
-	height:24px;
 }
 
 .action-join-button button:hover{

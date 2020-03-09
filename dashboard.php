@@ -97,14 +97,14 @@ session_start();
 									<td class="info-adm-group" hasadm="yes"><span>Tenho ADM</span></td>
 									<td class="info-qtd-members"><span>QTD Participantes</span></td>
 									<td class="info-owner"><span>Dono/Publico/Privado</span></td>
-									<td class="action-join-button"><button>Entrar</button></td>
+									<td class="action-join-button"><button class="action-join-button-btn">Entrar</button></td>
 								</tr>
 							</table>
 						</li>
 					</ul>
 					<ul class="boxContent-lista-resultados-pessoas">
 						<li>
-							<table id="molde-resultados-grupos-pesquisa">
+							<table id="molde-resultados-pessoas-pesquisa">
 								<tr>
 									<td class="info-nome-group">Nome pessoa</td>					
 								</tr>
