@@ -100,6 +100,23 @@ session_start();
 									<td class="action-join-button"><button class="action-join-button-btn">Entrar</button></td>
 								</tr>
 							</table>
+							<table id="molde-resultados-grupos-pesquisaTwo">
+								<tr>
+									<td class="info-nome-group">Nome grupo</td>					
+								</tr>
+								<tr>
+									<td class="info-adm-group" hasadm="yes"><span>Tenho ADM</span></td>
+								</tr>
+								<tr>
+									<td class="info-qtd-members"><span>QTD Participantes</span></td>
+								</tr>
+								<tr>							
+									<td class="info-owner"><span>Dono/Publico/Privado</span></td>
+								</tr>
+								<tr>
+									<td class="action-join-button"><button class="action-join-button-btn">Entrar</button></td>
+								</tr>
+							</table>
 						</li>
 					</ul>
 					<ul class="boxContent-lista-resultados-pessoas">
@@ -112,6 +129,23 @@ session_start();
 									<td class="info-adm-group" isme="yes"><span>Sou eu</span></td>
 									<td class="info-qtd-members"><span>QTD amigos</span></td>
 									<td class="info-owner"><span>Adicionado</span></td>
+									<td class="action-join-button"><button>Adicionar</button></td>
+								</tr>
+							</table>
+							<table id="molde-resultados-pessoas-pesquisaTwo">
+								<tr>
+									<td class="info-nome-group">Nome pessoa</td>					
+								</tr>
+								<tr>
+									<td class="info-adm-group" isme="yes"><span>Sou eu</span></td>
+								</tr>
+								<tr>
+									<td class="info-qtd-members"><span>QTD amigos</span></td>
+								</tr>
+								<tr>
+									<td class="info-owner"><span>Adicionado</span></td>
+								</tr>
+								<tr>
 									<td class="action-join-button"><button>Adicionar</button></td>
 								</tr>
 							</table>

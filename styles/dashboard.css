@@ -5,17 +5,41 @@ body{
 
 /*Bases*/
 
-.boxBase-One{
-	background: linear-gradient(to right,#72c2ff,#66cdaa);
-	border-radius:20px;
-	width:50%;
-	min-height:20%;
-	margin-left:auto;
-	margin-right:auto;
-	padding-bottom:20px;
-	box-shadow:2px 2px 16px #848484;
-}
 
+@media screen and (max-width:765px){
+	.boxBase-One{
+		background: linear-gradient(to right,#72c2ff,#66cdaa);
+		border-radius:20px;
+		width:412.16px;
+		min-height:20%;
+		margin-left:auto;
+		margin-right:auto;
+		padding-bottom:20px;
+		box-shadow:0px 0px 0px #848484;
+	}
+}
+@media screen and (min-width:765px){
+	.boxBase-One{
+		background: linear-gradient(to right,#72c2ff,#66cdaa);
+		border-radius:20px;
+		width:50%;
+		min-height:20%;
+		margin-left:auto;
+		margin-right:auto;
+		padding-bottom:20px;
+		box-shadow:2px 2px 16px #848484;
+	}
+}
+@media screen and (max-width:511px){
+	.boxBase-One{
+		width:90%;
+		min-height:20%;
+		margin-left:auto;
+		margin-right:auto;
+		padding-bottom:20px;
+		box-shadow:0px 0px 0px #848484;
+	}
+}
 /*Encapsuladores de conteúdos*/
 
 .menu-bar {
@@ -177,7 +201,8 @@ body{
 @media (max-width:618px){
 	.info-adm-group[hasadm="yes"] span{
 		display:block;
-		background: linear-gradient(#ffab1c,#ffd20a,#ffab1c);
+		/*background: linear-gradient(#ffab1c,#ffd20a,#ffab1c);*/
+		background-color:gray;
 		border-radius:20px;
 		text-align:center;
 		width:60px;
@@ -186,7 +211,8 @@ body{
 @media (min-width:618px){
 	.info-adm-group[hasadm="yes"] span{
 		display:block;
-		background: linear-gradient(#ffab1c,#ffd20a,#ffab1c);
+		/*background: linear-gradient(#ffab1c,#ffd20a,#ffab1c);*/
+		
 		border-radius:20px;
 		text-align:center;
 		width:101px;
@@ -199,38 +225,74 @@ body{
 .info-adm-group[hasadm="yes"] span{
 	display:block;
 }
-
 .info-qtd-members{
 	display:block;
 	color:white;
 }
-@media screen and (min-width:618px){
+@media screen and (min-width:1060px){
 	.action-join-button button{
-		display:block;
-		background-color:#333c3f;
+		width:71px;
+	}
+}
+@media screen and (min-width:900px) and (max-width:1060px){
+	.action-join-button button{
+		background-color:blue;
 		color:white;
-		width:120px;
+		width:71px;
 		height:24px;
 	}
-
-
-
-	
 }
-
+@media screen and (min-width:795px) and (max-width:900px){
+	.action-join-button button{
+		display:block;
+		background-color:red;
+		/*333c3f*/
+		color:white;
+		width:71px;
+		height:24px;
+	}
+}
+@media screen and (min-width:618px){
+	#molde-resultados-grupos-pesquisaTwo{
+		display:none;
+	}
+	#molde-resultados-pessoas-pesquisaTwo{
+		display:none;
+	}
+}
 @media screen and (max-width:618px){
 	.action-join-button button{
 		display:block;
-		background-color:#333c3f;
+		background-color:green;
 		color:red;
-		width:65px;
+		width:71px;
 		height:24px;
 	}
 	#molde-resultados-grupos-pesquisa{
 		font-size:16px;
+		display:none;
+	}
+	
+	#molde-resultados-pessoas-pesquisa{
+		display:none;
 	}
 }
-
+@media screen and (max-width:415px){/*Tela pequena demais. Troca de MOLDE TABELA que encapsulam as informações*/
+	#molde-resultados-grupos-pesquisa{
+		display:none;
+	}
+	
+	#molde-resultados-pessoas-pesquisa{
+		display:none;
+	}
+	
+	#molde-resultados-grupos-pesquisaTwo{
+		display:table;
+	}
+	#molde-resultados-pessoas-pesquisaTwo{
+		display:table;
+	}
+}
 .action-join-button button{
 	display:block;
 	background-color:#333c3f;
@@ -244,13 +306,23 @@ body{
 /*--------------sessão Lista de resultados da pesquisa de PESSOAS-------------*/
 
 
-@media (max-width:970px){
+@media screen and (max-width:970px){
 	#molde-resultados-grupos-pesquisa{
-		width:200px;
+		font-size:12px;
+	}
+	#molde-resultados-grupos-pesquisaTwo{
+		font-size:12px;
+	}
+	#molde-resultados-pessoas-pesquisa{
+		font-size:12px;
+	}
+	#molde-resultados-pessoas-pesquisaTwo{
 		font-size:12px;
 	}
 }
-
+#molde-resultados-grupos-pesquisa{
+	width:100%;
+}
 #molde-resultados-pessoas-pesquisa{
 	width:100%;
 }
