@@ -143,7 +143,7 @@ body{
 	display:block;
 	height:38px;
 	width:100%;
-	background-color:gray;
+	background-color:rgba(51, 60, 63,0.6);;
 }
 .molde-box-search{
 	width:100%;
@@ -175,19 +175,20 @@ body{
 	position:relative;
 	width:97%;
 	min-height:100px;
-	background-color:white;
+	background-color:rgba(51, 60, 63,0.6);
 	margin-right:auto;
 	margin-left:auto;
 	margin-top:20px;
 	border-radius:20px;
 	padding-bottom:5px;
+	padding-top:1px;
 }
 
 .boxContent-lista-resultados-grupos li{
 	position:relative;
 	list-style:none;
 	display:block;
-	background-color:gray;
+	background:linear-gradient(to right, #72c2ff,#66cdaa);
 	border-radius:20px;
 	margin-right:20px;
 	padding-left:10px;
@@ -290,6 +291,7 @@ body{
 	display:block;
 	background-color:#333c3f;
 	color:white;
+	border-radius:20px;
 }
 .action-join-button button:hover{
 	background-color:#ffab1c;
@@ -326,7 +328,7 @@ body{
 	position:relative;
 	list-style:none;
 	display:block;
-	background-color:gray;
+	background:linear-gradient(to right, #72c2ff, #66cdaa);
 	border-radius:20px;
 	margin-right:20px;
 	padding-left:10px;
@@ -374,13 +376,31 @@ body{
 #prefixoMoney{
 	display:block;
 	position:relative;
+	top:0px;
+	left:40px;
 	font-size:20px;
 	font-weight:700;
 	color:white;
 	margin-left:20px;
 }
+@media screen and (max-width:470px){
+	#unidade-toon-money{
+		top: 38%;
+		left: -12px
+	}
+	
+}
+@media screen and (min-width:470px){
+	#unidade-toon-money{
+		top: 25%;
+		left: -4px;
+	}
+	
+}
 #unidade-toon-money{
 	display:block;
+	position:relative;
+
 	font-size:20px;
 	text-align:left;
 	margin-left:20px;
@@ -398,6 +418,19 @@ body{
 	width:49%;
 	float:left;
 	padding-top:20px;
+}
+.simbolo-money{
+	display:block;
+	/*background-image:url("../imagens/money-bag.png");*/
+	background-image:url("../imagens/money-bag.png");
+	position:relative;
+	top: 30px;
+    left: 8px;
+	background-repeat:no-repeat;
+	background-size:cover;
+	height:50px;
+	width:50px;
+	/*background-color:green;*/
 }
 .prefixoMoneyBoxTwo{
 	/*background-color:gray;*/

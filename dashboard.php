@@ -39,6 +39,8 @@ session_start();
 				<div class="boxContent-Two">
 					<div class="money-box-info">
 						<div class="prefixoMoneyBox">
+							<div class="simbolo-money">
+							</div>
 							<span id="prefixoMoney">Toon$</span>
 						</div>
 						<div class="prefixoMoneyBoxTwo">
