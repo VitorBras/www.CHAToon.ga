@@ -198,29 +198,22 @@ body{
 	display:block;
 	font-size:17px;
 }
-@media (max-width:618px){
-	.info-adm-group[hasadm="yes"] span{
-		display:block;
-		/*background: linear-gradient(#ffab1c,#ffd20a,#ffab1c);*/
-		background-color:gray;
-		border-radius:20px;
-		text-align:center;
-		width:60px;
-	}
+@media (max-width:618px){/*Não sei qual o sentido desse BLOCO com essa resolução*/
+
 }
-@media (min-width:618px){
-	.info-adm-group[hasadm="yes"] span{
-		display:block;
-		/*background: linear-gradient(#ffab1c,#ffd20a,#ffab1c);*/
-		
-		border-radius:20px;
-		text-align:center;
-		width:101px;
-	}
+@media (min-width:618px){/*Não sei o porque esse bloco essaresolução existe*/
+
 }
 
 .info-adm-group[hasadm="no"] span{
-	/*display:none;*/
+	display:none;
+}
+.info-adm-group[hasadm="yes"] span{
+	display:block;
+	background: linear-gradient(#ffab1c,#ffd20a,#ffab1c);
+	border-radius:20px;
+	text-align:center;
+	width:101px;
 }
 .info-adm-group[hasadm="yes"] span{
 	display:block;
