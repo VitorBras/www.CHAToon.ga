@@ -42,9 +42,11 @@ session_start();
 							<div class="simbolo-money">
 							</div>
 							<span id="prefixoMoney">Toon$</span>
-						</div>
-						<div class="prefixoMoneyBoxTwo">
 							<span id="unidade-toon-money">200</span>
+						</div>
+						<div class="boxAvatar">
+							<div id="avatar">
+							</div>
 						</div>
 					</div>
 				</div>

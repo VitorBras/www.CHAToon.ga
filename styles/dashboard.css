@@ -385,15 +385,15 @@ body{
 }
 @media screen and (max-width:470px){
 	#unidade-toon-money{
-		top: 38%;
-		left: -12px
+		top: 1%;
+		left: 46px;
 	}
 	
 }
 @media screen and (min-width:470px){
 	#unidade-toon-money{
-		top: 25%;
-		left: -4px;
+		top: 1%;
+		left: 46px;
 	}
 	
 }
@@ -432,12 +432,19 @@ body{
 	width:50px;
 	/*background-color:green;*/
 }
-.prefixoMoneyBoxTwo{
+.boxAvatar{
 	/*background-color:gray;*/
 	height:100%;
 	width:49%;
 	float:right;
 	padding-top:20px;
+}
+#avatar{
+	height:100%;
+	width:100%;
+	background-image:url('../imagens/avatars/Harry-Beard.png');
+	background-size:100px;
+	background-repeat:no-repeat;
 }
 /*-----------------Menu-----------------*/
 .botoes-menu{
