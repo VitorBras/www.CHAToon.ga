@@ -16,12 +16,12 @@ session_start();
 				<div class="box-menu-bar">
 					<button class="button-negocios botoes-menu">Negócios</button>
 					<button class="button-friendsbotoes-menu botoes-menu">Amigos</button>
-					<button class="button-criar-grupo botoes-menu" onclick="criarGrupo();">Criar Grupo</button>
+					<button class="button-configuracoes botoes-menu">Painel</button>
 					<button class="button-configuracoes botoes-menu">Configurações</button>
 				</div>
 			</nav>
 			<div class="boxBase-Two">
-				<table>
+				<table class="molde-lista-quartos">
 					<tr>
 						<td><span>Nome</span></td>
 						<td>
@@ -31,7 +31,7 @@ session_start();
 					<tr>
 						<td><span>Assunto</span></td>
 						<td>
-							<select id="assunto">
+							<select id="assunto" onchange="assuntoSelecionado(this);"><!-- Lista de quartos -->
 								<option value="#Namoro">Namoro</option>
 								<option value="#Amizade">Amizade</option>
 								<option value="#Politica">Política</option>
@@ -49,15 +49,15 @@ session_start();
 						</td>
 						<td>
 							<table id="assuntos_escolhidos">
-								<tr><td><span>Assunto 1</span></td></tr>
-								<tr><td><span>Assunto 2</span></td></tr>
-								<tr><td><span>Assunto 3</span></td></tr>
+								<tr><td selecionado="false" onclick="assuntoSelecionar(this);"><span escolhido="false">Assunto 1</span></td></tr>
+								<tr><td selecionado="false" onclick="assuntoSelecionar(this);"><span escolhido="false">Assunto 2</span></td></tr>
+								<tr><td selecionado="false" onclick="assuntoSelecionar(this);"><span escolhido="false">Assunto 3</span></td></tr>
 							</table>
 						</td>
 					</tr>
 					<tr>
 						<td><span>Acesso</span></td>
-						<td id="buttonsTD-area">
+						<td id="buttonsTD-area" class="space-in-table">
 							<div class="boxOptions-group">
 								<button class="button-option-group button-aberto" onclick="btnSelect(this);" selecionado="false">Aberto</button>
 								<button class="button-option-group button-fechado" onclick="btnSelect(this);" selecionado="false">Fechado</button>
@@ -67,7 +67,14 @@ session_start();
 					<tr>
 						<td><span>Quarto</span></td>
 						<td>
-							<input type="search" class="inputs-search" id="quarto-id" placeholder="Id do seu quarto...">
+							<input type="search" class="inputs-search space-in-table" id="quarto-id" placeholder="Id do seu quarto...">
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" id="zona-btn-criar-grupo">
+							<div>
+								<button class="button-criar-grupo" onclick="criarGrupo();">Criar Grupo</button>
+							</div>
 						</td>
 					</tr>
 				</table>
@@ -76,29 +83,23 @@ session_start();
 				<div class="box-search">
 					<table class="molde-box-search">
 						<tr>
-							<td>
-								<select id="filtro">
-									<option value="grupos">Grupos</option>
-									<option value="pessoas">Pessoas</option>
-								</select>
+							<td id="texto1">
+								<span>Meus Quartos</span>
 							</td>
 							<td>
-								<input type="search" class="inputs-search" placeholder="Pesquise...">
+								<button onclick="roomSearch();">Atualizar</button>
 							</td>
 							<td>
-								<button onclick="search();">Pesquisar</button>
+								<!-- Célula VAZIA -->
 							</td>
 						</tr>
 					</table>
 				</div>
-				<div class="box-filtros">
+				<div class="box-lista-quarto">
 					<div class="filtro-twoOptions">
-						<select id="selectTwoOptions">
-							<option value="public">Público</option>
-							<option value="private">Privado</option>
-						</select>
+						<span>*Selecione um quarto seu do Habbo Hotel</span>
 					</div>
-					<ul id="lista-assuntos">
+					<ul id="lista-quartos">
 						<li>
 							<div>
 								<input type="checkbox">
@@ -183,89 +184,8 @@ session_start();
 				</div>
 			</div>
 			<div class="boxBase-Four">
-				<div class="boxContent-Infos">
-					<table class="molde-infos">
-						<tr><td class="infos-categories">Grupos</td></tr>
-						<tr>
-							<td>Grupos Públicos:</td>
-							<td>40</td>
-						</tr>
-						<tr>
-							<td>Grupos Privados</td>
-							<td>60</td>
-						</tr>
-					</table>
-					<table class="molde-infos-pessoas">
-						<tr>
-							<td><pan>255 pessoas encontradas</span></td>
-						</tr>
-					</table>
-				</div>
 				<div class="boxContent-resultados">
-					<ul class="boxContent-lista-resultados-grupos">
-						<li>
-							<table id="molde-resultados-grupos-pesquisa">
-								<tr>
-									<td class="info-nome-group">Nome grupo</td>					
-								</tr>
-								<tr>
-									<td class="info-adm-group" hasadm="yes"><span>Tenho ADM</span></td>
-									<td class="info-qtd-members"><span>QTD Participantes</span></td>
-									<td class="info-owner"><span>Dono/Publico/Privado</span></td>
-									<td class="action-join-button"><button class="action-join-button-btn">Entrar</button></td>
-								</tr>
-							</table>
-							<table id="molde-resultados-grupos-pesquisaTwo">
-								<tr>
-									<td class="info-nome-group">Nome grupo</td>					
-								</tr>
-								<tr>
-									<td class="info-adm-group" hasadm="yes"><span>Tenho ADM</span></td>
-								</tr>
-								<tr>
-									<td class="info-qtd-members"><span>QTD Participantes</span></td>
-								</tr>
-								<tr>							
-									<td class="info-owner"><span>Dono/Publico/Privado</span></td>
-								</tr>
-								<tr>
-									<td class="action-join-button"><button class="action-join-button-btn">Entrar</button></td>
-								</tr>
-							</table>
-						</li>
-					</ul>
-					<ul class="boxContent-lista-resultados-pessoas">
-						<li>
-							<table id="molde-resultados-pessoas-pesquisa">
-								<tr>
-									<td class="info-nome-group">Nome pessoa</td>					
-								</tr>
-								<tr>
-									<td class="info-adm-group" isme="yes"><span>Sou eu</span></td>
-									<td class="info-qtd-members"><span>QTD amigos</span></td>
-									<td class="info-owner"><span>Adicionado</span></td>
-									<td class="action-join-button"><button>Adicionar</button></td>
-								</tr>
-							</table>
-							<table id="molde-resultados-pessoas-pesquisaTwo">
-								<tr>
-									<td class="info-nome-group">Nome pessoa</td>					
-								</tr>
-								<tr>
-									<td class="info-adm-group" isme="yes"><span>Sou eu</span></td>
-								</tr>
-								<tr>
-									<td class="info-qtd-members"><span>QTD amigos</span></td>
-								</tr>
-								<tr>
-									<td class="info-owner"><span>Adicionado</span></td>
-								</tr>
-								<tr>
-									<td class="action-join-button"><button>Adicionar</button></td>
-								</tr>
-							</table>
-						</li>
-					</ul>
+				
 				</div>
 			</div>
 		</div>
