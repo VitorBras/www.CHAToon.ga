@@ -59,8 +59,8 @@ session_start();
 						<td><span>Acesso</span></td>
 						<td id="buttonsTD-area" class="space-in-table">
 							<div class="boxOptions-group">
-								<button class="button-option-group button-aberto" onclick="btnSelect(this);" selecionado="false">Aberto</button>
-								<button class="button-option-group button-fechado" onclick="btnSelect(this);" selecionado="false">Fechado</button>
+								<button class="button-option-group button-aberto" onclick="btnSelect(this);" selecionado="false" value="aberto">Aberto</button>
+								<button class="button-option-group button-fechado" onclick="btnSelect(this);" selecionado="false" value="fechado">Fechado</button>
 							</div>
 						</td>
 					</tr>
@@ -100,86 +100,7 @@ session_start();
 						<span>*Selecione um quarto seu do Habbo Hotel</span>
 					</div>
 					<ul id="lista-quartos">
-						<li>
-							<div>
-								<input type="checkbox">
-								<span>#Namoro</span>
-							</div>
-						</li>
-						<li>
-							<div>
-								<input type="checkbox">
-								<span>#Amizade</span>
-							</div>
-						</li>
-						<li>
-							<div>
-								<input type="checkbox">
-								<span>#Politica</span>
-							</div>
-						</li>
-						<li>
-							<div>
-								<input type="checkbox">
-								<span>#Jogos</span>
-							</div>
-						</li>
-						<li>
-							<div>
-								<input type="checkbox">
-								<span>#Negociacao</span>
-							</div>
-						</li>
-						<li>
-							<div>
-								<input type="checkbox">
-								<span>#Policias</span>
-							</div>
-						</li>
-						<li>
-							<div>
-								<input type="checkbox">
-								<span>#Insonia</span>
-							</div>
-						</li>
-						<li>
-							<div>
-								<input type="checkbox">
-								<span>#Medo</span>
-							</div>
-						</li>
-						<li>
-							<div>
-								<input type="checkbox">
-								<span>#Adultos</span>
-							</div>
-						</li>
-						<li>
-							<div>
-								<input type="checkbox">
-								<span>#Criancas</span>
-							</div>
-						</li>
-						<li>
-							<div>
-								<input type="checkbox">
-								<span>#Filmes</span>
-								<span>Desenhos</span>
-								<span>Series</span>
-							</div>
-						</li>
-						<li>
-							<div>
-								<input type="checkbox">
-								<span>#Estudos</span>
-							</div>
-						</li>
-						<li>
-							<div>
-								<input type="checkbox">
-								<span>#LGBT</span>
-							</div>
-						</li>
+						<!-- A lista é criada automaticamente -->
 					</ul>
 				</div>
 			</div>
@@ -192,6 +113,7 @@ session_start();
 	</body>
 	<link href="styles/criarGrupo.css" rel="stylesheet" />
 	<script src="styles/criarGrupo.js"></script>
+	<script src="frameworks/jquery-3.4.1.min.js"></script>
 </html>
 
 
