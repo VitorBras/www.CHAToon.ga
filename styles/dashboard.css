@@ -89,7 +89,45 @@ body{
     border-radius: 20px;
     box-shadow: 0px 0px 12px whitesmoke;
 }
+.filtro-twoOptions{
+	padding:2px;
+}
+#selectTwoOptions{
+    height: 32px;
+    width: 95px;
+    border-radius: 20px;
+    background-color: #ffab1c;
+}
+#selectTwoOptions:hover{
+	cursor:pointer;
+}
+#filtro:hover{
+	cursor:pointer;
+}
+#lista-assuntos{
+	list-style:none;
+	display:list-item;
+	column-count:4;
+	column-gap:5px;
+	margin-top:4px;
+	padding:0;
+	/*column-rule:thin solid black;*/
+}
+#lista-assuntos li div{
+	background-color:#ffab1c;
+}
+#lista-assuntos li{
+	font-size:14px;
+	border:1px solid black;
+}
+#lista-assuntos li div input:hover{
+	cursor:pointer;
+}
+/*--------Area de Filtros de pesquisa--------*/
+.box-filtros{
 
+	background-color:rgba(51, 60, 63,0.6);
+}
 
 /*-------- Area dos Resultados das pesquisas ---------*/
 .boxBase-Four {
@@ -419,6 +457,7 @@ body{
 	float:left;
 	padding-top:20px;
 }
+
 .simbolo-money{
 	display:block;
 	/*background-image:url("../imagens/money-bag.png");*/

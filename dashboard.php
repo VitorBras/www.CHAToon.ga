@@ -57,8 +57,8 @@ session_start();
 						<tr>
 							<td>
 								<select id="filtro">
-									<option>Grupos</option>
-									<option>Pessoas</option>
+									<option value="grupos">Grupos</option>
+									<option value="pessoas">Pessoas</option>
 								</select>
 							</td>
 							<td>
@@ -69,6 +69,96 @@ session_start();
 							</td>
 						</tr>
 					</table>
+				</div>
+				<div class="box-filtros">
+					<div class="filtro-twoOptions">
+						<select id="selectTwoOptions">
+							<option value="public">Público</option>
+							<option value="private">Privado</option>
+						</select>
+					</div>
+					<ul id="lista-assuntos">
+						<li>
+							<div>
+								<input type="checkbox">
+								<span>#Namoro</span>
+							</div>
+						</li>
+						<li>
+							<div>
+								<input type="checkbox">
+								<span>#Amizade</span>
+							</div>
+						</li>
+						<li>
+							<div>
+								<input type="checkbox">
+								<span>#Politica</span>
+							</div>
+						</li>
+						<li>
+							<div>
+								<input type="checkbox">
+								<span>#Jogos</span>
+							</div>
+						</li>
+						<li>
+							<div>
+								<input type="checkbox">
+								<span>#Negociacao</span>
+							</div>
+						</li>
+						<li>
+							<div>
+								<input type="checkbox">
+								<span>#Policias</span>
+							</div>
+						</li>
+						<li>
+							<div>
+								<input type="checkbox">
+								<span>#Insonia</span>
+							</div>
+						</li>
+						<li>
+							<div>
+								<input type="checkbox">
+								<span>#Medo</span>
+							</div>
+						</li>
+						<li>
+							<div>
+								<input type="checkbox">
+								<span>#Adultos</span>
+							</div>
+						</li>
+						<li>
+							<div>
+								<input type="checkbox">
+								<span>#Criancas</span>
+							</div>
+						</li>
+						<li>
+							<div>
+								<input type="checkbox">
+								<span>#Filmes</span>
+								<span>Desenhos</span>
+								<span>Series</span>
+							</div>
+						</li>
+						<li>
+							<div>
+								<input type="checkbox">
+								<span>#Estudos</span>
+							</div>
+						</li>
+						<li>
+							<div>
+								<input type="checkbox">
+								<span>#LGBT</span>
+							</div>
+						</li>
+					</ul>
 				</div>
 			</div>
 			<div class="boxBase-Four">
