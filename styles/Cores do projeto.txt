@@ -32,6 +32,9 @@ info ADM em GRUPOS: linear-gradient(#ffab1c,#ffd20a,#ffab1c);
 
 _________________CORES DE QUE GOSTEI MAS NÂO ESTÃO EM USO
 
+Background do botão Default HTML: #F0F0F0
+Borda de baixo do botão Default HTML: #9C9C9C
+Borda de cima do botão Default HTML : #F0F0F0
 
 
 Verde de cachoeira clara: 66cdaa

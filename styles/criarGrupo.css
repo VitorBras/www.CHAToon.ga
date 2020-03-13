@@ -50,7 +50,7 @@ body{
     border-radius: 20px 20px 0px 0px;
 }
 
-/*--------- Profile ----------*/
+/*--------- Campo de inserção de dados ----------*/
 .boxBase-Two{
 	background: rgb(202, 214, 217.0.4);
 	height:200px;
@@ -58,25 +58,68 @@ body{
 	margin-top:10px;
 	border-radius:20px;
 }
-
-.boxContent-One{
-	background-color: rgba(202, 214, 217,0.4);
-	height:100%;
-	width:49%;
-	float:left;
-	margin-left:0.63%;
-	margin-right:0.63%;
-	border-radius:20px 40px;
+#assuntos_escolhidos {
+    min-height: 63px;
+    min-width: 153px;
+	background-color: rgba(51, 60, 63,0.6);
+	border-radius:20px;
+	border:1px solid black;
+	overflow:hidden;
+	box-shadow: 0px 0px 10px #fff
 }
-.boxContent-Two{
-	background-color: rgba(202, 214, 217,0.4);
-	height:100%;
-	width:49%;
-	float:right;
-	margin-right:0.63%;
-	border-radius:40px 20px;
+.boxOptions-group{
+	width:129px;
+	margin-right:auto;
+	margin-left:auto;
 }
-
+.button-aberto[selecionado='false']{
+	border-radius:20px 0px 0px 20px;
+	
+}
+.button-fechado[selecionado='false']{
+	border-radius:0px 20px 20px 0px;
+	background-color:#F0F0F0;
+	border-top:#F0F0F0;
+	border-bottom:#9C9C9C;
+}
+.button-fechado:active{
+	background-color:#FFAB1C;
+	border-top:#F0F0F0;
+	border-bottom:#9C9C9C;
+}
+.button-aberto:active{
+	background-color:#FFAB1C;
+	border-top:#F0F0F0;
+	border-bottom:#9C9C9C;
+}
+.button-aberto[selecionado='true']{
+	border-radius:20px 0px 0px 20px;
+	background-color:#FFAB1C;
+	border-top:#F0F0F0;
+	border-bottom:#9C9C9C;
+	
+}
+.button-fechado[selecionado='true']{
+	border-radius:0px 20px 20px 0px;
+	background-color:#FFAB1C;
+	border-top:#F0F0F0;
+	border-bottom:#9C9C9C;
+}
+#buttonsTD-area{
+	width:70px;
+}
+#assuntos_escolhidos tr td{
+	background-color:rgba(255, 171, 28,0.2);
+	border-radius:20px;
+}
+#assuntos_escolhidos tr td {
+	text-align:center;
+}
+#assunto{
+	border-radius:20px;
+	height:32px;
+	width:90px;
+}
 /*--------------------*/
 /*---- Area de Pesquisa -----*/
 .boxBase-Three {
@@ -401,90 +444,9 @@ body{
 	cursor:pointer;
 }
 
-/*----------------Profile Informações--------------------*/
-.molde-profile-data{
-	position:relative;
-	margin-left:20px;
-	margin-top:30px;
-}
-#nome{
-	font-size:29px;
-}
 
-#prefixoMoney{
-	display:block;
-	position:relative;
-	top:0px;
-	left:40px;
-	font-size:20px;
-	font-weight:700;
-	color:white;
-	margin-left:20px;
-}
-@media screen and (max-width:470px){
-	#unidade-toon-money{
-		top: 1%;
-		left: 46px;
-	}
-	
-}
-@media screen and (min-width:470px){
-	#unidade-toon-money{
-		top: 1%;
-		left: 46px;
-	}
-	
-}
-#unidade-toon-money{
-	display:block;
-	position:relative;
 
-	font-size:20px;
-	text-align:left;
-	margin-left:20px;
-	width:100px;
-}
-.money-box-info{
-	width:100%;
-	height:100%;
-	min-height:34px;
-	/*background-color:#6a807b;*/
-}
-.prefixoMoneyBox{
-	/*background-color:gray;*/
-	height:100%;
-	width:49%;
-	float:left;
-	padding-top:20px;
-}
 
-.simbolo-money{
-	display:block;
-	/*background-image:url("../imagens/money-bag.png");*/
-	background-image:url("../imagens/money-bag.png");
-	position:relative;
-	top: 30px;
-    left: 8px;
-	background-repeat:no-repeat;
-	background-size:cover;
-	height:50px;
-	width:50px;
-	/*background-color:green;*/
-}
-.boxAvatar{
-	/*background-color:gray;*/
-	height:100%;
-	width:49%;
-	float:right;
-	padding-top:20px;
-}
-#avatar{
-	height:100%;
-	width:100%;
-	background-image:url('../imagens/avatars/Harry-Beard.png');
-	background-size:100px;
-	background-repeat:no-repeat;
-}
 /*-----------------Menu-----------------*/
 .botoes-menu{
 	height:100%;

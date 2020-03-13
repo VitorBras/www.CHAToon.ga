@@ -21,36 +21,56 @@ session_start();
 				</div>
 			</nav>
 			<div class="boxBase-Two">
-				<div class="boxContent-One">
-					<table class="molde-profile-data">
-						<tr>
-							<td id="nome">Nome:</td>
-						</tr>
-						<tr>
-							<td>Like:</td>
-						</tr>
-						<tr>
-							<td>Friend QTD:</td>
-						</tr>
-						<tr>
-							<td>Status:</td>
-						</tr>
-					</table>
-				</div>
-				<div class="boxContent-Two">
-					<div class="money-box-info">
-						<div class="prefixoMoneyBox">
-							<div class="simbolo-money">
+				<table>
+					<tr>
+						<td><span>Nome</span></td>
+						<td>
+							<input type="search" class="inputs-search" placeholder="Pesquise...">
+						</td>
+					</tr>
+					<tr>
+						<td><span>Assunto</span></td>
+						<td>
+							<select id="assunto">
+								<option value="#Namoro">Namoro</option>
+								<option value="#Amizade">Amizade</option>
+								<option value="#Politica">Política</option>
+								<option value="#Jogos">Jogos</option>
+								<option value="#Negociacao">Negociação</option>
+								<option value="#Policias">Polícias</option>
+								<option value="#Insonia">Insônia</option>
+								<option value="#Medo">Medo</option>
+								<option value="#Adultos">Adultos</option>
+								<option value="#Criancas">Crianças</option>
+								<option value="#FilmesDesenhosSeries">Filmes, Desenhos e Séries</option>
+								<option value="#Estudos">Estudos</option>
+								<option value="#LGBT">LGBT</option>
+							</select>
+						</td>
+						<td>
+							<table id="assuntos_escolhidos">
+								<tr><td><span>Assunto 1</span></td></tr>
+								<tr><td><span>Assunto 2</span></td></tr>
+								<tr><td><span>Assunto 3</span></td></tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td><span>Acesso</span></td>
+						<td id="buttonsTD-area">
+							<div class="boxOptions-group">
+								<button class="button-option-group button-aberto" onclick="btnSelect(this);" selecionado="false">Aberto</button>
+								<button class="button-option-group button-fechado" onclick="btnSelect(this);" selecionado="false">Fechado</button>
 							</div>
-							<span id="prefixoMoney">Toon$</span>
-							<span id="unidade-toon-money">200</span>
-						</div>
-						<div class="boxAvatar">
-							<div id="avatar">
-							</div>
-						</div>
-					</div>
-				</div>
+						</td>
+					</tr>
+					<tr>
+						<td><span>Quarto</span></td>
+						<td>
+							<input type="search" class="inputs-search" id="quarto-id" placeholder="Id do seu quarto...">
+						</td>
+					</tr>
+				</table>
 			</div>
 			<div class="boxBase-Three">
 				<div class="box-search">
@@ -250,8 +270,8 @@ session_start();
 			</div>
 		</div>
 	</body>
-	<link href="styles/dashboard.css" rel="stylesheet" />
-	<script src="styles/dashboard.js"></script>
+	<link href="styles/criarGrupo.css" rel="stylesheet" />
+	<script src="styles/criarGrupo.js"></script>
 </html>
 
 
