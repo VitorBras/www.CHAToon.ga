@@ -25,7 +25,7 @@ session_start();
 					<tr>
 						<td><span>Nome</span></td>
 						<td>
-							<input type="search" class="inputs-search" placeholder="Pesquise...">
+							<input type="search" class="inputs-search nome-grupo" placeholder="Pesquise...">
 						</td>
 					</tr>
 					<tr>
@@ -49,9 +49,9 @@ session_start();
 						</td>
 						<td>
 							<table id="assuntos_escolhidos">
-								<tr><td selecionado="false" onclick="assuntoSelecionar(this);"><span escolhido="false">Assunto 1</span></td></tr>
-								<tr><td selecionado="false" onclick="assuntoSelecionar(this);"><span escolhido="false">Assunto 2</span></td></tr>
-								<tr><td selecionado="false" onclick="assuntoSelecionar(this);"><span escolhido="false">Assunto 3</span></td></tr>
+								<tr><td selecionado="false" onclick="assuntoSelecionar(this);"><span class="assunto-escohlido" escolhido="false" value="nenhum">Assunto 1</span></td></tr>
+								<tr><td selecionado="false" onclick="assuntoSelecionar(this);"><span class="assunto-escohlido" escolhido="false" value="nenhum">Assunto 2</span></td></tr>
+								<tr><td selecionado="false" onclick="assuntoSelecionar(this);"><span class="assunto-escohlido" escolhido="false" value="nenhum">Assunto 3</span></td></tr>
 							</table>
 						</td>
 					</tr>

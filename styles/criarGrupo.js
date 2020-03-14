@@ -40,8 +40,15 @@ function listRoom(infos){//Coloca os quartos na lista / Função é acionada aut
 		lista.children[i].children[0].children[1].innerHTML = infos.dados[i].name;
 	}
 	
+	for(i=0;i<document.getElementsByName("qualQuarto").length;i++){//Adicionando evento a lista.
+		document.getElementsByName("qualQuarto")[i].onchange = function(){roomSelected(this);};
+	}
+	
 }
 
+function roomSelected(selecionado){
+	document.querySelector("#quarto-id").setAttribute("value",selecionado.getAttribute("quartoid"));
+}
 function roomSearch(){//Pede para o servidor enviar a lista de quartos (do avatar logado no sistema) em JSON.
 	
 	
@@ -58,8 +65,77 @@ function roomSearch(){//Pede para o servidor enviar a lista de quartos (do avata
 
 function criarGrupo(){//Envia ao servidor os dados para a criação do grupo.
 	
+	//assuntosSelecionados.children[0].childElementCount
+	//assuntosSelecionados.children[0].children[0]
+	
+	let grupoNome = document.querySelector(".nome-grupo").getAttribute("value");
+	let assuntos = [];
+	let grupoAberto;  //Boolean
+	let grupoId;
+	
+	let dadosCompletos = 0; //Precisa ser 4. São 4 campos de informações.
+	let assuntosSelecionados = document.querySelector("#assuntos_escolhidos");
 	
 	
+	
+	for(i=0;i<assuntosSelecionados.children[0].children.length;i++){
+		if(assuntosSelecionados.children[0].children[i].children[0].children[0].getAttribute("value") != "nenhum"){
+			assuntos[i] = assuntosSelecionados.children[0].children[i].children[0].children[0].getAttribute("value");
+		}else{
+			console.log("Escolha mais um assunto");
+		}
+	}
+	
+	if(document.querySelector(".nome-grupo").value.length > 0){
+		dadosCompletos++;
+	}else{
+		console.log("Dê algum nome ao grupo.");
+	}
+	
+	if(assuntos.length == 3){//caso os assuntos sejam selecionados todos os 3.
+		dadosCompletos++;
+	}
+	
+	if(document.querySelector("#quarto-id").value.length > 8){//Alguma ID de quarto informada?
+		dadosCompletos++;
+	}else{
+		console.log("Informe alguma ID de um quarto seu.");
+	}
+	
+	let lista = document.querySelector("#lista-quartos");
+	
+	for(i=0;i<lista.children.length;i++){//Qual quarto foi selecionado na lista?
+		if(lista.children[i].children[0].children.qualQuarto.checked == true){
+			grupoId = lista.children[i].children[0].children.qualQuarto.getAttribute("quartoid");
+			document.querySelector("#quarto-id").setAttribute("value",grupoId);
+		}
+	}
+	
+	//Grupo aberto?
+	if(document.querySelector(".button-aberto").getAttribute("selecionado") == "false"){
+		if(document.querySelector(".button-fechado").getAttribute("selecionado") == "true"){//Grupo fechado
+			grupoAberto = false;
+			dadosCompletos++;
+		}else{
+			console.log("Selecione uma das opçoes. Grupo aberto ou fechado?");
+		}
+	}else{//Grupo aberto
+		grupoAberto = true;
+		dadosCompletos++;
+	}
+	
+	console.log(dadosCompletos);
+
+	if(dadosCompletos == 4){//Caso todos os dados estejam completos...pode-se envia-los ao servidor para grava-lo na base de dados.
+		$.ajax({
+			url:"functions/criarGrupos.php",
+			type:"GET",
+			data:{nomeGrupo:grupoNome,assuntos:[assuntos[0],assuntos[1],assuntos[2]],grupoAberto:grupoAberto,grupoId:grupoId},
+			success:function(response){
+				console.log(response);
+			}
+		});
+	}
 }
 
 function assuntoSelecionar(elemento){
@@ -81,13 +157,17 @@ function assuntoSelecionar(elemento){
 }
 
 function assuntoSelecionado(elemento){
+	
 	let opcoesTwo = document.querySelector("#assuntos_escolhidos");
 	for(i=0;i<opcoesTwo.children[0].rows.length;i++){
 		if(opcoesTwo.children[0].rows[i].cells[0].getAttribute("selecionado") == "true"){
 			opcoesTwo.children[0].rows[i].cells[0].children[0].innerHTML = elemento.value;
+			opcoesTwo.children[0].rows[i].cells[0].children[0].setAttribute("value",elemento.value);
 		}
 	}
 }
+
+
 
 
 window.addEventListener("load",function(){roomSearch();});
