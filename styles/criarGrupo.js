@@ -123,15 +123,14 @@ function criarGrupo(){//Envia ao servidor os dados para a criação do grupo.
 		grupoAberto = true;
 		dadosCompletos++;
 	}
-	
-	console.log(dadosCompletos);
 
 	if(dadosCompletos == 4){//Caso todos os dados estejam completos...pode-se envia-los ao servidor para grava-lo na base de dados.
+		console.log("Dados completos");
 		$.ajax({
 			url:"functions/criarGrupos.php",
 			type:"GET",
 			data:{nomeGrupo:grupoNome,assuntos:[assuntos[0],assuntos[1],assuntos[2]],grupoAberto:grupoAberto,grupoId:grupoId},
-			success:function(response){
+			success:function(response){//O servidor salvou o grupo na base de dados???? O grupo foi criado?
 				console.log(response);
 			}
 		});

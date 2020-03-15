@@ -17,5 +17,54 @@
 		<server available="yes">.nl</server>
 		<server available="yes">.com.tr</server>
 	</habboServer>
+	<grupo>
+		<assuntos>
+			<assunto available="yes">Namoro</assunto>
+			<assunto available="yes">Amizade</assunto>
+			<assunto available="yes">Política</assunto>
+			<assunto available="yes">Jogos</assunto>
+			<assunto available="yes">Negociação</assunto>
+			<assunto available="yes">Polícias</assunto>
+			<assunto available="yes">Insônia</assunto>
+			<assunto available="yes">Medo</assunto>
+			<assunto available="yes">Adultos</assunto>
+			<assunto available="yes">Crianças</assunto>
+			<assunto available="yes">Filmes, Desenhos e Séries</assunto>
+			<assunto available="yes">Estudos</assunto>
+			<assunto available="yes">LGBT</assunto>
+		</assuntos>
+		<padraoNome>
+			<palavrasProibidas>
+				<portugues>
+					<palavra prohibited="yes">Administrador</palavra>
+					<palavra prohibited="yes">Administração</palavra>
+					<palavra prohibited="yes">Administracao</palavra>
+					<palavra prohibited="yes">Adm</palavra>
+					<palavra prohibited="yes">Admin</palavra>
+					<palavra prohibited="yes">Desenvolvedores</palavra>
+					<palavra prohibited="yes">Desenvolvedor</palavra>
+					<palavra prohibited="yes">Sulake</palavra>
+					<palavra prohibited="yes">Staff</palavra>
+					<palavra prohibited="yes">Staffs</palavra>
+					<palavra prohibited="yes">Programador</palavra>
+					<palavra prohibited="yes">Oficial</palavra>
+					<palavra prohibited="yes">official</palavra>
+				</portugues>
+			</palavrasProibidas>
+		</padraoNome>
+	</grupo>
+	<nomeUsuario>
+		<padraoNome>
+			<palavrasProibidas>
+				<palavra prohibited="yes">Administrador</palavra>
+				<palavra prohibited="yes">Adm</palavra>
+				<palavra prohibited="yes">Admin</palavra>
+				<palavra prohibited="yes">Staff</palavra>
+				<palavra prohibited="yes">Staffs</palavra>
+				<palavra prohibited="yes">Oficil</palavra>
+				<palavra prohibited="yes">Official</palavra>
+			</palavrasProibidas>
+		</padraoNome>
+	</nomeUsuario>
 </systemConfig>
 
