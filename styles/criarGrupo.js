@@ -12,12 +12,18 @@ function btnSelect(elemento){//Seleciona o elemento e atribui uma propriedade ne
 	}
 	elemento.setAttribute("selecionado",true);
 }
-
+var lista;
 function listRoom(infos){//Coloca os quartos na lista / Função é acionada automaticamente no primeiro LOAD mas é usada para atualizar a lista de grupos.
-	let lista = document.querySelector("#lista-quartos");
+	lista = document.querySelector("#lista-quartos");
 	//console.log(infos);
-	
-	
+	//console.log(lista.childElementCount);
+	if(lista.childElementCount != 0){//Destruir a lista atual para atualiza-la
+		
+		for(;0 != lista.childElementCount;){
+			lista.removeChild(lista.children[0]);
+		}
+	}
+	//console.log(lista.childElementCount);
 	for(i=0;i<infos.dados.length;i++){//Criando lista
 		let line = document.createElement("li");
 		let box = document.createElement("div");
@@ -72,7 +78,6 @@ function criarGrupo(){//Envia ao servidor os dados para a criação do grupo.
 	let assuntos = [];
 	let grupoAberto;  //Boolean
 	let grupoId;
-	
 	let dadosCompletos = 0; //Precisa ser 4. São 4 campos de informações.
 	let assuntosSelecionados = document.querySelector("#assuntos_escolhidos");
 	
@@ -84,6 +89,11 @@ function criarGrupo(){//Envia ao servidor os dados para a criação do grupo.
 		}else{
 			console.log("Escolha mais um assunto");
 		}
+	}
+	
+	//Tirando as HASHTAGs dos assuntos. (HAShtaGs NAO passam através de URL)
+	for(i=0;i<assuntos.length;i++){
+		assuntos[i] = assuntos[i].substr(1,assuntos[i].length);
 	}
 	
 	if(document.querySelector(".nome-grupo").value.length > 0){
@@ -160,8 +170,19 @@ function assuntoSelecionado(elemento){
 	let opcoesTwo = document.querySelector("#assuntos_escolhidos");
 	for(i=0;i<opcoesTwo.children[0].rows.length;i++){
 		if(opcoesTwo.children[0].rows[i].cells[0].getAttribute("selecionado") == "true"){
-			opcoesTwo.children[0].rows[i].cells[0].children[0].innerHTML = elemento.value;
-			opcoesTwo.children[0].rows[i].cells[0].children[0].setAttribute("value",elemento.value);
+			let jaSelecionado = false;
+			for(x=0;x<opcoesTwo.children[0].rows.length;x++){//Verificar se o valor já foi escolhido antes
+				if(elemento.value == opcoesTwo.children[0].rows[x].cells[0].children[0].innerHTML){
+					jaSelecionado = true;
+				}
+			}
+			if(jaSelecionado == false){
+				opcoesTwo.children[0].rows[i].cells[0].children[0].innerHTML = elemento.value;
+				opcoesTwo.children[0].rows[i].cells[0].children[0].setAttribute("value",elemento.value);
+			}else{//Dizer ao usuário que essa hashtag já foi selecionada. É pra ele selecionar outra.
+				
+			}
+			
 		}
 	}
 }
