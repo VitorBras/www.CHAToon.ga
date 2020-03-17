@@ -65,6 +65,7 @@
 				<palavra prohibited="yes">Official</palavra>
 			</palavrasProibidas>
 		</padraoNome>
+		<statusPadrao>Oi, sou novo no CHAToon</statusPadrao>
 	</nomeUsuario>
 </systemConfig>
 

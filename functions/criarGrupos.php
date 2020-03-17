@@ -39,39 +39,7 @@ $roomId;
 
 /*________________Sistema de timestamp reutilizado__________________*/
 
-function set_timing($servidor){
-	
-	switch($servidor){
-		case ".com.br":
-			date_default_timezone_set('America/Sao_Paulo');//Brasil
-			break;
-		case ".com":
-			date_default_timezone_set('America/New_York');//internacional
-			break; 
-		case ".de":
-			date_default_timezone_set('Europe/Berlin');//Alemanha
-			break;
-		case ".es":
-			date_default_timezone_set('Europe/Madrid');//Espanha
-			break;
-		case ".fi":
-			date_default_timezone_set('Europe/Moscow');//Finlandia
-			break;
-		case ".fr":
-			date_default_timezone_set('Europe/Paris');//França
-			break;
-		case ".it":
-			date_default_timezone_set('Europe/Monaco');//Italia
-			break;
-		case ".nl":
-			date_default_timezone_set('Europe/Amsterdam');//Holanda
-			break;
-		case ".com.tr":
-		date_default_timezone_set('Europe/Istanbul');//Turkuia
-			break;
-	}
-	
-}	
+
 set_timing($_SESSION['hbserver']); //Configuro o timestamp de acordo com a zona ou servidor que o usuário acessa
 $datetime = date("Y-m-d H:i:s"); //Armazeno os dados para coloca-lo na base de dados
 //------------------------------FIM DO SISTEMA DE TIMESTAMP---------------------------------------
@@ -89,8 +57,8 @@ if(isset($_SESSION['logado'])){
 		
 		if(isset($_REQUEST["nomeGrupo"]) && isset($_REQUEST["assuntos"]) && isset($_REQUEST["grupoAberto"]) && isset($_REQUEST["roomId"])){
 			//Caso todos os dados forem enviados pela aplicação cliente o procedimento começa realizar o FILTRO ANTI-SQL-INJECTION
-			$nomeGrupo = $_REQUEST["nomeGrupo"];//Filtro Anti-SQLI-INJECTION e Verificar Padrão de nome
-			$assuntos = $_REQUEST["assuntos"];//Verificar
+			$nomeGrupo = $_REQUEST["nomeGrupo"];//Verificar Padrão de nome
+			$assuntos = $_REQUEST["assuntos"];//Verificar se os assuntos são aceitos
 			$grupoAberto = $_REQUEST["grupoAberto"];//Verificar e converter para boolean
 			$roomId = $_REQUEST["roomId"];//Verificar se pertence ao Habbo Avatar cadastrado
 			//-------------FIM DA ATRIBUIÇÃO DE VALORES E FILTRAGEM ANTI-SQL-INJECTION-----------------(Grava valor filtrado na variavel)
@@ -140,7 +108,21 @@ if(isset($_SESSION['logado'])){
 				if($grupoAberto == "aberto" or $grupoAberto == "fechado"){//Valor válido
 					//Verificar se o Id do Room pertence ao usuário logado
 					if(isRoomOwner($_SESSION['hbname'],$_SESSION['hbserver'],$roomId) == true){//Id do room pertence ao a conta avatar Habbo logada
-						
+						registerGroup($nomeGrupo,$assuntos,$roomId,$_SESSION['hbserver'],$_SESSION['hbname']);
+						$resultado_registro = registerGroup($nomeGrupo,$assuntos,$roomId,$_SESSION['hbserver'],$_SESSION['hbname']);
+						//O grupo foi registrado com sucesso?
+						if($resultado_registro == true){//Registrado com sucesso
+							//header("location:dashboard.php");//Redirecionar usuário a Dashboard.php
+							echo("registrado com sucesso");
+							goto end;
+						}else{//Não registrado
+							if($resultado_registro == "already_registered"){
+								echo("{\"response\":\"already_registered\"}");
+								goto end;
+							}else{//Outro erro aconteceu durante o processo de registro de grupo.
+								
+							}
+						}
 					}else{
 						echo("{\"response\":\"roomId_is_not_owner\"}");
 						goto end;

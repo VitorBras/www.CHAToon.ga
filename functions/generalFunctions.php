@@ -90,7 +90,7 @@ function isRoomOwner($habboName,$habboServer,$roomId){//Verificar se o quarto pe
 }
 //print(isRoomOwner("Administrador.4",".com.br","546985030"));
 
-function userStatusChnge($status){//Mudar status do usuário
+function userStatusChange($status){//Mudar status do usuário
 
 }
 
@@ -123,13 +123,20 @@ function registerGroup($gpName,$gpAssuntos,$roomId,$hbServer,$hbName){
 		$query = "INSERT INTO grupo (criador_id,HabboRoomId,nome_grupo,assuntos,criado_timestamp,theme,server) VALUES ('$criadorId','$roomId','".utf8_decode($gpName)."','{\"assuntos\":[\"".utf8_decode($gpAssuntos[0])."\",\"".utf8_decode($gpAssuntos[1])."\",\"".utf8_decode($gpAssuntos[2])."\"]}','$timestamp',0,'$hbServer');";
 		$dados = mysqli_query($connect,$query);
 		print(mysqli_error($connect));
+		//O registro foi realizado com sucesso?
+		if(mysqli_error($connect) == null){//Registrado com sucesso na base de dados.
+			mysqli_close($connect);
+			return true;
+		}else{
+			mysqli_close($connect);
+			return false;
+		}
 		mysqli_close($connect);
 	}else{
 		return("already_registered");
 	}
 }
-
-registerGroup("nada",["Medo","Polícias","Insônia"],"146985034",".com.br","Administrador.4");
+//registerGroup("nada",["Medo","Polícias","Insônia"],"146985034",".com.br","Administrador.4");
 
 
 ?>
