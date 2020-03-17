@@ -77,7 +77,7 @@ function criarGrupo(){//Envia ao servidor os dados para a criação do grupo.
 	let grupoNome = document.querySelector(".nome-grupo").getAttribute("value");
 	let assuntos = [];
 	let grupoAberto;  //Boolean
-	let grupoId;
+	let roomId;
 	let dadosCompletos = 0; //Precisa ser 4. São 4 campos de informações.
 	let assuntosSelecionados = document.querySelector("#assuntos_escolhidos");
 	
@@ -116,8 +116,8 @@ function criarGrupo(){//Envia ao servidor os dados para a criação do grupo.
 	
 	for(i=0;i<lista.children.length;i++){//Qual quarto foi selecionado na lista?
 		if(lista.children[i].children[0].children.qualQuarto.checked == true){
-			grupoId = lista.children[i].children[0].children.qualQuarto.getAttribute("quartoid");
-			document.querySelector("#quarto-id").setAttribute("value",grupoId);
+			roomId = lista.children[i].children[0].children.qualQuarto.getAttribute("quartoid");
+			document.querySelector("#quarto-id").setAttribute("value",roomId);
 		}
 	}
 	
@@ -139,7 +139,7 @@ function criarGrupo(){//Envia ao servidor os dados para a criação do grupo.
 		$.ajax({
 			url:"functions/criarGrupos.php",
 			type:"GET",
-			data:{nomeGrupo:grupoNome,assuntos:[assuntos[0],assuntos[1],assuntos[2]],grupoAberto:grupoAberto,grupoId:grupoId},
+			data:{nomeGrupo:grupoNome,assuntos:[assuntos[0],assuntos[1],assuntos[2]],grupoAberto:grupoAberto,roomId:roomId},
 			success:function(response){//O servidor salvou o grupo na base de dados???? O grupo foi criado?
 				console.log(response);
 			}

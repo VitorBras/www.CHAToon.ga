@@ -3,7 +3,7 @@
 
 
 /*                  _________________Dados enviados da aplicação cliente__________________
-{nomeGrupo:grupoNome,assuntos:[assuntos[0],assuntos[1],assuntos[2]],grupoAberto:grupoAberto,grupoId:grupoId}
+{nomeGrupo:grupoNome,assuntos:[assuntos[0],assuntos[1],assuntos[2]],grupoAberto:grupoAberto,roomId:roomId}
 */
 
 /*  ---------------------------Dados necessários para a gravação do grupo na base de dados---------------------------------
@@ -20,17 +20,20 @@ admins_do_grupo = varchar(1271)                 (deixar como nulo)
  
 */
 
-session_start();
-$_SESSION['logado'] = true;
+require("generalFunctions.php");
 
+session_start();//Ficar experto com a sessão. Vou logar o usuário lá no sistema de LOGIN. Não irei loga-lo aqui.....
+$_SESSION['logado'] = true;//Ficar EXPERTO COM ESSA ATRIBUIÇÃO. Estou testando ainda.. depois LEMBRAR DE TIRAR.
+$_SESSION['hbname'] = "Administrador.4";//O hbname será pego quando o usuário logar.
+$_SESSION['hbserver'] = ".com.br";//Será pega 
 $criador_id = "d"; //Será capiturada da sessão
-$hbserver = ".com.br"; //será capiturada da sessão
+$hbserver = ".com.br"; //será capiturada da sessão/  $_SESSION['hbserver'];
 
 /*Dados enviados pela aplicação cliente*/
 $nomeGrupo; 
 $assuntos = array();
 $grupoAberto;
-$grupoId;
+$roomId;
 
 
 
@@ -69,7 +72,7 @@ function set_timing($servidor){
 	}
 	
 }	
-set_timing($hbserver); //Configuro o timestamp de acordo com a zona ou servidor que o usuário acessa
+set_timing($_SESSION['hbserver']); //Configuro o timestamp de acordo com a zona ou servidor que o usuário acessa
 $datetime = date("Y-m-d H:i:s"); //Armazeno os dados para coloca-lo na base de dados
 //------------------------------FIM DO SISTEMA DE TIMESTAMP---------------------------------------
 	
@@ -78,23 +81,18 @@ $datetime = date("Y-m-d H:i:s"); //Armazeno os dados para coloca-lo na base de d
 $nomeGrupo;
 $assuntos = array();
 $grupoAberto;
-$grupoId;
+$roomId;
 
-function wordFiltro($dados){//Filtro de palavras ofensivas. Normalmente acessa a base de dados. São muitas palavras.
-	return($dados);//Por enquanto
-}
-function wordNameFiltro($dados){//Filtra a string tirando as palavras proibidas pelo padrão de nome de grupo que é padronizado no arquivo (config/sistemaConfig.xml) e retorna o valor filtrado.
-	return($dados);//Por enquanto
-}
+
 if(isset($_SESSION['logado'])){
 	if($_SESSION['logado'] == true or $_SESSION['logado'] == "true" or $_SESSION['logado'] == 1){
 		
-		if(isset($_REQUEST["nomeGrupo"]) && isset($_REQUEST["assuntos"]) && isset($_REQUEST["grupoAberto"]) && isset($_REQUEST["grupoId"])){
+		if(isset($_REQUEST["nomeGrupo"]) && isset($_REQUEST["assuntos"]) && isset($_REQUEST["grupoAberto"]) && isset($_REQUEST["roomId"])){
 			//Caso todos os dados forem enviados pela aplicação cliente o procedimento começa realizar o FILTRO ANTI-SQL-INJECTION
-			$nomeGrupo = $_REQUEST["nomeGrupo"];//Filtro
-			$assuntos = $_REQUEST["assuntos"];//Verificar e converter para array
+			$nomeGrupo = $_REQUEST["nomeGrupo"];//Filtro Anti-SQLI-INJECTION e Verificar Padrão de nome
+			$assuntos = $_REQUEST["assuntos"];//Verificar
 			$grupoAberto = $_REQUEST["grupoAberto"];//Verificar e converter para boolean
-			$grupoId = $_REQUEST["grupoId"];//Verificar e manter como string
+			$roomId = $_REQUEST["roomId"];//Verificar se pertence ao Habbo Avatar cadastrado
 			//-------------FIM DA ATRIBUIÇÃO DE VALORES E FILTRAGEM ANTI-SQL-INJECTION-----------------(Grava valor filtrado na variavel)
 			//--------------Filtrar Palavras PROIBIDAS no nome do grupo e substitui-las bor BOBBA----------------(Altera variável)
 			
@@ -129,8 +127,6 @@ if(isset($_SESSION['logado'])){
 							$i++;
 						}
 					}
-					
-					
 				}
 			}else{
 				echo("Arquivo não encontrado");
@@ -139,14 +135,23 @@ if(isset($_SESSION['logado'])){
 			//var_dump($configSystem->grupo->assuntos->assunto);
 			//var_dump($configSystem);
 			if($assuntosAceitos == true){//Os assuntos de grupo enviado pelo cliente são aceitos. 
-				
+				//print("Assuntos aceitos");
+				//Só continua se grupoAberto tiver um valor válido.
+				if($grupoAberto == "aberto" or $grupoAberto == "fechado"){//Valor válido
+					//Verificar se o Id do Room pertence ao usuário logado
+					if(isRoomOwner($_SESSION['hbname'],$_SESSION['hbserver'],$roomId) == true){//Id do room pertence ao a conta avatar Habbo logada
+						
+					}else{
+						echo("{\"response\":\"roomId_is_not_owner\"}");
+						goto end;
+					}
+				}
 				
 			}else{
 				echo("{\"response\":\"hashtag_not_accepted_actually\"}");
 				goto end;
 			}
-			//Verificar se o nome de grupo está no padrão: (irei utilizar o sistema de anti SQL injectio)
-		
+			
 		
 		}else{
 			echo("{\"response\":\"nenhum_dado\"}");
