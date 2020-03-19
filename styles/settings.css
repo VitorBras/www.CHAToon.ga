@@ -280,16 +280,29 @@ body{
 .hbName{
 	color:white;
 }
-#opt_status{
+#opt_status[adaptacao=false]{
+	position:relative;
+	top:0px;
+	left:0px;
 	border-radius:20px;
 	cursor:pointer;
 	font-size:14px;
 	width:89px;
 }
+#opt_status[adaptacao=true]{
+	position:relative;
+	top:0px;
+	left:-18px;
+	border-radius:20px;
+	cursor:pointer;
+	font-size:14px;
+	width:89px;
+}
+
 .nomenclatura{
 	
 }
-.btn_mudar {
+.btn_mudar_senha{
     border-radius: 40px;
     font-size: 14px;
     width: 25px;
@@ -298,14 +311,14 @@ body{
 	padding:0;
 }
 
-.btn_mudar:hover{
+.btn_mudar_senha:hover{
 	background-color:#989898;
 	background-image: url(../imagens/icones/icons8-exemplo-24.png);
 	cursor:pointer;
 	color:white;
 	background-image:url();
 }
-.btn_mudar div{
+.btn_mudar_senha div{
 	background-image: url(../imagens/icones/icons8-exemplo-24.png);
     background-size: 20px;
     background-repeat: no-repeat;
@@ -346,4 +359,138 @@ body{
 }
 .modelo_confirmacao{
 	text-align:center;
+}
+.area_text_status{
+	height: 46px;
+    width: 305px;
+	min-height: 46px;
+    min-width: 305px;
+	max-height: 46px;
+    max-width: 305px;
+	border-radius:40px;
+	text-align:center;
+}
+.botao_salvar{
+	position: relative;
+    top: -25px;
+    left: 0px;
+}
+
+/*----------------BOTÕES DE CONFIGURAÇÕES---------------------*/
+.btn_mudar_status[clicked=true]{
+	display:none;
+}
+.btn_mudar_status[clicked=false]{
+	display:block;
+}
+.btn_mudar_status[clicked=false] + .modelo_insercao_status{
+	display:none;
+}
+.btn_mudar_status[clicked=true] + .modelo_insercao_status{
+	display:block;
+}
+
+/*-------*/
+
+.btn_mudar_email[clicked=false]{
+	display:block;
+}
+.btn_mudar_email[clicked=true]{
+	display:none;
+}
+.btn_mudar_email + table input.area_text_email{
+	border-radius:40px;
+	width:256px;
+}
+.btn_mudar_email[clicked=false] + table.modelo_de_input_de_email{
+	display:none;
+}
+.btn_mudar_email[clicked=true] + table.modelo_de_input_de_email{
+	display:block;
+}
+
+.btn_mudar_email[clicked=true] + table > tbody > tr > td > div.icone_close_area_text_email{
+	display:block;
+	border-radius:40px;
+}
+.btn_mudar_email[clicked=true] + table > tbody > tr > td > div.icone_close_area_text_email > div:hover{
+	background-color:red;
+	cursor:pointer;
+	border-radius:40px;
+}
+
+.btn_mudar_email[clicked=true] + table > tbody > tr > td > div.icone_close_area_text_email > div{
+	display:block;
+	background-image:url(../imagens/icones/icons8-cancelar-24.png);
+	background-size:cover;
+    height: 26px;
+    width: 26px;
+}
+/*----------*/
+.icone_close_status_change > div{
+	display:block;
+	background-image:url(../imagens/icones/icons8-cancelar-24.png);
+	background-size:cover;
+    height: 26px;
+    width: 26px;
+}
+.icone_close_status_change > div:hover{
+	display:block;
+	background-color:red;
+	border-radius:40px;
+    height: 26px;
+    width: 26px;
+	cursor:pointer;
+}
+.modelo_insercao_status{
+	display:block;
+}
+
+
+/*-------------- Dois campos para inserir a nova senha --------------*/
+.box_change_password[visible=true] {
+	display:block;
+    text-align: center;
+    position: relative;
+    top: -118px;
+    left: 147px;
+    padding: 5px 0px 5px 5px;
+    background-color: rgba(0,0,0,0.5);
+    height: 94px;
+    width: 189px;
+}
+.box_change_password[visible=false] {
+	display:none;
+}
+.box_change_password > span{
+	color:white;
+	position:relative;
+	top:-27px;
+}
+.box_change_password .password_typing{
+	position:relative;
+	top:-24px !important;
+}
+.botao_fechar_box_senha {
+    position: relative;
+    top: -33px;
+    left: 176px;
+    background-image: url(../imagens/icones/icons8-cancelar-24.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 26px;
+    width: 26px;
+}
+.botao_fechar_box_senha:hover{
+	cursor:pointer;
+	background-color:red;
+	border-radius:40px;
+}
+/*-----------*/
+
+.btn_apenas_mudar_senha[clicked=false]{
+	display:block;
+}
+.btn_apenas_mudar_senha[clicked=true]{
+	display:none;
 }
