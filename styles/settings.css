@@ -1,0 +1,349 @@
+
+body{
+	background-color:#E1EEF2;
+}
+
+/*Bases*/
+
+
+@media screen and (max-width:765px){
+	.boxBase-One{
+		background: linear-gradient(to right,#72c2ff,#66cdaa);
+		border-radius:20px;
+		width:412.16px;
+		min-height:20%;
+		margin-left:auto;
+		margin-right:auto;
+		padding-bottom:20px;
+		box-shadow:0px 0px 0px #848484;
+	}
+}
+@media screen and (min-width:765px){
+	.boxBase-One{
+		background: linear-gradient(to right,#72c2ff,#66cdaa);
+		border-radius:20px;
+		width:50%;
+		min-height:20%;
+		margin-left:auto;
+		margin-right:auto;
+		padding-bottom:20px;
+		box-shadow:2px 2px 16px #848484;
+	}
+}
+@media screen and (max-width:511px){
+	.boxBase-One{
+		width:90%;
+		min-height:20%;
+		margin-left:auto;
+		margin-right:auto;
+		padding-bottom:20px;
+		box-shadow:0px 0px 0px #848484;
+	}
+}
+/*Encapsuladores de conteúdos*/
+
+.menu-bar {
+    background: linear-gradient(#1c1c1c,#7f7f7f);
+    height: 40px;
+    width: 100%;
+    box-shadow: 0px 4px 2px #5a5a5a;
+    border-radius: 20px 20px 0px 0px;
+}
+
+/*--------- Campo de inserção de dados ----------*/
+.boxBase-Two{
+	background: rgb(202, 214, 217.0.4);
+	height:200px;
+	width:100%;
+	margin-top:10px;
+	border-radius:20px;
+}
+#assuntos_escolhidos {
+    min-height: 63px;
+    min-width: 153px;
+	background-color: rgba(51, 60, 63,0.6);
+	border-radius:20px;
+	border:1px solid black;
+	overflow:hidden;
+	box-shadow: 0px 0px 10px #fff
+}
+
+
+
+.molde-lista-quartos{
+	margin-left:auto;
+	margin-right:auto;
+	/*border-bottom: dashed;*/
+	border-collapse:separate;
+}
+.molde-lista-quartos tr td{
+
+}
+.space-in-table{/*Estou tentando colocar um espaço entre as células da tabela molde do campo de input de dados*/
+	border-bottom-width:10px;
+	border-left-width:0;
+	border-right-width:0;
+	border-style:solid;
+	border-color:rgba(0,0,0,0);
+}
+
+.button-salvar-settings {
+    height: 32px;
+    width: 126px;
+    background-color: #333c3f;
+    color: white;
+    border-radius: 20px;
+	margin-left:auto;
+	margin-right:auto;
+	margin-top:5px;
+}
+.button-salvar-settings:hover{
+	background-color:#49575b;
+	cursor:pointer;
+	color:#41a6bf;
+}
+#zona-btn-criar-grupo div{
+	margin-right:auto;
+	margin-left:auto;
+	width:126px;
+}
+#buttonsTD-area{
+	width:70px;
+	margin-bottom:40px;
+}
+#assuntos_escolhidos tr td{
+	border-radius:20px;
+}
+#assuntos_escolhidos tr td[selecionado='false']{
+	background-color:rgba(255, 171, 28,0.2);
+	border-radius:20px;
+}
+#assuntos_escolhidos tr td[selecionado='true']{
+	background-color:rgba(255, 171, 28,0.7);
+}
+#assuntos_escolhidos tr td:hover{
+	cursor:pointer;
+}
+#assuntos_escolhidos tr td {
+	text-align:center;
+}
+#assunto{
+	border-radius:20px;
+	height:32px;
+	width:90px;
+}
+/*--------------------*/
+/*---- Area de Pesquisa -----*/
+.boxBase-Three {
+    background: linear-gradient(to right,#72c2ff,#66cdaa);
+    height: 267px;
+    width: 98%;
+    margin-top: 25px;
+    margin-right: auto;
+    margin-left: auto;
+    border-radius: 20px;
+    box-shadow: 0px 0px 12px whitesmoke;
+	overflow:hidden;
+}
+#filtro:hover{
+	cursor:pointer;
+}
+/*--------Area de Filtros de pesquisa--------*/
+.box-confirmacao{
+	background-color:rgba(51, 60, 63,0.6);
+	overflow-y:hidden;
+	overflow-x:hidden;
+	height:232px;
+}
+
+/*-------- Area dos Resultados das pesquisas ---------*/
+.boxBase-Four {
+	display:block;
+    position: relative;
+    background: linear-gradient(to right,#696f73,#66cdaa);
+    min-height: 94px;
+    width: 116%;
+    margin-top: 20px;
+    margin-right: auto;
+    margin-left: auto;
+    border-radius: 20px;
+	padding-bottom:10px;
+    left: -8%;
+}
+/*--------------Zona de pesquisa por GRUPOS e PESSOAS------------------*/
+.box-search{
+	display:block;
+	height:38px;
+	width:100%;
+	background-color:rgba(51, 60, 63,0.6);;
+}
+.molde-box-search{
+	width:100%;
+}
+
+.inputs-search {
+    height: 32px;
+    width: 100%;
+	border-radius:20px;
+}
+#filtro{
+	height:32px;
+	width:100%;
+	border-radius:20px;
+}
+#texto1{
+	color:white;
+	text-align:center;
+	background-color:rgba(0,0,0,0.4);
+	border-radius:20px;
+}
+.molde-box-search button{
+	height:32px;
+	width:100%;
+	background-color:#333c3f;
+	color:white;
+	border-radius:20px;
+}
+.molde-box-search button:hover{
+	cursor:pointer;
+	background-color:#49575b;
+}
+/*--------------sessão Lista de resultados da pesquisa de GRUPOS-------------*/
+
+
+
+
+@media (max-width:618px){/*Não sei qual o sentido desse BLOCO com essa resolução*/
+
+}
+@media (min-width:618px){/*Não sei o porque esse bloco essaresolução existe*/
+
+}
+
+@media screen and (min-width:1060px){
+
+}
+@media screen and (min-width:900px) and (max-width:1060px){
+
+}
+@media screen and (min-width:795px) and (max-width:900px){
+
+}
+@media screen and (min-width:618px){
+
+}
+@media screen and (max-width:618px){
+
+}
+@media screen and (max-width:415px){/*Tela pequena demais. Troca de MOLDE TABELA que encapsulam as informações*/
+
+}
+
+/*--------------sessão Lista de resultados da pesquisa de PESSOAS-------------*/
+
+
+@media screen and (max-width:970px){
+
+}
+
+/*-----------------Menu-----------------*/
+body{
+	font-size:14px;
+}
+.botoes-menu{
+	height:100%;
+	background-color:#333c3f;
+	color:white;
+	border-radius:20px;
+	font-size:14px;
+}
+.botoes-menu:hover{
+	background-color:#49575b;
+	cursor:pointer;
+	color:#41a6bf;
+}
+.box-menu-bar{
+	margin-left:auto;
+	margin-right:auto;
+	width:250px;
+}
+.button-negocios{
+	
+}
+.button-configuracoes{
+	
+}
+.button-friends{
+	
+}
+/*-----------------------NOVAS ESTILIZAÇÕES*/
+.hbName{
+	color:white;
+}
+#opt_status{
+	border-radius:20px;
+	cursor:pointer;
+	font-size:14px;
+	width:89px;
+}
+.nomenclatura{
+	
+}
+.btn_mudar {
+    border-radius: 40px;
+    font-size: 14px;
+    width: 25px;
+    height: 26px;
+    background-color: white;
+	padding:0;
+}
+
+.btn_mudar:hover{
+	background-color:#989898;
+	background-image: url(../imagens/icones/icons8-exemplo-24.png);
+	cursor:pointer;
+	color:white;
+	background-image:url();
+}
+.btn_mudar div{
+	background-image: url(../imagens/icones/icons8-exemplo-24.png);
+    background-size: 20px;
+    background-repeat: no-repeat;
+	height:inherit;
+	width:inherit;
+	margin:0;
+	
+}
+.status_atual{
+	color:white;
+}
+
+#email_usuario{
+	font-size:14px;
+	color:white;
+}
+
+.box-confirmacao > div{
+	margin-right:auto;
+	margin-left:auto;
+	width:240px;
+	border-radius:40px;
+	background-color:rgba(0,0,0,0.5);
+	
+}
+.box-confirmacao > div > div{
+	margin-right:auto;
+	margin-left:auto;
+	border-radius:50px;	
+	width:128px;
+}
+#codigo_confirmacao{
+	color:white;
+}
+.span_text_code{
+	color:yellow;
+	font-size:16px;
+}
+.modelo_confirmacao{
+	text-align:center;
+}
