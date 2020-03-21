@@ -28,7 +28,7 @@ session_start();
 							<span class="hbName">Administrador.4</span>
 						</td>
 						<td>
-							<select id="opt_status" adaptacao="false">
+							<select id="opt_status" adaptacao="oneFalse">
 								<option>Disponível</option>
 								<option>Meio Ocupado</option>
 								<option>Ocupado</option>
@@ -38,8 +38,7 @@ session_start();
 					<tr>
 						<td><span class="nomenclatura">Status:</span></td>
 						<td>
-						
-						<button class="btn_mudar_senha btn_mudar_status" clicked='false' onclick="setInterface('status_changing');"><div></div></button>
+							<button class="btn_mudar_senha btn_mudar_status" clicked='false' onclick="setInterface('status_changing');"><div></div></button>
 							<table class="modelo_insercao_status">
 								<tr>
 									<td>
@@ -53,15 +52,15 @@ session_start();
 						</td>
 					</tr>
 					<tr>
-						<td>
+						<td colspan="3">
 							<span class="status_atual">Status...</span>
 						</td>
 					</tr>
 					<tr>
-						<td><span>E-mail:</span></td>
+						<td style="min-width:60px;"><span>E-mail:</span></td>
 						<td id="buttonsTD-area" class="space-in-table">
 							<span id="email_usuario">administrador@gmail.com</span>
-							<button class="btn_mudar_senha btn_mudar_email" clicked='false' onclick="setInterface('email_changing');"><div></div></button>
+							<button class="btn_mudar_senha btn_mudar_email" visible="yes" clicked='false' onclick="setInterface('email_changing');"><div></div></button>
 							<table class="modelo_de_input_de_email">
 								<tr>
 									<td>
@@ -77,29 +76,29 @@ session_start();
 					<tr>
 						<td><span>Senha:</span></td>
 						<td>
-							<button class="btn_mudar_senha btn_apenas_mudar_senha" clicked="false" onclick="setInterface('senha_changing');"><div></div></button>
+							<button class="btn_mudar_senha btn_apenas_mudar_senha" visible="yes" clicked="false" onclick="setInterface('senha_changing');"><div></div></button>
 						</td>
 					</tr>
 					<tr>
 						<td colspan="3" id="zona-btn-criar-grupo">
 							<div>
-								<button class="button-salvar-settings botao_salvar" onclick="salvar();">Salvar</button>
+								<button class="button-salvar-settings botao_salvar" visible="not" positioned="false" onclick="salvar();">Salvar</button>
 							</div>
 						</td>
 					</tr>
 				</table>
-				<div class="box_change_password" visible='true'>
+				<div class="box_change_password" visible='false'>
 					<div class="botao_fechar_box_senha" onclick="setInterface('close_box_password_change');"></div>
 					<span>Insira uma nova senha</span>
 					<table>
 						<tr>
 							<td>
-								<input class="password_typing" type="text">
+								<input class="password_typing newPassone" incorreta="false" onchange="changeSenha(this);" type="text">
 							</td>
 						</tr>
 						<tr>
 							<td>
-								<input class="password_typing" type="text">
+								<input class="password_typing newPasstwo" incorreta="false" onchange="changeSenha(this);" type="text">
 							</td>
 						</tr>
 					</table>

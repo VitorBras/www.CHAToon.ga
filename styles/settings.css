@@ -280,7 +280,7 @@ body{
 .hbName{
 	color:white;
 }
-#opt_status[adaptacao=false]{
+#opt_status[adaptacao=oneFalse]{
 	position:relative;
 	top:0px;
 	left:0px;
@@ -289,7 +289,7 @@ body{
 	font-size:14px;
 	width:89px;
 }
-#opt_status[adaptacao=true]{
+#opt_status[adaptacao=oneTrue]{
 	position:relative;
 	top:0px;
 	left:-18px;
@@ -297,6 +297,24 @@ body{
 	cursor:pointer;
 	font-size:14px;
 	width:89px;
+}
+#opt_status[adaptacao=twoTrue] {
+    position: relative;
+    top: 0px;
+    left: -9px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    width: 89px;
+}
+#opt_status[adaptacao=threeTrue] {
+    position: relative;
+    top: 0px;
+    left: -57px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    width: 89px;
 }
 
 .nomenclatura{
@@ -316,7 +334,6 @@ body{
 	background-image: url(../imagens/icones/icons8-exemplo-24.png);
 	cursor:pointer;
 	color:white;
-	background-image:url();
 }
 .btn_mudar_senha div{
 	background-image: url(../imagens/icones/icons8-exemplo-24.png);
@@ -370,10 +387,27 @@ body{
 	border-radius:40px;
 	text-align:center;
 }
-.botao_salvar{
+/*,
+.btn_apenas_mudar_senha[clicked=true] .botao_salvar*/
+
+
+button.botao_salvar[positioned=false]{
 	position: relative;
-    top: -25px;
+    top: 0px;
     left: 0px;
+}
+/* */
+button.botao_salvar[positioned=true]{
+	position: relative;
+    top: 39px;
+    left: 0px;
+}
+/*  */
+button.botao_salvar[visible=yes]{
+	display:block;
+}
+button.botao_salvar[visible=not]{
+	display:none;
 }
 
 /*----------------BOTÕES DE CONFIGURAÇÕES---------------------*/
@@ -452,12 +486,14 @@ body{
 	display:block;
     text-align: center;
     position: relative;
-    top: -118px;
-    left: 147px;
+    top: -94px;
+    left: 0px;
     padding: 5px 0px 5px 5px;
     background-color: rgba(0,0,0,0.5);
     height: 94px;
     width: 189px;
+	margin-right:auto;
+	margin-left:auto;
 }
 .box_change_password[visible=false] {
 	display:none;
@@ -471,6 +507,24 @@ body{
 	position:relative;
 	top:-24px !important;
 }
+/*-------CASO AS SENHAS NOVAS COINCIDAM-------*/
+.newPassone[incorreta=false]{
+	border:0px;
+	background-color:white;
+}
+.newPasstwo[incorreta=false]{
+	border:0px;
+	background-color:white;
+}
+/*.newPassone[incorreta=true]{Não pode ser incorreta
+	border:2px solid red;
+	background-color:#e5a0a0;
+}*/
+.newPasstwo[incorreta=true]{
+	border:2px solid red;
+	background-color:#e5a0a0;
+}
+/*-----------------------------------------------*/
 .botao_fechar_box_senha {
     position: relative;
     top: -33px;
@@ -489,8 +543,28 @@ body{
 /*-----------*/
 
 .btn_apenas_mudar_senha[clicked=false]{
-	display:block;
+
 }
 .btn_apenas_mudar_senha[clicked=true]{
+
+}
+.btn_apenas_mudar_senha[visible=yes]{
+	display:block;
+}
+.btn_apenas_mudar_senha[visible=not]{
+	display:none;
+}
+/*--*/
+.btn_mudar_status[visible=yes]{
+	display:block;
+}
+.btn_mudar_status[visible=not]{
+	display:none;
+}
+/*--*/
+.btn_mudar_email[visible=yes]{
+	display:block;
+}
+.btn_mudar_email[visible=not]{
 	display:none;
 }
