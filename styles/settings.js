@@ -51,6 +51,25 @@ function salvar(){
 	document.querySelector("#opt_status").setAttribute("adaptacao","oneFalse");
 	
 	//Identifica qual campo/dado está sendo alterado. Colhe os dados dos inputs e manda para variáveis.
+	if(document.querySelector(".btn_mudar_status").getAttribute("clicked") == "true"){//Editando status
+		//Pegar valor criado
+		status = document.querySelector(".area_text_status").value;
+		//Enviar dados ao servidor para registrar um novo status
+		$.ajax({
+			url:"function/userSettings.php",
+			type:"GET",
+			data:{processo:"change_status",newStatus:status},
+			success:function(response){
+				
+			}
+		});
+	}
+	if(document.querySelector(".btn_mudar_email").getAttribute("clicked") == "true"){//Editando E-mail
+		
+	}
+	if(document.querySelector(".btn_apenas_mudar_senha").getAttribute("clicked") == "true"){//Editando senha
+		
+	}
 	//Das variáveis vão para o servidor
 	
 	//De acordo com a resposta do servidor a aplicação altera sua interface setInterface(estado);

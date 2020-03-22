@@ -1,5 +1,11 @@
 <?php
 
+//Variáveis de sistema
+$connect;
+$db_name = "db_sistemachat";
+$db_server = "localhost";
+$db_user = "root";
+$db_pass = "";
 
 function set_timing($servidor){
 	
@@ -137,6 +143,57 @@ function registerGroup($gpName,$gpAssuntos,$roomId,$hbServer,$hbName){
 	}
 }
 //registerGroup("nada",["Medo","Polícias","Insônia"],"146985034",".com.br","Administrador.4");
+
+function userDataUpdate($hb_name,$hb_server,$mudar,$dado){
+	
+	$connect = mysqli_connect($GLOBALS['db_server'],$GLOBALS['db_user'],$GLOBALS['db_pass'],$GLOBALS['db_name']);
+	
+	switch($mudar){
+		case "status":
+			if($hb_name != null && $hb_server != null && $mudar != null && $dado != null){
+				$query = "UPDATE usuarios SET status='".utf8_decode($dado)."' WHERE habbo_name='$hb_name' AND server='$hb_server';";
+				$resposta = mysqli_query($connect,$query);
+				//Tudo deu certo?
+				if(mysqli_error($connect) == "" && mysqli_error($connect) == null){
+					return("erro");
+					goto fim;
+				}
+			}
+			break;
+		case "senha":
+			if($hb_name != null && $hb_server != null && $mudar != null && $dado != null){
+				
+			}
+			break;
+		case "email":
+			if($hb_name != null && $hb_server != null && $mudar != null && $dado != null){
+				
+			}
+			break;
+		case "celular":
+			if($hb_name != null && $hb_server != null && $mudar != null && $dado != null){
+				
+			}
+			break;
+		case "creditos":
+			if($hb_name != null && $hb_server != null && $mudar != null && $dado != null){
+				
+			}
+			break;
+		case "banimento":
+			if($hb_name != null && $hb_server != null && $mudar != null && $dado != null){
+				
+			}
+			break;
+		case "redeSocial":
+			if($hb_name != null && $hb_server != null && $mudar != null && $dado != null){
+				
+			}
+			break;
+	}
+	mysqli_close($connect);
+	fim:
+}
 
 
 ?>

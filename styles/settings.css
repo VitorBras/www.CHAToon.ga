@@ -280,6 +280,7 @@ body{
 .hbName{
 	color:white;
 }
+
 #opt_status[adaptacao=oneFalse]{
 	position:relative;
 	top:0px;

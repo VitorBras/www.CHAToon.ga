@@ -1,8 +1,22 @@
 <?php
 
+session_id("o1ogb822rt2l8guii1jdk5fsoq");
 session_start();
 
+//-----------------------INICILIALIZAÇÃO DE SESSÂO ARTIFICIAL   (APENAS PARA DESENVOLVIMENTO)
+$_SESSION['adm'] = "Vitor Gomes";
 
+echo("<script>
+
+console.log('Administrador = ".$_SESSION['adm']." ');
+console.log('Servidor = ".$_SESSION['hbserver']." ');
+console.log('Nome = ".$_SESSION['hbname']." ');
+console.log('Logado Var = ".$_SESSION['logado']." ');
+
+
+</script>
+");
+//---------------------------------INICIALIZAÇAO DE SESSAO ARTIFICIAL REALIZADA
 ?>
 
 
