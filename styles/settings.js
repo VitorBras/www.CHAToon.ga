@@ -44,36 +44,57 @@ function goToPerfil(){
 function salvar(){
 	console.log("Salvar");
 	
-	//Todos os botões precisam estar com o atributo CLICKED=FALSE
-	document.querySelector(".btn_mudar_status").setAttribute("clicked","false");
-	
 	//Ajustando a posição do select
 	document.querySelector("#opt_status").setAttribute("adaptacao","oneFalse");
 	
 	//Identifica qual campo/dado está sendo alterado. Colhe os dados dos inputs e manda para variáveis.
 	if(document.querySelector(".btn_mudar_status").getAttribute("clicked") == "true"){//Editando status
+		console.log("Requisição enviada");
 		//Pegar valor criado
 		status = document.querySelector(".area_text_status").value;
 		//Enviar dados ao servidor para registrar um novo status
 		$.ajax({
-			url:"function/userSettings.php",
+			url:"functions/userSettings.php",
 			type:"GET",
-			data:{processo:"change_status",newStatus:status},
-			success:function(response){
-				
+			data:{processo:"change_status",newStatus:status,PHPSESSID:"o1ogb822rt2l8guii1jdk5fsoq"},
+			success:function(response){//Informar ao usuário que deu certo
+				console.log(response);
 			}
 		});
-	}
-	if(document.querySelector(".btn_mudar_email").getAttribute("clicked") == "true"){//Editando E-mail
+		//Reabilitando os botões de configuração
+		setInterface("reabilitar_botoes_configuracao");
 		
-	}
-	if(document.querySelector(".btn_apenas_mudar_senha").getAttribute("clicked") == "true"){//Editando senha
+		document.querySelector(".btn_apenas_mudar_senha").setAttribute("clicked","false");
+		document.querySelector(".btn_apenas_mudar_senha").setAttribute("visible","yes");
+	} else if(document.querySelector(".btn_mudar_email").getAttribute("clicked") == "true"){//Editando Email
 		
+		email = document.querySelector(".area_text_email").value;
+		//Enviar dados ao servidor para registrar um novo status
+		$.ajax({
+			url:"functions/userSettings.php",
+			type:"GET",
+			data:{processo:"change_email",newEmail:email,PHPSESSID:"o1ogb822rt2l8guii1jdk5fsoq"},
+			success:function(response){//Informar ao usuário que deu certo
+				console.log(response);
+			}
+		});
+		
+		//Reabilitando os botões de configuração
+		setInterface("reabilitar_botoes_configuracao");
+		
+	} else if(document.querySelector(".btn_apenas_mudar_senha").getAttribute("clicked") == "true"){//Editando Senha
+		
+		
+		//Reabilitando os botões de configuração
+		setInterface("reabilitar_botoes_configuracao");
 	}
+	
 	//Das variáveis vão para o servidor
 	
 	//De acordo com a resposta do servidor a aplicação altera sua interface setInterface(estado);
 	
+	//Todos os botões precisam estar com o atributo CLICKED=FALSE
+	document.querySelector(".btn_mudar_status").setAttribute("clicked","false");
 }
 
 function setInterface(estado){
@@ -162,6 +183,14 @@ function setInterface(estado){
 			//Demais configurações inabilitadas
 			document.querySelector(".btn_mudar_email").setAttribute("visible","yes");
 			document.querySelector(".btn_apenas_mudar_senha").setAttribute("visible","yes");
+			break;
+		case "reabilitar_botoes_configuracao":
+			//Reabilitando os botões de configuração
+			document.querySelector(".btn_mudar_status").setAttribute("clicked","false");
+			document.querySelector(".btn_mudar_status").setAttribute("visible","yes");
+			document.querySelector(".btn_mudar_email").setAttribute("clicked","false");
+			document.querySelector(".btn_mudar_email").setAttribute("visible","yes");
+			document.querySelector(".botao_salvar").setAttribute("visible","not");
 			break;
 	}
 }

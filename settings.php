@@ -1,10 +1,17 @@
 <?php
 
+require("functions/generalFunctions.php");
+
+
+
+//-----------------------INICILIALIZAÇÃO DE SESSÂO ARTIFICIAL   (APENAS PARA DESENVOLVIMENTO)
 session_id("o1ogb822rt2l8guii1jdk5fsoq");
 session_start();
 
-//-----------------------INICILIALIZAÇÃO DE SESSÂO ARTIFICIAL   (APENAS PARA DESENVOLVIMENTO)
 $_SESSION['adm'] = "Vitor Gomes";
+$_SESSION['hbserver'] = ".com.br";
+$_SESSION['hbname'] = "VitorGp";
+$_SESSION['logado'] = true;
 
 echo("<script>
 
@@ -22,7 +29,9 @@ console.log('Logado Var = ".$_SESSION['logado']." ');
 
 <html>
 	<head>
-	
+		<title>Configurações</title>
+		<meta charset="utf-8">
+		<h4></h4>
 	</head>
 	<body>
 		<div class="boxBase-One">
@@ -39,7 +48,7 @@ console.log('Logado Var = ".$_SESSION['logado']." ');
 					<tr>
 						<td><span>Nome</span></td>
 						<td>
-							<span class="hbName">Administrador.4</span>
+							<span class="hbName"><?php echo($_SESSION['hbname']);?></span>
 						</td>
 						<td>
 							<select id="opt_status" adaptacao="oneFalse">
@@ -66,8 +75,8 @@ console.log('Logado Var = ".$_SESSION['logado']." ');
 						</td>
 					</tr>
 					<tr>
-						<td colspan="3">
-							<span class="status_atual">Status...</span>
+						<td colspan="3"><?php //  nÃ£o ?>
+							<span class="status_atual"><?php echo(utf8_encode(userData($_SESSION['hbname'],$_SESSION['hbserver'])['status']));?></span>
 						</td>
 					</tr>
 					<tr>

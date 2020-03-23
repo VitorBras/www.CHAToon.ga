@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <systemConfig>
+	<serverSystem>
+		<database name="db_sistemachat" server="localhost" user="root" pass=""></database>
+	</serverSystem>
+	<serverLinks>
+		<codeEmailConfirm using="yes">http://localhost/TESTEDECODIGO/Chat/www.CHAToon.ga/functions/confirmarEmail.php</codeEmailConfirm>
+		<codeEmailConfirm using="no">http://www.CHAToon.ga/functions/confirmarEmail.php</codeEmailConfirm>
+	</serverLinks>
 	<session>
 		<usuarioComum>
 			<tempoMaximo minutos="30"/>

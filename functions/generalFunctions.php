@@ -55,6 +55,10 @@ function nameGroupAccepted($dados){//Verificar se a string nome de grupo não co
 	
 }
 
+function isUser($hbname,$hbserver){
+	
+}
+
 function isRoomOwner($habboName,$habboServer,$roomId){//Verificar se o quarto pertence ao Habbo Avatar Cadastrado
 	//Pegar habbo Id única
 	$url = "https://www.habbo".$habboServer."/api/public/users?name=".$habboName;
@@ -101,7 +105,7 @@ function userStatusChange($status){//Mudar status do usuário
 }
 
 function userData($hbName,$hbServer){//Retorna dados do usuário
-	$connect = mysqli_connect("localhost","root","","db_sistemachat");
+	$connect = mysqli_connect($GLOBALS['db_server'],$GLOBALS['db_user'],$GLOBALS['db_pass'],$GLOBALS['db_name']);
 	$query = "SELECT user_id,senha,creditos,email,celular,criado_timestamp,status FROM usuarios WHERE habbo_name = '$hbName' AND server = '$hbServer'";
 	$dados = mysqli_query($connect,$query);
 	if(gettype($dados) == 'object'){
@@ -130,7 +134,7 @@ function registerGroup($gpName,$gpAssuntos,$roomId,$hbServer,$hbName){
 		$dados = mysqli_query($connect,$query);
 		print(mysqli_error($connect));
 		//O registro foi realizado com sucesso?
-		if(mysqli_error($connect) == null){//Registrado com sucesso na base de dados.
+		if(mysqli_error($connect) == null or mysqli_error($connect) == ""){//Registrado com sucesso na base de dados.
 			mysqli_close($connect);
 			return true;
 		}else{
@@ -154,8 +158,8 @@ function userDataUpdate($hb_name,$hb_server,$mudar,$dado){
 				$query = "UPDATE usuarios SET status='".utf8_decode($dado)."' WHERE habbo_name='$hb_name' AND server='$hb_server';";
 				$resposta = mysqli_query($connect,$query);
 				//Tudo deu certo?
-				if(mysqli_error($connect) == "" && mysqli_error($connect) == null){
-					return("erro");
+				if(mysqli_error($connect) == "" or mysqli_error($connect) == null){
+					return(true);
 					goto fim;
 				}
 			}
@@ -167,7 +171,13 @@ function userDataUpdate($hb_name,$hb_server,$mudar,$dado){
 			break;
 		case "email":
 			if($hb_name != null && $hb_server != null && $mudar != null && $dado != null){
-				
+				$query = "UPDATE usuarios SET email='".utf8_decode($dado)."' WHERE habbo_name='$hb_name' AND server='$hb_server';";
+				$resposta = mysqli_query($connect,$query);
+				//Tudo deu certo?
+				if(mysqli_error($connect) == "" or mysqli_error($connect) == null){
+					return(true);
+					goto fim;
+				}
 			}
 			break;
 		case "celular":
@@ -191,9 +201,111 @@ function userDataUpdate($hb_name,$hb_server,$mudar,$dado){
 			}
 			break;
 	}
-	mysqli_close($connect);
 	fim:
+	mysqli_close($connect);
+	
 }
+
+function gen_code_confirm($x){
+	$code = "";
+	for($i=0;$i<$x;$i++){
+		if($i == 0){
+			$code = rand(0,9);
+		}else{
+			$code .= rand(0,9);
+		}
+	}
+	return($code);
+}
+function sendEmail($what,$email,$name = null,$hbserver,$code = null,$link){
+	
+	switch($what){
+		case "email_confirm_code":
+			//$mensagem = "Olá $name. \n Seu código de confirmação é: <h4>$code</h4> \n \n <strong>Por favor não responda este email.</strong>";
+			$header = "Content-type: text/html; charset=UTF-8; \r\n";
+			$header .= "MIME-Version: 1.0; \r\n";
+			$header .= "From: jeguestudiodev@gmail.com; \r\n";
+			$mensagem = "
+				<html>
+					<head>
+						<h2>CHAToon - Olá $name</h2>
+						<h4>Seu código de confirmação é: <strong>$code</strong></h4></br></br>
+						<h4>Ou clique no link para confirmar seu email: <a href='$link?hbname=$name&hbserver=$hbserver&confirmCode=$code'>confirmar</a></h4></br></br></br>
+						
+						<span>*Por favor não responda este e-mail</span>
+					</head>
+				</html>
+			
+			";
+			$sending = mail($email,"CHAToon - Confirme seu e-mail",$mensagem,$header);
+			if($sending){
+				return(true);
+			}
+			break;
+	}
+}
+function changeEmail($hbname,$hbserver,$email){//Grava na base de dados na tabela de codigo de confirmação um novo email
+	//Verificacr se o usuário está definitivamente cadastrado no sistema (Não é necessário pq esTÁ LOGADO)
+	
+	//Na base de dados da tabela CODIGO DE CONFIRMAÇÃO há um registro deste usuário que está em confirmação?
+	$connect = mysqli_connect($GLOBALS['db_server'],$GLOBALS['db_user'],$GLOBALS['db_pass'],$GLOBALS['db_name']);
+	$query = "SELECT status,codigo_email FROM codigo_confirmacao WHERE habbo_name = '$hbname' AND server = '$hbserver';";
+	$dados = mysqli_query($connect,$query);
+	if(mysqli_error($connect) == "" or mysqli_error($connect) == null){
+		$infos = mysqli_fetch_array($dados);
+		//return(var_dump($infos));
+		
+		if($infos == null){//Não há registro.
+			
+		}else{//Há algum registro.
+			//return(var_dump($infos));
+			//Verificar se apenas falta a verificação do email
+			if($infos['status'] == "1"){
+				if($infos['codigo_email'] == null){//Indicar um código para confirmação
+					$code = gen_code_confirm(6);
+					
+					$query = "UPDATE codigo_confirmacao SET codigo_email = '$code',email = '$email' WHERE habbo_name = '$hbname' AND server = '$hbserver';";
+					$dados = mysqli_query($connect,$query);
+					print(mysqli_error($connect));
+					if(mysqli_error($connect) == null or mysqli_error($connect) == ""){//Caso não dê erro
+						//Enviar o código para o email
+							//Escolhendo qual o link a usar.. de produção ou o usado no desenvolvimento localhost.
+						$configSystem = simplexml_load_file('../config/sistemaConfig.xml');
+						$link;
+						for($i=0;$i<count($configSystem->serverLinks->codeEmailConfirm);$i++){
+							if($configSystem->serverLinks->codeEmailConfirm[$i]['using'] == "yes"){
+								$link = $configSystem->serverLinks->codeEmailConfirm[$i];
+							}
+						}
+						$sending = sendEmail("email_confirm_code",$email,$hbname,$hbserver,$code,$link);
+						if($sending == true){
+							//Avisar a aplicação cliente que o usuário deve ir ao seu email pegar o código
+							mysqli_close($connect);
+							return("confirm_email_step");
+						}
+					}else{
+						mysqli_close($connect);
+						return("mysqli_error"); 
+					}
+					
+					
+					
+				}else{
+					return("confirm_email_step");
+				}
+			}else{
+				mysqli_close($connect);
+				return("user_no_registered_yet");
+			}
+		}
+		
+	}else{
+		return("mysqli_error");
+	}
+	mysqli_close($connect);	
+}
+
+
 
 
 ?>

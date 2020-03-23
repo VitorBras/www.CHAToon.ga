@@ -1,8 +1,7 @@
 <?php
 
 require("generalFunctions.php");
-session_id($_REQUEST['PHPSESSID']);
-session_start();
+
 
 $hbname;
 $hbserver;
@@ -12,34 +11,62 @@ $sessionId; //É o Hash da sessão. Armazeno ela no banco de dados quando o usu�
 $newStatus;
 
 
-if(isset($_REQUEST['processo']) and isset($_REQUEST['newStatus']) and isset($_REQUEST['PHPSESSID'])){
-	
-	//Qual é o processo?
-	switch($_REQUEST['processo']){
-		case "change_status":
-			//Mudar status
-			$newStatus = $_REQUEST['newStatus'];//FILTRO ANTI-SQL aqui
-			//A sessão está logada?
-			if($_SESSION['hbname'] != null && $_SESSION['hbserver'] != null && $_SESSION['logado'] == true){//Atualizar dados no banco de dados
-				//Atribuindo as variáveis globais os valores passado a este sistema para início de sua operação
-				$GLOBALS['hbname'] = $_SESSION['hbname'];
-				$GLOBALS['hbserver'] = $_SESSION['hbserver'];
-				userDataUpdate($GLOBALS['hbname'],$GLOBALS['hbserver'],"status",$newStatus);
-			}
-			break;
-		case "a":
+if(isset($_REQUEST['processo']) and isset($_REQUEST['PHPSESSID'])){
+	//Iniciando sessão
+	session_id($_REQUEST['PHPSESSID']);
+	session_start();
+	//A sessão está logada?
+	if(@$_SESSION['logado'] == true){//Está logada sim.
+		//Atribuindo as variáveis globais os valores passado a este sistema para início de sua operação
+		$GLOBALS['hbname'] = $_SESSION['hbname']; //FILTRO ANTI-SQL-INJECTION aqui
+		$GLOBALS['hbserver'] = $_SESSION['hbserver'];//FILTRO ANTI-SQL-INJECTION aqui
 		
-			break;
-		case "b":
+		//Qual é o processo?
+		switch($_REQUEST['processo']){
+			case "change_status":
+				if(isset($_REQUEST['newStatus'])){
+					//Mudar status
+					$newStatus = $_REQUEST['newStatus'];//FILTRO ANTI-SQL aqui
+					
+					//Atualizar dados no banco de dados
+					
+					userDataUpdate($GLOBALS['hbname'],$GLOBALS['hbserver'],"status",$newStatus);
+					if(userDataUpdate($GLOBALS['hbname'],$GLOBALS['hbserver'],"status",$newStatus)){
+						echo("{\"response\":\"status_changed\"}");
+					}
+				}else{
+					echo("{\"response\":\"falta_dados_a_enviar\"}");
+				}
+				
+				break;
+			case "change_email":
+				if(isset($_REQUEST['newEmail'])){
+					$email = $_REQUEST['newEmail'];//Filtro ANTI-SQL-INJECTION aqui
+					if(changeEmail($GLOBALS['hbname'],$GLOBALS['hbserver'],$email) == "confirm_email_step"){
+						echo("{\"response\":\"confirm_email_step\"}");
+					}
+				}else{
+					echo("{\"response\":\"falta_dados_a_enviar\"}");
+				}
+				break;
+			case "change_pass":
+				if(isset($_REQUEST['newPass'])){
+					
+				}else{
+					echo("{\"response\":\"falta_dados_a_enviar\"}");
+				}
+				break;
+		}
 		
-			break;
+	}else{//Usuário não logado
+		echo("{\"response\":\"user_no_loged\"}");
 	}
 	
+	
 }else{
-	echo("{\"response\":\"nenhum_dado_enviado\"}");
+	echo("{\"response\":\"falta_dados_a_enviar\"}");
 }
 
-echo("<script>alert('Administrador = ".$_SESSION['adm']." ')</script>");
 /*
 o1ogb822rt2l8guii1jdk5fsoq      adm=vitor
 o1ogb822rt2l8guii1jdk5fsoq   settings.php
