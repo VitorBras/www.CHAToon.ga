@@ -19,11 +19,14 @@ console.log('Administrador = ".$_SESSION['adm']." ');
 console.log('Servidor = ".$_SESSION['hbserver']." ');
 console.log('Nome = ".$_SESSION['hbname']." ');
 console.log('Logado Var = ".$_SESSION['logado']." ');
-
-
 </script>
 ");
+//Passando dados da sessão para lado cliente para que ele possa enviar requisições com base em sua sessão
+setcookie("hbname",$_SESSION['hbname']);
+setcookie("hbserver",$_SESSION['hbserver']);
 //---------------------------------INICIALIZAÇAO DE SESSAO ARTIFICIAL REALIZADA
+
+
 ?>
 
 
@@ -76,13 +79,13 @@ console.log('Logado Var = ".$_SESSION['logado']." ');
 					</tr>
 					<tr>
 						<td colspan="3"><?php //  nÃ£o ?>
-							<span class="status_atual"><?php echo(utf8_encode(userData($_SESSION['hbname'],$_SESSION['hbserver'])['status']));?></span>
+							<span class="status_atual"><?php echo(utf8_encode(friendlyDataUser(userData($_SESSION['hbname'],$_SESSION['hbserver'])['status'],"status")));?></span>
 						</td>
 					</tr>
 					<tr>
 						<td style="min-width:60px;"><span>E-mail:</span></td>
 						<td id="buttonsTD-area" class="space-in-table">
-							<span id="email_usuario">administrador@gmail.com</span>
+							<span id="email_usuario"><?php echo(friendlyDataUser(userData($_SESSION['hbname'],$_SESSION['hbserver'])['email'],"email"));?></span>
 							<button class="btn_mudar_senha btn_mudar_email" visible="yes" clicked='false' onclick="setInterface('email_changing');"><div></div></button>
 							<table class="modelo_de_input_de_email">
 								<tr>
@@ -142,10 +145,13 @@ console.log('Logado Var = ".$_SESSION['logado']." ');
 									<td><span class="span_text_code">Código</span></td>
 								</tr>
 								<tr>
-									<td><span id="codigo_confirmacao">085947</td>
+									<td>
+										<span id="codigo_confirmacao" visible="yes">085947</span>
+										<input type="text" class="input_de_codigo" maxlength="6" visible="no">
+									</td>
 								</tr>
 								<tr>
-									<td><button class="button-salvar-settings ">Confirmar</button></td>
+									<td><button class="button-salvar-settings" onclick="confirmar('confirmar_codigo_email');">Confirmar</button></td>
 								</tr>
 							</table>
 						</div>

@@ -104,6 +104,28 @@ function userStatusChange($status){//Mudar status do usuário
 
 }
 
+//Função para mostrar dados amigáveis na interface_exists
+function friendlyDataUser($dados,$dataType){
+	
+	switch($dataType){
+		case "status":
+			if($dados == null or $dados == "" or $dados == "null"){
+				return("<i>status vazio</i>");
+			}else{
+				return($dados);
+			}
+			break;
+		case "email":
+			if($dados == null or $dados == "" or $dados == "null"){
+				return("<i>sem e-mail</i>");
+			}else{
+				return($dados);
+			}		
+			break;
+	}
+	
+}
+
 function userData($hbName,$hbServer){//Retorna dados do usuário
 	$connect = mysqli_connect($GLOBALS['db_server'],$GLOBALS['db_user'],$GLOBALS['db_pass'],$GLOBALS['db_name']);
 	$query = "SELECT user_id,senha,creditos,email,celular,criado_timestamp,status FROM usuarios WHERE habbo_name = '$hbName' AND server = '$hbServer'";
@@ -244,6 +266,10 @@ function sendEmail($what,$email,$name = null,$hbserver,$code = null,$link){
 			break;
 	}
 }
+
+function replaceEmailInConfirmingStep(){//Substitui o email que está em verificação na base de dados na tabela (codigo_confirmacao)
+	
+}
 function changeEmail($hbname,$hbserver,$email){//Grava na base de dados na tabela de codigo de confirmação um novo email
 	//Verificacr se o usuário está definitivamente cadastrado no sistema (Não é necessário pq esTÁ LOGADO)
 	
@@ -285,12 +311,9 @@ function changeEmail($hbname,$hbserver,$email){//Grava na base de dados na tabel
 						}
 					}else{
 						mysqli_close($connect);
-						return("mysqli_error"); 
+						return("mysqli_error");
 					}
-					
-					
-					
-				}else{
+				}else{//Já há um email para confirmar. Enviar ao cliente usuário uma opção para registrar outro e-mail.
 					return("confirm_email_step");
 				}
 			}else{

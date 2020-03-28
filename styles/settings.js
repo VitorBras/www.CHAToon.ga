@@ -4,7 +4,25 @@ var disponibilidade;
 var status;
 var email;
 var senha = {alterando:false,nova:{inputUm:null,inputDois:null}};
+var dadosCookies = {hbname:null,hbserver:null};
 
+var allCookies = document.cookie;
+
+//Pegar dados de cookies (nesses cookies guarda-se valores de variáveis de sessão)
+function pegarDadosSessao(){//Utilizando RegEx para pegar dados de cookies
+	let expression_hbname = /(?<=hbname\=).+?(?=;)/; //(hbname=.+?;)
+	let expression_hbserver = /(?<=hbserver\=).+?(?=;)/;  //(hbserver=.+?;)
+	if(expression_hbname.test(allCookies) == true && expression_hbserver.test(allCookies) == true){
+		dadosCookies.hbname = expression_hbname.exec(allCookies)[0];
+		dadosCookies.hbserver = expression_hbserver.exec(allCookies)[0];
+	}else{
+		console.log("Um dos cookies ou os dois não foram gerados. Provavelmente a sessão não está logada.");
+	}
+	//console.log(expression_hbserver.exec(allCookies));
+}
+pegarDadosSessao();
+
+//-------------
 function disponibilidadeChange(elemento){//Enviar ao servidor o pedido de novo estado de disponibilidade
 	
 }
@@ -34,11 +52,35 @@ function goToAmigos(){
 }
 
 function goToBusiness(){
-	console.log("Ir ao Negócios.(marketplace.php)")
+	console.log("Ir ao Negócios.(marketplace.php)");
 }
 
 function goToPerfil(){
-	console.log("Ir ao perfil.(dashboard.php)")
+	console.log("Ir ao perfil.(dashboard.php)");
+}
+
+function confirmar(processo){//Botão (confirmar) na caixa de confirmação de código chama esta função.
+	let codigo = document.querySelector(".input_de_codigo").value;//Tratar entrada aqui.
+	switch(processo){
+		case "confirmar_codigo_email":
+			$.ajax({
+				url:"functions/confirmarEmail.php",
+				type:"GET",
+				data:{hbname:dadosCookies.hbname,hbserver:dadosCookies.hbserver,confirmCode:codigo},
+				success:function(response){
+					response = JSON.parse(response);
+					
+					if(response.response == "email_confirmed"){//O E-mail foi confirmado
+						console.log("E-mail confirmado com sucesso!");
+					}else if(response.response == "incorrect_code"){//Código incorreto/E-mail não confirmado
+						console.log("Código de confirmação incorreto!");
+					}
+					
+					
+				}
+			});
+			break;
+	}
 }
 
 function salvar(){
@@ -76,6 +118,11 @@ function salvar(){
 			data:{processo:"change_email",newEmail:email,PHPSESSID:"o1ogb822rt2l8guii1jdk5fsoq"},
 			success:function(response){//Informar ao usuário que deu certo
 				console.log(response);
+				response = JSON.parse(response);
+				//CAso a mudança seja iniciada, adaptar a interface para a confirmação do código
+				if(response.response == "confirm_email_step"){
+					setInterface("email_confirm");
+				}
 			}
 		});
 		
@@ -191,6 +238,10 @@ function setInterface(estado){
 			document.querySelector(".btn_mudar_email").setAttribute("clicked","false");
 			document.querySelector(".btn_mudar_email").setAttribute("visible","yes");
 			document.querySelector(".botao_salvar").setAttribute("visible","not");
+			break;
+		case "email_confirm":
+			document.querySelector(".input_de_codigo").setAttribute("visible","yes");
+			document.querySelector("#codigo_confirmacao").innerHTML = "Digite o código aqui";
 			break;
 	}
 }

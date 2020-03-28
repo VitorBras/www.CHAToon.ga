@@ -57,7 +57,6 @@ if(isset($_REQUEST['processo']) and isset($_REQUEST['PHPSESSID'])){
 				}
 				break;
 		}
-		
 	}else{//Usuário não logado
 		echo("{\"response\":\"user_no_loged\"}");
 	}

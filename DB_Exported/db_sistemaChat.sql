@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: 07-Mar-2020 às 17:21
+-- Generation Time: 28-Mar-2020 às 04:58
 -- Versão do servidor: 5.7.24
 -- versão do PHP: 7.3.1
 
@@ -100,7 +100,7 @@ INSERT INTO `codigo_confirmacao` (`id`, `habbo_name`, `codigo_hb_name`, `email`,
 (1, '4Queijos', '4444', NULL, NULL, 0, '2020-03-05 20:03:06.000000', ''),
 (19, 'Te_Importa?', NULL, NULL, NULL, 1, '2020-03-05 21:01:24.000000', '.com.br'),
 (37, 'Bolsonaro1', '006319', NULL, NULL, 0, '2020-03-07 16:36:39.000000', '.com.br'),
-(34, 'VitorGp', '085493', NULL, NULL, 0, '2020-03-07 16:01:49.000000', '.com.br'),
+(34, 'VitorGp', '085493', 'vitorgomesdev@gmail.com', '405437', 1, '2020-03-07 16:01:49.000000', '.com.br'),
 (35, 'Te_Importa?', '200950', NULL, NULL, 0, '2020-03-07 20:06:01.000000', '.de'),
 (36, 'Testando', '593764', NULL, NULL, 0, '2020-03-07 14:21:19.000000', '.com'),
 (32, 'Te_Importa?', '706275', NULL, NULL, 0, '2020-03-07 12:55:33.000000', '.com'),
@@ -135,15 +135,26 @@ DROP TABLE IF EXISTS `grupo`;
 CREATE TABLE IF NOT EXISTS `grupo` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `criador_id` varchar(24) NOT NULL COMMENT 'Id de identificação do indivíduo que criou o grupo.',
+  `HabboRoomId` varchar(255) CHARACTER SET utf8 NOT NULL COMMENT 'Cada grupo pertencerá um quarto no Habbo Hotel.',
   `nome_grupo` varchar(30) NOT NULL,
+  `assuntos` varchar(255) DEFAULT NULL,
   `criado_timestamp` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
   `participantes_id` varchar(1272) DEFAULT NULL,
   `theme` int(11) NOT NULL,
-  `estado` tinyint(1) NOT NULL DEFAULT '1',
+  `estado` int(1) NOT NULL DEFAULT '1',
   `admins_do_grupo` varchar(1271) DEFAULT NULL,
+  `server` varchar(7) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQUE` (`criador_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  UNIQUE KEY `HabboRoomId` (`HabboRoomId`)
+) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `grupo`
+--
+
+INSERT INTO `grupo` (`id`, `criador_id`, `HabboRoomId`, `nome_grupo`, `assuntos`, `criado_timestamp`, `participantes_id`, `theme`, `estado`, `admins_do_grupo`, `server`) VALUES
+(1, 'd', '146985030', 'Conversas', '{\"assuntos\":[\"Medo\",\"InsÃ´nia\",\"PolÃ­cias\"]}', '2020-03-17 07:58:50.000000', NULL, 0, 1, NULL, '.com.br'),
+(14, 'd', '146985034', 'nada', '{\"assuntos\":[\"Medo\",\"Polícias\",\"Insônia\"]}', '2020-03-17 17:50:06.000000', NULL, 0, 1, NULL, '.com.br');
 
 -- --------------------------------------------------------
 
@@ -154,6 +165,7 @@ CREATE TABLE IF NOT EXISTS `grupo` (
 DROP TABLE IF EXISTS `usuarios`;
 CREATE TABLE IF NOT EXISTS `usuarios` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` varchar(255) CHARACTER SET utf8 NOT NULL,
   `habbo_name` varchar(18) NOT NULL COMMENT 'Nome do usuário cadastrado no sistema.',
   `senha` varchar(34) NOT NULL COMMENT 'Senha do usuário cadastrado. Vai es',
   `creditos` int(11) DEFAULT '0' COMMENT 'O crédito que o usário possui no sistema. Será usado para a utilização de funções no chat.',
@@ -163,22 +175,23 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `criado_timestamp` timestamp(6) NULL DEFAULT NULL COMMENT 'É a hora e a data quando o usuário foi cadastrado no sistema.',
   `ban` tinyint(1) DEFAULT '0' COMMENT 'O usuário pode ser banido do sistema. Não há tempo de término para o banido. É necessário enviar um email para a administração do site ou sistema.',
   `server` varchar(7) NOT NULL DEFAULT '.com.br' COMMENT 'Indica em qual servidor o usuário pertence. No cadastra ele informará.',
-  `status` int(11) DEFAULT '0' COMMENT 'Define se o usuário está online ou offline.',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
+  `status` varchar(255) DEFAULT 'Sou novo no CHAToon' COMMENT 'Define se o usuário está online ou offline.',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_id` (`user_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 
 --
 -- Extraindo dados da tabela `usuarios`
 --
 
-INSERT INTO `usuarios` (`id`, `habbo_name`, `senha`, `creditos`, `email`, `celular`, `rede_social`, `criado_timestamp`, `ban`, `server`, `status`) VALUES
-(1, '4Queijos', 'administrador55', 30, NULL, NULL, NULL, NULL, 1, '.com.br', 0),
-(2, '4Queijoss', 'administrador55', 400, NULL, NULL, NULL, NULL, 0, '.com.br', 0),
-(4, 'Te_Importa?', 'piriquitoverde', 0, NULL, NULL, NULL, NULL, 0, '.com.br', 0),
-(5, 'Administrador', 'administrando', 0, NULL, NULL, NULL, '2020-03-07 03:00:00.000000', 0, '.com.br', 0),
-(17, 'Bolsonaro1', 'Testando', 0, NULL, NULL, NULL, '2020-03-07 15:13:29.000000', 0, '.com', 0),
-(7, 'Te_Importa?', 'piriquitoverde', 0, NULL, NULL, NULL, NULL, 0, '.com.br', 0),
-(13, 'Te_Importa?', 'piriquitoverde', 0, NULL, NULL, NULL, NULL, 0, '.com.br', 0);
+INSERT INTO `usuarios` (`id`, `user_id`, `habbo_name`, `senha`, `creditos`, `email`, `celular`, `rede_social`, `criado_timestamp`, `ban`, `server`, `status`) VALUES
+(1, 'a', '4Queijos', 'administrador55', 30, NULL, NULL, NULL, NULL, 1, '.com.br', 'Sou novo no CHAToon'),
+(2, 'b', '4Queijoss', 'administrador55', 400, NULL, NULL, NULL, NULL, 0, '.com.br', 'Sou novo no CHAToon'),
+(4, 'c', 'Te_Importa?', 'piriquitoverde', 0, NULL, NULL, NULL, NULL, 0, '.com.br', 'Um staff a sua disposição'),
+(5, 'd', 'Administrador.4', 'administrando', 0, NULL, NULL, NULL, '2020-03-07 03:00:00.000000', 0, '.com.br', 'Um Staff a sua disposição'),
+(17, 'e', 'Bolsonaro1', 'Testando', 0, NULL, NULL, NULL, '2020-03-07 15:13:29.000000', 0, '.com', 'Sou novo no CHAToon'),
+(7, 'f', 'Te_Importa?', 'piriquitoverde', 0, NULL, NULL, NULL, NULL, 0, '.com', 'Sou novo no CHAToon'),
+(18, '', 'VitorGp', 'administrando', 0, 'vitorgomesdev@gmail.com', NULL, NULL, '2020-03-17 03:00:00.000000', 0, '.com.br', 'Sou administrador.');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

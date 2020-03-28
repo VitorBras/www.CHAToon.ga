@@ -19,7 +19,7 @@ if(isset($_REQUEST['hbname']) and isset($_REQUEST['hbserver']) and isset($_REQUE
 		$infos = mysqli_fetch_array($dados);
 		//Verificar dados
 		if($confirmCode == $infos['codigo_email']){
-			echo("Email confirmado");
+			echo('{"response":"email_confirmed"}');
 			
 			//Mudar o email do usuário na base de dados de registro definitivo (usuarios)
 			userDataUpdate($hbname,$hbserver,"email",$infos['email']);
@@ -28,7 +28,7 @@ if(isset($_REQUEST['hbname']) and isset($_REQUEST['hbserver']) and isset($_REQUE
 			//Mostrar ao usuário uma interface gráfica apresentando o sucesso do feito. Puxar outros arquivos de estilos.
 			
 		}else{
-			echo("Codigo incorreto");
+			echo('{"response":"incorrect_code"}');
 			//Por segurança, é necessário registrar o erro na confirmação. Concatenar +1 no campo confirm_error em 
 			//... codigo_confirmacao       (IREI FAZER ESTE SISTEMA DE CONTAGEM PARA SEGURANÇA ANTI BRUTAL FORCE)
 			
