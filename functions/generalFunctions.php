@@ -267,7 +267,32 @@ function sendEmail($what,$email,$name = null,$hbserver,$code = null,$link){
 	}
 }
 
-function replaceEmailInConfirmingStep(){//Substitui o email que está em verificação na base de dados na tabela (codigo_confirmacao)
+function replaceEmailInConfirmingStep($hbname,$hbserver,$email){//Substitui o email que está em verificação na base de dados na tabela (codigo_confirmacao)
+	$code = gen_code_confirm(6);
+	$connect = mysqli_connect($GLOBALS['db_server'],$GLOBALS['db_user'],$GLOBALS['db_pass'],$GLOBALS['db_name']);
+	$query = "UPDATE codigo_confirmacao SET email = '$email',codigo_email = '$code' WHERE habbo_name = '$hbname' AND server = '$hbserver';";
+	$query = mysqli_query($connect,$query);
+	if(mysqli_error($connect) == "" or mysqli_error($connect) == null or mysqli_error($connect) == false){
+		mysqli_close($connect);
+		//Escolhendo qual o link a usar.. de produção ou o usado no desenvolvimento localhost.
+		$configSystem = simplexml_load_file('../config/sistemaConfig.xml');
+		$link;
+		for($i=0;$i<count($configSystem->serverLinks->codeEmailConfirm);$i++){
+			if($configSystem->serverLinks->codeEmailConfirm[$i]['using'] == "yes"){
+				$link = $configSystem->serverLinks->codeEmailConfirm[$i];
+			}
+		}
+		$sending = sendEmail("email_confirm_code",$email,$hbname,$hbserver,$code,$link);
+		if($sending == true){
+			//Avisar a aplicação cliente que o usuário deve ir ao seu email pegar o código
+			mysqli_close($connect);
+			return("confirm_email_step");
+		}
+		return(true);
+	}else{
+		mysqli_close($connect);
+		return(false);
+	}
 	
 }
 function changeEmail($hbname,$hbserver,$email){//Grava na base de dados na tabela de codigo de confirmação um novo email
@@ -275,11 +300,11 @@ function changeEmail($hbname,$hbserver,$email){//Grava na base de dados na tabel
 	
 	//Na base de dados da tabela CODIGO DE CONFIRMAÇÃO há um registro deste usuário que está em confirmação?
 	$connect = mysqli_connect($GLOBALS['db_server'],$GLOBALS['db_user'],$GLOBALS['db_pass'],$GLOBALS['db_name']);
-	$query = "SELECT status,codigo_email FROM codigo_confirmacao WHERE habbo_name = '$hbname' AND server = '$hbserver';";
+	$query = "SELECT status,codigo_email,email FROM codigo_confirmacao WHERE habbo_name = '$hbname' AND server = '$hbserver';";
 	$dados = mysqli_query($connect,$query);
-	if(mysqli_error($connect) == "" or mysqli_error($connect) == null){
+	if(mysqli_error($connect) == "" or mysqli_error($connect) == null or mysqli_error($connect) == false){
 		$infos = mysqli_fetch_array($dados);
-		//return(var_dump($infos));
+		//return(var_dump($infos));		
 		
 		if($infos == null){//Não há registro.
 			
@@ -295,7 +320,7 @@ function changeEmail($hbname,$hbserver,$email){//Grava na base de dados na tabel
 					print(mysqli_error($connect));
 					if(mysqli_error($connect) == null or mysqli_error($connect) == ""){//Caso não dê erro
 						//Enviar o código para o email
-							//Escolhendo qual o link a usar.. de produção ou o usado no desenvolvimento localhost.
+						//Escolhendo qual o link a usar.. de produção ou o usado no desenvolvimento localhost.
 						$configSystem = simplexml_load_file('../config/sistemaConfig.xml');
 						$link;
 						for($i=0;$i<count($configSystem->serverLinks->codeEmailConfirm);$i++){
@@ -314,7 +339,13 @@ function changeEmail($hbname,$hbserver,$email){//Grava na base de dados na tabel
 						return("mysqli_error");
 					}
 				}else{//Já há um email para confirmar. Enviar ao cliente usuário uma opção para registrar outro e-mail.
-					return("confirm_email_step");
+					//Verificar se o email que foi enviado pela aplicação cliente é o mesmo que está sendo verificado. Caso não substituir pelo novo email enviado pela aplicação cliente
+					if($infos['email'] == $email){
+						return("confirm_email_step");
+					}else{
+						replaceEmailInConfirmingStep($hbname,$hbserver,$email);
+					}
+					
 				}
 			}else{
 				mysqli_close($connect);
