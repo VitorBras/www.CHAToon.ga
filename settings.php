@@ -131,16 +131,16 @@ setcookie("hbserver",$_SESSION['hbserver']);
 				</div>
 			</div>
 			
-			<div class="boxBase-Three">
+			<div class="boxBase-Three" >
 				<div class="box-search">
-					<div id="texto1">
+					<div id="texto1" visible="yes">
 						<span>Confirmar Mudança</span>
 					</div>
 				</div>
-				<div class="box-confirmacao">
+				<div class="box-confirmacao" confirmando="">
 					<div>
 						<div>
-							<table class="modelo_confirmacao">
+							<table class="modelo_confirmacao" >
 								<tr>
 									<td><span class="span_text_code">Código</span></td>
 								</tr>
@@ -151,7 +151,10 @@ setcookie("hbserver",$_SESSION['hbserver']);
 									</td>
 								</tr>
 								<tr>
-									<td><button class="button-salvar-settings" onclick="confirmar('confirmar_codigo_email');">Confirmar</button></td>
+									<td><button class="button-salvar-settings btn-confirmar" onclick="confirmar('confirmar_codigo_email');" visible="no">Confirmar</button></td>
+								</tr>
+								<tr>
+									<td><button class="button-salvar-settings btn-resend-code" onclick="resendCode();" visible="no";>Reenviar código</button></td>
 								</tr>
 							</table>
 						</div>

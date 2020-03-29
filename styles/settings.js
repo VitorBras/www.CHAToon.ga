@@ -1,5 +1,7 @@
 //Abas onde estou TRABALHANDO: ABAS ABERTAS
 
+var serverUrl = "localhost/TESTEDECODIGO/Chat/www.CHAToon.ga/"
+
 var disponibilidade;
 var status;
 var email;
@@ -66,17 +68,23 @@ function confirmar(processo){//Botão (confirmar) na caixa de confirmação de c
 			$.ajax({
 				url:"functions/confirmarEmail.php",
 				type:"GET",
-				data:{hbname:dadosCookies.hbname,hbserver:dadosCookies.hbserver,confirmCode:codigo},
+				//data:{hbname:dadosCookies.hbname,hbserver:dadosCookies.hbserver,confirmCode:codigo},
+				data:{confirmCode:codigo},
 				success:function(response){
 					response = JSON.parse(response);
 					
 					if(response.response == "email_confirmed"){//O E-mail foi confirmado
+						setInterface("email_confirmed");
 						console.log("E-mail confirmado com sucesso!");
 					}else if(response.response == "incorrect_code"){//Código incorreto/E-mail não confirmado
 						console.log("Código de confirmação incorreto!");
+						setInterface("email_code_incorrect_to_confirm");
+					}else if(response.response == "user_no_logged"){//Usuário não logado
+						
+					}else if(response.response == "have_no_email_to_verify"){//Não há email para verificar
+						console.log("Não há email para verificar.");
+						setInterface("have_not_email_to_confirm");//_____________________________________________
 					}
-					
-					
 				}
 			});
 			break;
@@ -120,7 +128,7 @@ function salvar(){
 				console.log(response);
 				response = JSON.parse(response);
 				//CAso a mudança seja iniciada, adaptar a interface para a confirmação do código
-				if(response.response == "confirm_email_step"){
+				if(response.response == "confirm_email_step"){//Email em processo de confirmação
 					setInterface("email_confirm");
 				}
 			}
@@ -143,7 +151,33 @@ function salvar(){
 	//Todos os botões precisam estar com o atributo CLICKED=FALSE
 	document.querySelector(".btn_mudar_status").setAttribute("clicked","false");
 }
-
+function resendCode(){//Pedir ao servidor para reenviar o código de confirmação.
+	console.log("resendCode()");
+	//Verificar o que está sendo confirmado
+	if(document.querySelector(".box-confirmacao").getAttribute("confirmando") == "email"){//Confirmando código email
+		//Enviar ao servidor uma requisição para ele reenviar o código para o email novamente
+		console.log("Enviar requisição :resendCode()");
+		$.ajax({
+			url:"functions/confirmarEmail.php",
+			type:"GET",
+			data:{resendCodeToEmail:true},
+			success:function(response){
+				response = JSON.parse(response);
+				console.log(response);
+				if(response.response == "email_resended"){//O código foi reenviado ao email que está em verificação com sucesso.
+					console.log("O código foi reenviado ao email.");
+				}else if(response.response == "email_not_resended"){//O código não foi enviado ao email que está em verifi...
+					console.log("O código não foi reenviado ao email..");
+				}
+			},
+			error:function(erro){
+				console.log(erro);
+			}
+		});
+	}else if(document.querySelector(".box-confirmacao").getAttribute("confirmando") == "phone_number"){
+		//Não existe uma confirmação para Número de telefone ainda. Não fiz o CHAToon com esta funcionalidade. Em versoes posteriores irei adicionaar
+	}
+}
 function setInterface(estado){
 	switch(estado){
 		case "status_changing":
@@ -240,8 +274,45 @@ function setInterface(estado){
 			document.querySelector(".botao_salvar").setAttribute("visible","not");
 			break;
 		case "email_confirm":
+			document.querySelector("#texto1").children[0].innerText = "Confirmar Email";
+			document.querySelector(".box-confirmacao").setAttribute("confirmando","email");
+			document.querySelector("#texto1").setAttribute("visible","yes");
+			document.querySelector(".box-search").setAttribute("visible","yes");
 			document.querySelector(".input_de_codigo").setAttribute("visible","yes");
 			document.querySelector("#codigo_confirmacao").innerHTML = "Digite o código aqui";
+			document.querySelector(".btn-confirmar").setAttribute("visible","yes");
+			document.querySelector(".btn-resend-code").setAttribute("visible","yes");
+			break;
+		case "email_confirmed":
+			document.querySelector(".box-confirmacao").setAttribute("confirmando","");
+			document.querySelector(".input_de_codigo").setAttribute("visible","no");
+			document.querySelector("#codigo_confirmacao").innerHTML = "Email confirmado!";
+			document.querySelector(".btn-resend-code").setAttribute("visible","no");
+			document.querySelector(".btn-confirmar").setAttribute("visible","no");
+			setTimeout(function(){
+				document.querySelector("#codigo_confirmacao").innerHTML = "";
+				document.querySelector("#texto1").setAttribute("visible","no");
+			},3000);
+			break;
+		case "email_code_incorrect_to_confirm":
+			document.querySelector(".input_de_codigo").setAttribute("visible","yes");
+			document.querySelector("#codigo_confirmacao").innerHTML = "Código incorreto!";
+			setTimeout(function(){
+				document.querySelector("#codigo_confirmacao").innerHTML = "";
+				document.querySelector("#texto1").children[0].innerText = "Confirmar Mudanças";
+			},3000);
+			break;
+		case "have_not_email_to_confirm":
+			document.querySelector(".box-confirmacao").setAttribute("confirmando","");
+			document.querySelector(".input_de_codigo").setAttribute("visible","no");
+			document.querySelector("#codigo_confirmacao").innerHTML = "Não há email para confirmar!";
+			document.querySelector(".btn-resend-code").setAttribute("visible","no");
+			document.querySelector(".btn-confirmar").setAttribute("visible","no");
+			
+			setTimeout(function(){
+				document.querySelector("#codigo_confirmacao").innerHTML = "";
+				document.querySelector("#texto1").setAttribute("visible","no");
+			},3000);
 			break;
 	}
 }

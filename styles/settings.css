@@ -87,7 +87,8 @@ body{
 	border-color:rgba(0,0,0,0);
 }
 
-.button-salvar-settings {
+.button-salvar-settings{
+	display:block;
     height: 32px;
     width: 126px;
     background-color: #333c3f;
@@ -101,6 +102,21 @@ body{
 	background-color:#49575b;
 	cursor:pointer;
 	color:#41a6bf;
+}
+.btn-confirmar[visible=yes]{
+	display:block;
+}
+.btn-confirmar[visible=no]{
+	display:none;
+}
+.button-salvar-settings[visible=no] {
+	display:none;
+}
+.btn-resend-code[visible=yes]{
+	display:block;
+}
+.btn-resend-code[visible=no]{
+	display:none;
 }
 #zona-btn-criar-grupo div{
 	margin-right:auto;
@@ -191,11 +207,15 @@ body{
 	width:100%;
 	border-radius:20px;
 }
-#texto1{
+#texto1[visible=yes]{
+	display:block;
 	color:white;
 	text-align:center;
 	background-color:rgba(0,0,0,0.4);
 	border-radius:20px;
+}
+#texto1[visible=no]{
+	display:none;
 }
 .molde-box-search button{
 	height:32px;

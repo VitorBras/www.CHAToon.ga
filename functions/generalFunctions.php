@@ -10,7 +10,7 @@ $db_pass = "";
 
 function currentTime($server){
 	set_timing($server);
-	return($timestamp = date("Y-m-d H:i:s"));
+	return(date("Y-m-d H:i:s"));
 }
 function set_timing($servidor){
 	
@@ -144,6 +144,21 @@ function userData($hbName,$hbServer){//Retorna dados do usuário
 	return($dados);
 }
 
+function userDataConfirming_EmailAndCode($hbname,$hbserver){
+	//Capiturar Email e Código de verificação do email
+	$connect = mysqli_connect($GLOBALS['db_server'],$GLOBALS['db_user'],$GLOBALS['db_pass'],$GLOBALS['db_name']);
+	$query = "SELECT email,codigo_email FROM codigo_confirmacao WHERE habbo_name = '$hbname' AND server = '$hbserver';";
+	$dados = mysqli_query($connect,$query);
+	if(mysqli_error($connect) == "" or mysqli_error($connect) == null){
+		$infos = mysqli_fetch_array($dados);
+		mysqli_close($connect);
+		return($infos);
+	}else{
+		mysqli_close($connect);
+		return(false);
+	}
+}
+
 function registerGroup($gpName,$gpAssuntos,$roomId,$hbServer,$hbName){
 	
 	//Verificar se o grupo já está cadastrado na base de dados
@@ -265,8 +280,10 @@ function sendEmail($what,$email,$name = null,$hbserver,$code = null,$link){
 			
 			";
 			$sending = mail($email,"CHAToon - Confirme seu e-mail",$mensagem,$header);
-			if($sending){
+			if($sending == true){//Email enviado com sucesso
 				return(true);
+			}else{//Email não enviado
+				return(false);
 			}
 			break;
 	}
