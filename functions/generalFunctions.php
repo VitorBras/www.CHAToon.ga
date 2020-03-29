@@ -7,6 +7,11 @@ $db_server = "localhost";
 $db_user = "root";
 $db_pass = "";
 
+
+function currentTime($server){
+	set_timing($server);
+	return($timestamp = date("Y-m-d H:i:s"));
+}
 function set_timing($servidor){
 	
 	switch($servidor){
@@ -267,6 +272,18 @@ function sendEmail($what,$email,$name = null,$hbserver,$code = null,$link){
 	}
 }
 
+function deleteVerificationRecordInDB($hbname,$hbserver){
+	$connect = mysqli_connect($GLOBALS['db_server'],$GLOBALS['db_user'],$GLOBALS['db_pass'],$GLOBALS['db_name']);
+	$query = "DELETE FROM codigo_confirmacao WHERE habbo_name = '$hbname' AND server = '$hbserver';";
+	$query = mysqli_query($connect,$query);
+	if(mysqli_error($connect) == "" or mysqli_error($connect) == null or mysqli_error($connect) == false){
+		mysqli_close($connect);
+		return(true);
+	}else{
+		mysqli_close($connect);
+		return(false);
+	}
+}
 function replaceEmailInConfirmingStep($hbname,$hbserver,$email){//Substitui o email que está em verificação na base de dados na tabela (codigo_confirmacao)
 	$code = gen_code_confirm(6);
 	$connect = mysqli_connect($GLOBALS['db_server'],$GLOBALS['db_user'],$GLOBALS['db_pass'],$GLOBALS['db_name']);
@@ -285,10 +302,10 @@ function replaceEmailInConfirmingStep($hbname,$hbserver,$email){//Substitui o em
 		$sending = sendEmail("email_confirm_code",$email,$hbname,$hbserver,$code,$link);
 		if($sending == true){
 			//Avisar a aplicação cliente que o usuário deve ir ao seu email pegar o código
-			mysqli_close($connect);
 			return("confirm_email_step");
+		}else{
+			return(true);
 		}
-		return(true);
 	}else{
 		mysqli_close($connect);
 		return(false);
@@ -307,7 +324,33 @@ function changeEmail($hbname,$hbserver,$email){//Grava na base de dados na tabel
 		//return(var_dump($infos));		
 		
 		if($infos == null){//Não há registro.
-			
+			//Registrar uma TUPlA de verificação: Usada para armazenar o EMAIL sob verificação e o Código para confirma-lo
+			$code = gen_code_confirm(6);
+			mysqli_close($connect);//Fechando conexão anterior
+			$connect = mysqli_connect($GLOBALS['db_server'],$GLOBALS['db_user'],$GLOBALS['db_pass'],$GLOBALS['db_name']);
+			$query = "INSERT INTO codigo_confirmacao (habbo_name,email,codigo_email,status,criado_timestamp,server) VALUES ('$hbname','$email','$code',1,'".currentTime($hbserver)."','$hbserver');";
+			$dados = mysqli_query($connect,$query);
+			//Verificar se deu certo
+			if(mysqli_error($connect) == "" or mysqli_error($connect) == null or mysqli_error($connect) == false){
+				mysqli_close($connect);
+				//Escolhendo qual o link a usar.. de produção ou o usado no desenvolvimento localhost.
+				$configSystem = simplexml_load_file('../config/sistemaConfig.xml');
+				$link;
+				for($i=0;$i<count($configSystem->serverLinks->codeEmailConfirm);$i++){
+					if($configSystem->serverLinks->codeEmailConfirm[$i]['using'] == "yes"){
+						$link = $configSystem->serverLinks->codeEmailConfirm[$i];
+					}
+				}
+				$sending = sendEmail("email_confirm_code",$email,$hbname,$hbserver,$code,$link);
+				if($sending == true){
+					//Avisar a aplicação cliente que o usuário deve ir ao seu email pegar o código
+					return("confirm_email_step");
+				}
+				return("confirm_email_step");
+			}else{//Caso dê errao
+				mysqli_close($connect);
+				return(false);
+			}
 		}else{//Há algum registro.
 			//return(var_dump($infos));
 			//Verificar se apenas falta a verificação do email

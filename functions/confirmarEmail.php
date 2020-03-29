@@ -24,7 +24,8 @@ if(isset($_REQUEST['hbname']) and isset($_REQUEST['hbserver']) and isset($_REQUE
 			//Mudar o email do usuário na base de dados de registro definitivo (usuarios)
 			userDataUpdate($hbname,$hbserver,"email",$infos['email']);
 			//Apagar o registro desse usuário na base de dados de confirmação (codigo_confirmacao)
-							//DEPOIS IREI APAGAR      estou trabalhando no sistema. irei fazer uns testes ainda
+				//DEPOIS IREI APAGAR      estou trabalhando no sistema. irei fazer uns testes ainda
+			deleteVerificationRecordInDB($hbname,$hbserver);			
 			//Mostrar ao usuário uma interface gráfica apresentando o sucesso do feito. Puxar outros arquivos de estilos.
 			
 		}else{
