@@ -6,7 +6,7 @@ $db_name = "db_sistemachat";
 $db_server = "localhost";
 $db_user = "root";
 $db_pass = "";
-
+$sessid = session_id();
 
 function currentTime($server){
 	set_timing($server);
@@ -259,7 +259,8 @@ function gen_code_confirm($x){
 	}
 	return($code);
 }
-function sendEmail($what,$email,$name = null,$hbserver,$code = null,$link){
+
+function sendEmail($what,$email,$name = null,$hbserver,$code = null,$link,$sessid = "semSessao"){
 	
 	switch($what){
 		case "email_confirm_code":
@@ -272,7 +273,7 @@ function sendEmail($what,$email,$name = null,$hbserver,$code = null,$link){
 					<head>
 						<h2>CHAToon - Olá $name</h2>
 						<h4>Seu código de confirmação é: <strong>$code</strong></h4></br></br>
-						<h4>Ou clique no link para confirmar seu email: <a href='$link?hbname=$name&hbserver=$hbserver&confirmCode=$code'>confirmar</a></h4></br></br></br>
+						<h4>Ou clique no link para confirmar seu email: <a href='$link?hbname=$name&hbserver=$hbserver&confirmCode=$code&throwEmail=true&PHPSESSID=$sessid'>confirmar</a></h4></br></br></br>
 						
 						<span>*Por favor não responda este e-mail</span>
 					</head>
@@ -316,7 +317,7 @@ function replaceEmailInConfirmingStep($hbname,$hbserver,$email){//Substitui o em
 				$link = $configSystem->serverLinks->codeEmailConfirm[$i];
 			}
 		}
-		$sending = sendEmail("email_confirm_code",$email,$hbname,$hbserver,$code,$link);
+		$sending = sendEmail("email_confirm_code",$email,$hbname,$hbserver,$code,$link,$GLOBALS['sessid']);
 		if($sending == true){
 			//Avisar a aplicação cliente que o usuário deve ir ao seu email pegar o código
 			return("confirm_email_step");
@@ -339,7 +340,6 @@ function changeEmail($hbname,$hbserver,$email){//Grava na base de dados na tabel
 	if(mysqli_error($connect) == "" or mysqli_error($connect) == null or mysqli_error($connect) == false){
 		$infos = mysqli_fetch_array($dados);
 		//return(var_dump($infos));		
-		
 		if($infos == null){//Não há registro.
 			//Registrar uma TUPlA de verificação: Usada para armazenar o EMAIL sob verificação e o Código para confirma-lo
 			$code = gen_code_confirm(6);
@@ -358,7 +358,7 @@ function changeEmail($hbname,$hbserver,$email){//Grava na base de dados na tabel
 						$link = $configSystem->serverLinks->codeEmailConfirm[$i];
 					}
 				}
-				$sending = sendEmail("email_confirm_code",$email,$hbname,$hbserver,$code,$link);
+				$sending = sendEmail("email_confirm_code",$email,$hbname,$hbserver,$code,$link,$GLOBALS['sessid']);
 				if($sending == true){
 					//Avisar a aplicação cliente que o usuário deve ir ao seu email pegar o código
 					return("confirm_email_step");
@@ -388,7 +388,7 @@ function changeEmail($hbname,$hbserver,$email){//Grava na base de dados na tabel
 								$link = $configSystem->serverLinks->codeEmailConfirm[$i];
 							}
 						}
-						$sending = sendEmail("email_confirm_code",$email,$hbname,$hbserver,$code,$link);
+						$sending = sendEmail("email_confirm_code",$email,$hbname,$hbserver,$code,$link,$GLOBALS['sessid']);
 						if($sending == true){
 							//Avisar a aplicação cliente que o usuário deve ir ao seu email pegar o código
 							mysqli_close($connect);
@@ -418,7 +418,6 @@ function changeEmail($hbname,$hbserver,$email){//Grava na base de dados na tabel
 	}
 	mysqli_close($connect);	
 }
-
 
 
 

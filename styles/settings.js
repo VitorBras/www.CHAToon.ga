@@ -6,7 +6,7 @@ var disponibilidade;
 var status;
 var email;
 var senha = {alterando:false,nova:{inputUm:null,inputDois:null}};
-var dadosCookies = {hbname:null,hbserver:null};
+var dadosCookies = {hbname:null,hbserver:null,PHPSESSID:null};
 
 var allCookies = document.cookie;
 
@@ -14,9 +14,11 @@ var allCookies = document.cookie;
 function pegarDadosSessao(){//Utilizando RegEx para pegar dados de cookies
 	let expression_hbname = /(?<=hbname\=).+?(?=;)/; //(hbname=.+?;)
 	let expression_hbserver = /(?<=hbserver\=).+?(?=;)/;  //(hbserver=.+?;)
-	if(expression_hbname.test(allCookies) == true && expression_hbserver.test(allCookies) == true){
+	let expression_SESSAOID = /(?<=;\sPHPSESSID=).+?(?=\b)/;
+	if(expression_hbname.test(allCookies) == true && expression_hbserver.test(allCookies) == true && expression_SESSAOID.test(allCookies) == true){
 		dadosCookies.hbname = expression_hbname.exec(allCookies)[0];
 		dadosCookies.hbserver = expression_hbserver.exec(allCookies)[0];
+		dadosCookies.PHPSESSID = expression_SESSAOID.exec(allCookies)[0];
 	}else{
 		console.log("Um dos cookies ou os dois não foram gerados. Provavelmente a sessão não está logada.");
 	}
@@ -69,7 +71,7 @@ function confirmar(processo){//Botão (confirmar) na caixa de confirmação de c
 				url:"functions/confirmarEmail.php",
 				type:"GET",
 				//data:{hbname:dadosCookies.hbname,hbserver:dadosCookies.hbserver,confirmCode:codigo},
-				data:{confirmCode:codigo},
+				data:{confirmCode:codigo,PHPSESSID:dadosCookies.PHPSESSID},
 				success:function(response){
 					response = JSON.parse(response);
 					
@@ -160,10 +162,10 @@ function resendCode(){//Pedir ao servidor para reenviar o código de confirmaç�
 		$.ajax({
 			url:"functions/confirmarEmail.php",
 			type:"GET",
-			data:{resendCodeToEmail:true},
+			data:{resendCodeToEmail:true,PHPSESSID:dadosCookies.PHPSESSID},
 			success:function(response){
-				response = JSON.parse(response);
 				console.log(response);
+				response = JSON.parse(response);
 				if(response.response == "email_resended"){//O código foi reenviado ao email que está em verificação com sucesso.
 					console.log("O código foi reenviado ao email.");
 				}else if(response.response == "email_not_resended"){//O código não foi enviado ao email que está em verifi...
