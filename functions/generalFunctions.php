@@ -8,6 +8,76 @@ $db_user = "root";
 $db_pass = "";
 $sessid = session_id();
 
+class habboAvatar{
+
+	public $uniqueId = null;
+	public $name = null;
+	public $figureString = null;
+	public $memberSince = null;
+	public $profileVisible = null;
+	public $selectedBadges = null;
+	public $motto = null;
+
+	public $infos;
+	public function capiturar_dados($hbName,$hbServer){
+		$url = "https://www.habbo$hbServer/api/public/users?name=$hbName";
+		$curl_handle = curl_init();
+
+		curl_setopt($curl_handle, CURLOPT_URL,$url);
+		curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 2);
+		curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, 0);//Desliguei o SSL pq estou em localhost e nao tenho certificado SSL aqui.
+		curl_setopt($curl_handle, CURLOPT_USERAGENT, 'spider');
+		$loop = true;$loopCount = 0;
+		while($loop == true){//Parar só quando a requisição trouxer informações
+			$query = curl_exec($curl_handle);
+			$loopCount++;
+			if(curl_error($curl_handle) == ''){//Deu certo
+				curl_close($curl_handle);
+				$this->infos = json_decode($query,true);
+				if($this->infos != '' AND $this->infos != null AND $this->infos != '{"error":"not-found"}'){//Requizição mal feita
+					$loop = false;
+					return(true);//O usuário foi encontrado.
+				}elseif($this->infos == '{"error":"not-found"}'){//Requisição bem feita porém esse usuário não foi encontrado
+					$loop = false;
+					return(true);//Retorna true pq a requisição foi bem feita apesar do usuário não ser encontrado.
+				}
+				if($loopCount == 10){
+					$loop = false;
+					return(false);
+				}
+			}else{
+				curl_close($curl_handle);
+				if($loopCount == 10){
+					return(false);
+				}
+			}		
+		}
+		print($query);
+		https://www.habbo.com.br/api/public/users?name=ababsab
+	}
+
+	function __construct($hbName,$hbServer){
+		if($this->capiturar_dados($hbName,$hbServer) == true){//Requisição feita com sucesso
+			//Verificar se o usuário foi encontrado
+			if(isset($this->infos['error'])){//Usuário não encontrado
+				$this->uniqueId = $this->infos['uniqueId'];
+				$this->name = $this->infos['name'];
+				$this->figureString = $this->infos['figureString'];
+				$this->memberSince = $this->infos['memberSince'];
+				$this->profileVisible = $this->infos['profileVisible'];
+				$this->selectedBadges = $this->infos['selectedBadges'];
+				$this->motto = $this->infos['motto'];
+			}		
+		}else{//Não feita com sucesso
+			/*não fazer nada. Os atributos do objeto ficam como nulos*/
+		}
+		
+		
+
+	}
+}
+
 function currentTime($server){
 	set_timing($server);
 	return(date("Y-m-d H:i:s"));
@@ -59,11 +129,73 @@ function nameGroupAccepted($dados){//Verificar se a string nome de grupo não co
 	
 	
 }
+function AcceptedServer($domain){//Preciso abrir o arquivo de configurações do sistema e buscar a lista de servidores Habbo
+	//Verificar se o dominio passado no parâmetro está na lista de configurações do sistema e ver se está ativo no sistema.
+	//Afim de permitir o sistema de verificar e por consequencia a realização do cadastro da conta do usuário para aquele respectivo servidor
+	$configSystem = simplexml_load_file("../config/sistemaConfig.xml");
+	
+	for($i=0,$habS=false;$i<count($configSystem->habboServer->server);$i++){
+		if(((string) $configSystem->habboServer->server[$i]) == $domain){//É um servidor Oficial do Habbo
+			$i=count($configSystem->habboServer->server);
+			$habS=true;
+			return true;
+		}else{
+			if($i+1 == count($configSystem->habboServer->server) and $habS == false){
+				return false;
+			}
+		}
+	}
+}
+
+function isHabboAvatarOwner($hbName = null,$hbServer = null,$code = null,$substitutePass){
+	if($hbName != null && $hbServer != null){
+				
+		//Verificar se o servidor é do Habbo e está aceitando cadastro no sistema do CHAToon
+		if(AcceptedServer($hbServer) == true){//Servidor pode estar fora do ar
+			//Verificar se há registro em codigo_confirmacao
+			$resultado = mysqli_query($connect,"SELECT codigo_hb_name,status,substitutePass,substitutePassCode FROM codigo_confirmacao WHERE habbo_name = '$hbName' AND server = '$hbServer';");
+			//print(mysqli_error($connect));
+			//var_dump($resultado);
+			if(mysqli_error() == false or mysqli_error() == ''){
+				if($resultado != null or $resultado != ""){//Há tupla de veri..
+					$dados = mysqli_fetch_assoc($resultado);
+					mysqli_close($connect);
+					if($dados['substitutePassCode'] == null){//Gravar um novo código
+						$code = gen_code_confirm(6);
+						$resultado = mysqli_query($connect,"UPDATE codigo_confirmacao SET status = 1,criado_timestamp = ".currentTime(".com.br").",substitutePass = '$substitutePass',substitutePassCode = '$code',server = '$hbServer' WHERE habbo_name = '$hbName' AND server = '$hbServer';");
+						if(mysqli_error() == null or mysqli_error() == ""){//Sem erro
+							mysqli_close($connect);
+							echo('{"response":"PASS_IN_CONFIRMING_STEP","passCode":"$code"}');
+							//return(true);
+						}else{
+							echo('{"response":"INTERNAL_ERROR"}');
+							//return(false);
+						}
+					}
+				}else{//Não há resultado. Cadastrar uma tupla de verificação
+					$code = gen_code_confirm(6);
+					$resultado = mysqli_query($connect,"INSERT INTO codigo_confirmacao (habbo_name,status,criado_timestamp,substitutePass,substitutePassCode,server) VALUES ('$hbName',1,'".currentTime(".com.br")."','$substitutePass','$code');");
+					if(mysqli_error() == null or mysqli_error() == ""){//Sem erro
+						echo('{"response":"PASS_IN_CONFIRMING_STEP","passCode":"$code"}');
+						//return(true);
+					}else{
+						echo('{"response":"INTERNAL_ERROR"}');
+						//return(false);
+					}
+				}
+			}else{//Deu erro
+				echo('{"response":"INTERNAL_ERROR"}');
+			}
+		}
+							
+	}else{//Não foram enviados dados suficientes sob parâmetro
+		return('insufficient_params');
+	}
+}
 
 function isUser($hbname,$hbserver){
 	
 }
-
 function isRoomOwner($habboName,$habboServer,$roomId){//Verificar se o quarto pertence ao Habbo Avatar Cadastrado
 	//Pegar habbo Id única
 	$url = "https://www.habbo".$habboServer."/api/public/users?name=".$habboName;
@@ -102,11 +234,6 @@ function isRoomOwner($habboName,$habboServer,$roomId){//Verificar se o quarto pe
 	}
 	return($isOwner);
 	
-}
-//print(isRoomOwner("Administrador.4",".com.br","546985030"));
-
-function userStatusChange($status){//Mudar status do usuário
-
 }
 
 //Função para mostrar dados amigáveis na interface_exists
@@ -168,7 +295,7 @@ function registerGroup($gpName,$gpAssuntos,$roomId,$hbServer,$hbName){
 	$dados = mysqli_fetch_array($dados);
 	mysqli_close($connect);
 	if($dados == null){print("registrar o grupo");
-		$criadorId = userData("Administrador.4",".com.br")['user_id'];
+		$criadorId = userData($hbName,$hbServer)['user_id'];
 		set_timing($hbServer);
 		$timestamp = date("Y-m-d H:i:s");
 		$connect = mysqli_connect("localhost","root","","db_sistemachat");
@@ -419,6 +546,8 @@ function changeEmail($hbname,$hbserver,$email){//Grava na base de dados na tabel
 	mysqli_close($connect);	
 }
 
+function changePass($hbName,$hbServer){//Processo de mudança de senha
 
+}
 
 ?>

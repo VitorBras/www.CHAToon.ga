@@ -81,7 +81,7 @@ if(isset($_REQUEST['processo'])){
 					//Verificar se o código de confirmação foi colocado na missão do avatar a ser REGISTRADO DEFINITIVAMENTE
 					//print($dados['codigo_hb_name']);
 				
-					$missao;
+					
 					$url = "https://www.habbo$habboServer/api/public/users?name=$habboName";
 					$curl_handle=curl_init();
 					curl_setopt($curl_handle, CURLOPT_URL,$url);
