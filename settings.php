@@ -7,11 +7,12 @@ require("functions/generalFunctions.php");
 //-----------------------INICILIALIZAÇÃO DE SESSÂO ARTIFICIAL   (APENAS PARA DESENVOLVIMENTO)
 session_id("o1ogb822rt2l8guii1jdk5fsoq");
 session_start();
-
+//=============================================MODO DESENVOLVIMENTO.. TIRAR ISSO DAQUI
 $_SESSION['adm'] = "Vitor Gomes";
 $_SESSION['hbserver'] = ".com.br";
-$_SESSION['hbname'] = "VitorGp";
+$_SESSION['hbname'] = "Administrador.4";
 $_SESSION['logado'] = true;
+//==============================================
 
 echo("<script>
 

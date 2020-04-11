@@ -8,6 +8,16 @@ $db_user = "root";
 $db_pass = "";
 $sessid = session_id();
 
+class conectarBancoDeDados{
+	public $conexao;
+	function __construct(){
+		$this->conexao = mysqli_connect($GLOBALS['db_server'],$GLOBALS['db_user'],$GLOBALS['db_pass'],$GLOBALS['db_name']);
+	}
+	public function conectarBanco(){
+		$this->conexao = mysqli_connect($GLOBALS['db_server'],$GLOBALS['db_user'],$GLOBALS['db_pass'],$GLOBALS['db_name']);;
+	}
+}
+
 class habboAvatar{
 
 	public $uniqueId = null;
@@ -30,37 +40,51 @@ class habboAvatar{
 		curl_setopt($curl_handle, CURLOPT_USERAGENT, 'spider');
 		$loop = true;$loopCount = 0;
 		while($loop == true){//Parar só quando a requisição trouxer informações
+			
 			$query = curl_exec($curl_handle);
 			$loopCount++;
 			if(curl_error($curl_handle) == ''){//Deu certo
-				curl_close($curl_handle);
+				//curl_close($curl_handle); NÃO FECHAR A SESSÃO ATÉ CONCLUIR O PROCEDIMENTO....
 				$this->infos = json_decode($query,true);
 				if($this->infos != '' AND $this->infos != null AND $this->infos != '{"error":"not-found"}'){//Requizição mal feita
 					$loop = false;
 					return(true);//O usuário foi encontrado.
+					echo('Debbug Problem');
 				}elseif($this->infos == '{"error":"not-found"}'){//Requisição bem feita porém esse usuário não foi encontrado
 					$loop = false;
 					return(true);//Retorna true pq a requisição foi bem feita apesar do usuário não ser encontrado.
+					echo('Debbug Problem');
 				}
 				if($loopCount == 10){
 					$loop = false;
 					return(false);
+					echo('Debbug Problem');
 				}
 			}else{
-				curl_close($curl_handle);
+				//curl_close($curl_handle); NÃO FECHAR A SESSÃO ATÉ CONCLUIR O PROCEDIMENTO....
 				if($loopCount == 10){
 					return(false);
+					echo('Debbug Problem');
 				}
 			}		
 		}
-		print($query);
-		https://www.habbo.com.br/api/public/users?name=ababsab
+		//print($query);
+		//https://www.habbo.com.br/api/public/users?name=ababsab
 	}
 
 	function __construct($hbName,$hbServer){
 		if($this->capiturar_dados($hbName,$hbServer) == true){//Requisição feita com sucesso
 			//Verificar se o usuário foi encontrado
+			//echo("Debbug Problem");
 			if(isset($this->infos['error'])){//Usuário não encontrado
+				$this->uniqueId = null;
+				$this->name = null;
+				$this->figureString = null;
+				$this->memberSince = null;
+				$this->profileVisible = null;
+				$this->selectedBadges = null;
+				$this->motto = null;
+			}else{//Requisição feita com sucesso e Usuário encontrado
 				$this->uniqueId = $this->infos['uniqueId'];
 				$this->name = $this->infos['name'];
 				$this->figureString = $this->infos['figureString'];
@@ -75,6 +99,27 @@ class habboAvatar{
 		
 		
 
+	}
+}
+
+class User{
+	public $codigo_hb_name;
+	public $status;
+	public $substitutePass;
+	public $substitutePassCode;
+	public function dataInVerification($hbName,$hbServer){
+		$connect = new conectarBancoDeDados();
+		$resultado = mysqli_query($connect->conexao,"SELECT codigo_hb_name,status,substitutePass,substitutePassCode FROM codigo_confirmacao WHERE habbo_name = '$hbName' AND server = '$hbServer';");
+		if(mysqli_error($connect->conexao) == "" or mysqli_error($connect->conexao) == null){
+			if($resultado != "" && $resultado != null){
+				$resultado = mysqli_fetch_array($resultado);
+
+				$this->codigo_hb_name = $resultado['codigo_hb_name'];
+				$this->status = $resultado['status'];
+				$this->substitutePass = $resultado['substitutePass'];
+				$this->substitutePassCode = $resultado['substitutePassCode'];
+			}
+		}
 	}
 }
 
@@ -147,38 +192,54 @@ function AcceptedServer($domain){//Preciso abrir o arquivo de configurações do
 	}
 }
 
-function isHabboAvatarOwner($hbName = null,$hbServer = null,$code = null,$substitutePass){
+function isHabboAvatarOwner($hbName = null,$hbServer = null,$code = null,$substitutePass){//USO para MUDAR a SENHA
 	if($hbName != null && $hbServer != null){
-				
 		//Verificar se o servidor é do Habbo e está aceitando cadastro no sistema do CHAToon
 		if(AcceptedServer($hbServer) == true){//Servidor pode estar fora do ar
 			//Verificar se há registro em codigo_confirmacao
-			$resultado = mysqli_query($connect,"SELECT codigo_hb_name,status,substitutePass,substitutePassCode FROM codigo_confirmacao WHERE habbo_name = '$hbName' AND server = '$hbServer';");
+			$connect = new conectarBancoDeDados();
+			$resultado = mysqli_query($connect->conexao,"SELECT codigo_hb_name,status,substitutePass,substitutePassCode FROM codigo_confirmacao WHERE habbo_name = '$hbName' AND server = '$hbServer';");
 			//print(mysqli_error($connect));
 			//var_dump($resultado);
-			if(mysqli_error() == false or mysqli_error() == ''){
-				if($resultado != null or $resultado != ""){//Há tupla de veri..
-					$dados = mysqli_fetch_assoc($resultado);
-					mysqli_close($connect);
+			if(mysqli_error($connect->conexao) == false or mysqli_error($connect->conexao) == ''){
+				if($resultado->num_rows != 0){//Há tupla de veri..
+					$dados = mysqli_fetch_assoc($resultado);//echo('Depurar');
+					mysqli_close($connect->conexao);
 					if($dados['substitutePassCode'] == null){//Gravar um novo código
 						$code = gen_code_confirm(6);
-						$resultado = mysqli_query($connect,"UPDATE codigo_confirmacao SET status = 1,criado_timestamp = ".currentTime(".com.br").",substitutePass = '$substitutePass',substitutePassCode = '$code',server = '$hbServer' WHERE habbo_name = '$hbName' AND server = '$hbServer';");
-						if(mysqli_error() == null or mysqli_error() == ""){//Sem erro
-							mysqli_close($connect);
-							echo('{"response":"PASS_IN_CONFIRMING_STEP","passCode":"$code"}');
+						$connect->conectarBanco();
+						$resultado = mysqli_query($connect->conexao,"UPDATE codigo_confirmacao SET status = 1,criado_timestamp = '".currentTime(".com.br")."',substitutePass = '$substitutePass',substitutePassCode = '$code',server = '$hbServer' WHERE habbo_name = '$hbName' AND server = '$hbServer';");
+						if(mysqli_error($connect->conexao) == ""){//Sem erro
+							mysqli_close($connect->conexao);
+							echo('{"response":"PASS_IN_CONFIRMING_STEP","passCode":"'.$code.'"}');
 							//return(true);
-						}else{
-							echo('{"response":"INTERNAL_ERROR"}');
+						}else{echo("teste");
+							echo('{"response":"INTERNAL_ERROR"}');echo(mysqli_error($connect->conexao));
 							//return(false);
 						}
+					}else{//Já está em processo de verificação Habbo Avatar Owner 
+						//Verificar se CApp enviou uma senha pra substituição
+						if(isset($_REQUEST['substitutePass'])){//CApp pede para mudar a senha que irá substituir
+							$newPass = $_REQUEST['substitutePass'];//ANTI-SQL INJECTION aqui...
+							$connect = new conectarBancoDeDados();
+							$query = mysqli_query($connect->conexao,"UPDATE codigo_confirmacao SET substitutePass = '$newPass' WHERE habbo_name = '$hbName' AND server = '$hbServer';") or die(mysqli_error($connect->conexao));
+							//var_dump($query);
+							while(mysqli_error($connect->conexao) != ""){
+								$query = mysqli_query($connect->conexao,"UPDATE codigo_confirmacao SET substitutePass = '$newPass' WHERE habbo_name = '$hbName' AND server = '$hbServer';") or die(mysqli_error($connect->conexao));
+							}
+							mysqli_close($connect->conexao);
+						}
+						echo('{"response":"PASS_IN_CONFIRMING_STEP","passCode":"'.$dados['substitutePassCode'].'"}');
 					}
 				}else{//Não há resultado. Cadastrar uma tupla de verificação
 					$code = gen_code_confirm(6);
-					$resultado = mysqli_query($connect,"INSERT INTO codigo_confirmacao (habbo_name,status,criado_timestamp,substitutePass,substitutePassCode,server) VALUES ('$hbName',1,'".currentTime(".com.br")."','$substitutePass','$code');");
-					if(mysqli_error() == null or mysqli_error() == ""){//Sem erro
-						echo('{"response":"PASS_IN_CONFIRMING_STEP","passCode":"$code"}');
+					$connect = new conectarBancoDeDados();
+					$resultado = mysqli_query($connect->conexao,"INSERT INTO codigo_confirmacao (habbo_name,status,criado_timestamp,substitutePass,substitutePassCode,server) VALUES ('$hbName',1,'".currentTime(".com.br")."','$substitutePass','$code','$hbServer');");
+					if(mysqli_error($connect->conexao) == false && mysqli_error($connect->conexao) == ""){//Sem erro
+						echo('{"response":"PASS_IN_CONFIRMING_STEP","passCode":"'.$code.'"}');
 						//return(true);
-					}else{
+					}else{echo("teste");
+						echo(mysqli_error($connect->conexao));
 						echo('{"response":"INTERNAL_ERROR"}');
 						//return(false);
 					}
@@ -259,7 +320,7 @@ function friendlyDataUser($dados,$dataType){
 }
 
 function userData($hbName,$hbServer){//Retorna dados do usuário
-	$connect = mysqli_connect($GLOBALS['db_server'],$GLOBALS['db_user'],$GLOBALS['db_pass'],$GLOBALS['db_name']);
+	$connect = new conectarBancoDeDados();
 	$query = "SELECT user_id,senha,creditos,email,celular,criado_timestamp,status FROM usuarios WHERE habbo_name = '$hbName' AND server = '$hbServer'";
 	$dados = mysqli_query($connect,$query);
 	if(gettype($dados) == 'object'){
@@ -267,21 +328,21 @@ function userData($hbName,$hbServer){//Retorna dados do usuário
 	}else{
 		return("user_dont_found");
 	}
-	mysqli_close($connect);
+	mysqli_close($connect->conexao);
 	return($dados);
 }
 
-function userDataConfirming_EmailAndCode($hbname,$hbserver){
+function userDataConfirming_EmailAndCode($hbname,$hbserver){//Verificar.. preciso arrumar essa função ainda. DESENVOLVENDO
 	//Capiturar Email e Código de verificação do email
-	$connect = mysqli_connect($GLOBALS['db_server'],$GLOBALS['db_user'],$GLOBALS['db_pass'],$GLOBALS['db_name']);
+	$connect = new conectarBancoDeDados();
 	$query = "SELECT email,codigo_email FROM codigo_confirmacao WHERE habbo_name = '$hbname' AND server = '$hbserver';";
 	$dados = mysqli_query($connect,$query);
-	if(mysqli_error($connect) == "" or mysqli_error($connect) == null){
+	if(mysqli_error($connect->conexao) == "" or mysqli_error($connect->conexao) == null){
 		$infos = mysqli_fetch_array($dados);
-		mysqli_close($connect);
+		mysqli_close($connect->conexao);
 		return($infos);
 	}else{
-		mysqli_close($connect);
+		mysqli_close($connect->conexao);
 		return(false);
 	}
 }
@@ -289,28 +350,28 @@ function userDataConfirming_EmailAndCode($hbname,$hbserver){
 function registerGroup($gpName,$gpAssuntos,$roomId,$hbServer,$hbName){
 	
 	//Verificar se o grupo já está cadastrado na base de dados
-	$connect = mysqli_connect("localhost","root","","db_sistemachat");
+	$connect = new conectarBancoDeDados();
 	$query = "SELECT criador_id FROM grupo WHERE HabboRoomId = '$roomId' AND server = '$hbServer'";
 	$dados = mysqli_query($connect,$query);
 	$dados = mysqli_fetch_array($dados);
-	mysqli_close($connect);
+	mysqli_close($connect->conexao);
 	if($dados == null){print("registrar o grupo");
 		$criadorId = userData($hbName,$hbServer)['user_id'];
 		set_timing($hbServer);
 		$timestamp = date("Y-m-d H:i:s");
-		$connect = mysqli_connect("localhost","root","","db_sistemachat");
+		$connect = new conectarBancoDeDados();
 		$query = "INSERT INTO grupo (criador_id,HabboRoomId,nome_grupo,assuntos,criado_timestamp,theme,server) VALUES ('$criadorId','$roomId','".utf8_decode($gpName)."','{\"assuntos\":[\"".utf8_decode($gpAssuntos[0])."\",\"".utf8_decode($gpAssuntos[1])."\",\"".utf8_decode($gpAssuntos[2])."\"]}','$timestamp',0,'$hbServer');";
 		$dados = mysqli_query($connect,$query);
-		print(mysqli_error($connect));
+		print(mysqli_error($connect->conexao));
 		//O registro foi realizado com sucesso?
-		if(mysqli_error($connect) == null or mysqli_error($connect) == ""){//Registrado com sucesso na base de dados.
-			mysqli_close($connect);
+		if(mysqli_error($connect->conexao) == null or mysqli_error($connect->conexao) == ""){//Registrado com sucesso na base de dados.
+			mysqli_close($connect->conexao);
 			return true;
 		}else{
-			mysqli_close($connect);
+			mysqli_close($connect->conexao);
 			return false;
 		}
-		mysqli_close($connect);
+		mysqli_close($connect->conexao);
 	}else{
 		return("already_registered");
 	}
@@ -319,7 +380,7 @@ function registerGroup($gpName,$gpAssuntos,$roomId,$hbServer,$hbName){
 
 function userDataUpdate($hb_name,$hb_server,$mudar,$dado){
 	
-	$connect = mysqli_connect($GLOBALS['db_server'],$GLOBALS['db_user'],$GLOBALS['db_pass'],$GLOBALS['db_name']);
+	$connect = new conectarBancoDeDados();
 	
 	switch($mudar){
 		case "status":
@@ -327,15 +388,20 @@ function userDataUpdate($hb_name,$hb_server,$mudar,$dado){
 				$query = "UPDATE usuarios SET status='".utf8_decode($dado)."' WHERE habbo_name='$hb_name' AND server='$hb_server';";
 				$resposta = mysqli_query($connect,$query);
 				//Tudo deu certo?
-				if(mysqli_error($connect) == "" or mysqli_error($connect) == null){
+				if(mysqli_error($connect->conexao) == "" or mysqli_error($connect->conexao) == null){
 					return(true);
 					goto fim;
 				}
+				mysqli_close($connect->conexao);
 			}
 			break;
 		case "senha":
 			if($hb_name != null && $hb_server != null && $mudar != null && $dado != null){
-				
+				$query = mysqli_query($connect->conexao,"UPDATE usuarios SET senha = '$dado' WHERE habbo_name = '$hb_name' AND server = '$hb_server';") or die(mysqli_error($connect->conexao));
+				while(mysqli_error($connect->conexao) != false AND mysqli_error($connect->conexao) != ""){//Há erro. Try again
+					$query = mysqli_query($connect->conexao,"UPDATE usuarios SET senha = '$dado' WHERE habbo_name = '$hb_name' AND server = '$hb_server';") or die(mysqli_error($connect->conexao));
+				}
+				mysqli_close($connect->conexao);
 			}
 			break;
 		case "email":
@@ -343,7 +409,7 @@ function userDataUpdate($hb_name,$hb_server,$mudar,$dado){
 				$query = "UPDATE usuarios SET email='".utf8_decode($dado)."' WHERE habbo_name='$hb_name' AND server='$hb_server';";
 				$resposta = mysqli_query($connect,$query);
 				//Tudo deu certo?
-				if(mysqli_error($connect) == "" or mysqli_error($connect) == null){
+				if(mysqli_error($connect->conexao) == "" or mysqli_error($connect->conexao) == null){
 					return(true);
 					goto fim;
 				}
@@ -371,7 +437,7 @@ function userDataUpdate($hb_name,$hb_server,$mudar,$dado){
 			break;
 	}
 	fim:
-	mysqli_close($connect);
+	
 	
 }
 
@@ -418,24 +484,24 @@ function sendEmail($what,$email,$name = null,$hbserver,$code = null,$link,$sessi
 }
 
 function deleteVerificationRecordInDB($hbname,$hbserver){
-	$connect = mysqli_connect($GLOBALS['db_server'],$GLOBALS['db_user'],$GLOBALS['db_pass'],$GLOBALS['db_name']);
+	$connect = new conectarBancoDeDados();
 	$query = "DELETE FROM codigo_confirmacao WHERE habbo_name = '$hbname' AND server = '$hbserver';";
 	$query = mysqli_query($connect,$query);
-	if(mysqli_error($connect) == "" or mysqli_error($connect) == null or mysqli_error($connect) == false){
-		mysqli_close($connect);
+	if(mysqli_error($connect->conexao) == "" or mysqli_error($connect->conexao) == null or mysqli_error($connect->conexao) == false){
+		mysqli_close($connect->conexao);
 		return(true);
 	}else{
-		mysqli_close($connect);
+		mysqli_close($connect->conexao);
 		return(false);
 	}
 }
 function replaceEmailInConfirmingStep($hbname,$hbserver,$email){//Substitui o email que está em verificação na base de dados na tabela (codigo_confirmacao)
 	$code = gen_code_confirm(6);
-	$connect = mysqli_connect($GLOBALS['db_server'],$GLOBALS['db_user'],$GLOBALS['db_pass'],$GLOBALS['db_name']);
+	$connect = new conectarBancoDeDados();
 	$query = "UPDATE codigo_confirmacao SET email = '$email',codigo_email = '$code' WHERE habbo_name = '$hbname' AND server = '$hbserver';";
 	$query = mysqli_query($connect,$query);
-	if(mysqli_error($connect) == "" or mysqli_error($connect) == null or mysqli_error($connect) == false){
-		mysqli_close($connect);
+	if(mysqli_error($connect->conexao) == "" or mysqli_error($connect->conexao) == null or mysqli_error($connect->conexao) == false){
+		mysqli_close($connect->conexao);
 		//Escolhendo qual o link a usar.. de produção ou o usado no desenvolvimento localhost.
 		$configSystem = simplexml_load_file('../config/sistemaConfig.xml');
 		$link;
@@ -452,7 +518,7 @@ function replaceEmailInConfirmingStep($hbname,$hbserver,$email){//Substitui o em
 			return(true);
 		}
 	}else{
-		mysqli_close($connect);
+		mysqli_close($connect->conexao);
 		return(false);
 	}
 	
@@ -461,22 +527,22 @@ function changeEmail($hbname,$hbserver,$email){//Grava na base de dados na tabel
 	//Verificacr se o usuário está definitivamente cadastrado no sistema (Não é necessário pq esTÁ LOGADO)
 	
 	//Na base de dados da tabela CODIGO DE CONFIRMAÇÃO há um registro deste usuário que está em confirmação?
-	$connect = mysqli_connect($GLOBALS['db_server'],$GLOBALS['db_user'],$GLOBALS['db_pass'],$GLOBALS['db_name']);
+	$connect = new conectarBancoDeDados();
 	$query = "SELECT status,codigo_email,email FROM codigo_confirmacao WHERE habbo_name = '$hbname' AND server = '$hbserver';";
 	$dados = mysqli_query($connect,$query);
-	if(mysqli_error($connect) == "" or mysqli_error($connect) == null or mysqli_error($connect) == false){
+	if(mysqli_error($connect->conexao) == "" or mysqli_error($connect->conexao) == null or mysqli_error($connect->conexao) == false){
 		$infos = mysqli_fetch_array($dados);
 		//return(var_dump($infos));		
 		if($infos == null){//Não há registro.
 			//Registrar uma TUPlA de verificação: Usada para armazenar o EMAIL sob verificação e o Código para confirma-lo
 			$code = gen_code_confirm(6);
-			mysqli_close($connect);//Fechando conexão anterior
-			$connect = mysqli_connect($GLOBALS['db_server'],$GLOBALS['db_user'],$GLOBALS['db_pass'],$GLOBALS['db_name']);
+			mysqli_close($connect->conexao);//Fechando conexão anterior
+			$connect = new conectarBancoDeDados();
 			$query = "INSERT INTO codigo_confirmacao (habbo_name,email,codigo_email,status,criado_timestamp,server) VALUES ('$hbname','$email','$code',1,'".currentTime($hbserver)."','$hbserver');";
 			$dados = mysqli_query($connect,$query);
 			//Verificar se deu certo
-			if(mysqli_error($connect) == "" or mysqli_error($connect) == null or mysqli_error($connect) == false){
-				mysqli_close($connect);
+			if(mysqli_error($connect->conexao) == "" or mysqli_error($connect->conexao) == null or mysqli_error($connect->conexao) == false){
+				mysqli_close($connect->conexao);
 				//Escolhendo qual o link a usar.. de produção ou o usado no desenvolvimento localhost.
 				$configSystem = simplexml_load_file('../config/sistemaConfig.xml');
 				$link;
@@ -492,7 +558,7 @@ function changeEmail($hbname,$hbserver,$email){//Grava na base de dados na tabel
 				}
 				return("confirm_email_step");
 			}else{//Caso dê errao
-				mysqli_close($connect);
+				mysqli_close($connect->conexao);
 				return(false);
 			}
 		}else{//Há algum registro.
@@ -504,8 +570,8 @@ function changeEmail($hbname,$hbserver,$email){//Grava na base de dados na tabel
 					
 					$query = "UPDATE codigo_confirmacao SET codigo_email = '$code',email = '$email' WHERE habbo_name = '$hbname' AND server = '$hbserver';";
 					$dados = mysqli_query($connect,$query);
-					print(mysqli_error($connect));
-					if(mysqli_error($connect) == null or mysqli_error($connect) == ""){//Caso não dê erro
+					print(mysqli_error($connect->conexao));
+					if(mysqli_error($connect->conexao) == null or mysqli_error($connect->conexao) == ""){//Caso não dê erro
 						//Enviar o código para o email
 						//Escolhendo qual o link a usar.. de produção ou o usado no desenvolvimento localhost.
 						$configSystem = simplexml_load_file('../config/sistemaConfig.xml');
@@ -518,11 +584,11 @@ function changeEmail($hbname,$hbserver,$email){//Grava na base de dados na tabel
 						$sending = sendEmail("email_confirm_code",$email,$hbname,$hbserver,$code,$link,$GLOBALS['sessid']);
 						if($sending == true){
 							//Avisar a aplicação cliente que o usuário deve ir ao seu email pegar o código
-							mysqli_close($connect);
+							mysqli_close($connect->conexao);
 							return("confirm_email_step");
 						}
 					}else{
-						mysqli_close($connect);
+						mysqli_close($connect->conexao);
 						return("mysqli_error");
 					}
 				}else{//Já há um email para confirmar. Enviar ao cliente usuário uma opção para registrar outro e-mail.
@@ -532,10 +598,9 @@ function changeEmail($hbname,$hbserver,$email){//Grava na base de dados na tabel
 					}else{
 						replaceEmailInConfirmingStep($hbname,$hbserver,$email);
 					}
-					
 				}
 			}else{
-				mysqli_close($connect);
+				mysqli_close($connect->conexao);
 				return("user_no_registered_yet");
 			}
 		}
@@ -543,7 +608,7 @@ function changeEmail($hbname,$hbserver,$email){//Grava na base de dados na tabel
 	}else{
 		return("mysqli_error");
 	}
-	mysqli_close($connect);	
+	mysqli_close($connect->conexao);	
 }
 
 function changePass($hbName,$hbServer){//Processo de mudança de senha

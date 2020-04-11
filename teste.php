@@ -12,8 +12,5 @@ $url = "https://www.habbo.com.br/api/public/users?name=Administrador.4";
 		//var_dump($query);
 		curl_close($curl_handle);
 		//var_dump($infos);
-
-
-		
 		
 ?>
